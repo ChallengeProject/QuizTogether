@@ -1,6 +1,5 @@
-package com.quiz_together.ui.base
+package com.quiz_together.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -9,24 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
-import com.quiz_together.ui.login.LoginActivity
-import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
-import com.quiz_together.util.toast
 import kotlinx.android.synthetic.main.frag_base.*
 
-class LoadingFragment : Fragment(), LoadingContract.View {
+class MainFragment : Fragment(), MainContract.View {
 
+    val TAG = "MainFragment"
 
-
-
-
-
-
-    val TAG = "LoadingFragment"
-
-    override lateinit var presenter: LoadingContract.Presenter
+    override lateinit var presenter: MainContract.Presenter
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -41,7 +31,7 @@ class LoadingFragment : Fragment(), LoadingContract.View {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.frag_base, container, false)
+        val root = inflater.inflate(R.layout.frag_main, container, false)
 
         return root
     }
@@ -56,33 +46,14 @@ class LoadingFragment : Fragment(), LoadingContract.View {
         super.onActivityCreated(savedInstanceState)
 
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            //            presenter.editTask()
             Log.i(TAG,"findViewById<FloatingActionButton>")
         }
 
     }
 
-
-    override fun showLoginUi() {
-        activity?.run{
-            startActivity(Intent(applicationContext,LoginActivity::class.java))
-            finish()
-        }
-    }
-
-    override fun showMainUi() {
-        activity?.run{
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-            finish()
-        }
-    }
-
-    override fun showErrorTxt() {
-        "Network or Server Err, Plase restart application".toast()
-    }
-
     companion object {
-        fun newInstance() = LoadingFragment()
+        fun newInstance() = MainFragment()
     }
-
 
 }

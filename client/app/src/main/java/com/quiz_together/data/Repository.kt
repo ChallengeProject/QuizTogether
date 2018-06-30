@@ -13,8 +13,6 @@ import com.quiz_together.data.remote.AppApiHelper
 object Repository : PreferenceHelper, ApiHelper {
 
 
-
-
     private val preferenceHelper = AppPreferenceHelper()
     private val apiHelper = AppApiHelper()
 
@@ -42,7 +40,7 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.getBroadcastById(broadcastId,cb)
     }
 
-    override fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetBroadcastCallback) {
+    override fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback) {
         apiHelper.updateBroadcast(broadcast,cb)
     }
 
@@ -67,6 +65,8 @@ object Repository : PreferenceHelper, ApiHelper {
     }
 
 
+    // shared prefrenece
+
     override fun isFirstLaunch(): Boolean {
         return preferenceHelper.isFirstLaunch()
     }
@@ -74,6 +74,12 @@ object Repository : PreferenceHelper, ApiHelper {
     override fun setIsFirst(isFirst: Boolean) {
         preferenceHelper.setIsFirst(isFirst)
     }
+
+    override fun setUserId(userId: String) {
+        preferenceHelper.setUserId(userId)
+    }
+
+    override fun getUserId(): String? = preferenceHelper.getUserId()
 
 
 

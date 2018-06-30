@@ -2,16 +2,13 @@ package com.quiz_together.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import kotlinx.android.synthetic.main.frag_login.*
 import com.quiz_together.R
-import com.quiz_together.ui.event.EventActivity
+import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import com.quiz_together.util.toast
@@ -49,27 +46,36 @@ class LoginFragment : Fragment(), LoginContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
-            //            presenter.editTask()
-            Log.i(TAG,"findViewById<FloatingActionButton>")
+        btCheckNick.setOnClickListener { v->
+            presenter.checkTask(etId.text.toString())
         }
 
-        btLogin.setOnClickListener{
-            presenter.loginTask(etId.text.toString(),etPw.text.toString())
+        btStart.setOnClickListener { v->
+            presenter.loginTask(etId.text.toString())
+        }
+
+    }
+
+    override fun showMainUi() {
+
+        activity?.run{
+            startActivity(Intent(context, MainActivity::class.java))
+            finish()
         }
     }
 
-    override fun showMainUi(id:String) {
+    override fun isCheckSuccess(isSuccess: Boolean) {
 
-        val intent = Intent(context, EventActivity::class.java).apply {
-            putExtra(EventActivity.EXTRA_ID, id)
+        if(isSuccess) {
+            "can created id".toast()
+        } else {
+            "duplicated id".toast()
         }
-        startActivity(intent)
-        activity?.finish()
+        btStart.isEnabled = isSuccess
     }
 
-    override fun showFirstLaunch() {
-        "showFirstLaunch".toast()
+    override fun showFailLoginTxt() {
+        "error".toast()
     }
 
     companion object {

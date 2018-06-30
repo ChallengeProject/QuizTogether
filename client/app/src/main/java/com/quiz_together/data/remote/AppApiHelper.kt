@@ -77,8 +77,6 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onUserLoaded(it.data)
-                    else if(it.code == 409)
-                        cb.onUserDataConflict()
                     else
                         cb.onDataNotAvailable()
                 }, { error ->
@@ -129,13 +127,13 @@ class AppApiHelper : ApiHelper {
                 })
     }
 
-    override fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetBroadcastCallback) {
+    override fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback) {
         apiServices.updateBroadcast(broadcast)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onBroadcastLoaded(it.data)
+                        cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
                 }, { error ->

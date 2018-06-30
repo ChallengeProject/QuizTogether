@@ -11,16 +11,15 @@ data class Events(val events:List<Event>)
 class RespEmpty()
 
 data class ReqLogin(val name:String)
-data class RespLogin(val userId:Long, val name:String)
+data class RespLogin(val userId:String, val name:String)
 
 //updateUserProfile
-data class User(val userId:Long, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
-data class BroadcastBeforeStarting(val broadcastId:Long , val scheduledTime:Long)
+data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
+data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
-data class Option(val option:String)
-data class QustionList(val answerNo:Int, val questionTitle : String,val options:List<Option>, val category:Int)
+data class QustionList(val answerNo:Int, val questionTitle : String,val options:List<String>, val category:Int)
 data class Broadcast(
-        val broadcastId:Long,
+        val broadcastId:String,
         val title:String,
         val description:String,
         val scheduledTime:String,
@@ -28,12 +27,12 @@ data class Broadcast(
         val prize:String,
         val giftDescription:String,
 
-        var userId:Long,
+        var userId:String,
         var broadcastStatus:String,
         var winnerMessage:String,
         var userRes:String,
         var QuestionList:List<QustionList>,
-        var quizQuiestionCount:Int
+        var questionCount:Int
 )
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)

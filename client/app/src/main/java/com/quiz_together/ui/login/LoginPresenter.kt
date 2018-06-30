@@ -3,6 +3,7 @@ package com.quiz_together.ui.login
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.RespLogin
 import com.quiz_together.data.remote.ApiHelper
+import com.quiz_together.util.SC
 
 class LoginPresenter(
         private val repository: Repository,
@@ -14,13 +15,36 @@ class LoginPresenter(
     }
 
     override fun start() {
-        if(repository.isFirstLaunch()){
-            repository.setIsFirst(false)
-            loginView.showFirstLaunch()
-        }
+
     }
 
-    override fun loginTask(id: String, pw: String) {
+    override fun checkTask(id: String) {
+
+        loginView.setLoadingIndicator(true)
+
+        repository.findUserByName(id, object : ApiHelper.GetSuccessCallback{
+            override fun onSuccessLoaded() {
+                loginView.run {
+                    if(!isActive) return@onSuccessLoaded
+                    setLoadingIndicator(false)
+
+                    isCheckSuccess(true)
+                }
+            }
+
+            override fun onDataNotAvailable() {
+                loginView.run {
+                    if (!isActive) return@onDataNotAvailable
+                    setLoadingIndicator(false)
+
+                    isCheckSuccess(false)
+                }
+            }
+        })
+    }
+
+
+    override fun loginTask(id: String ) {
 
         loginView.setLoadingIndicator(true)
 
@@ -29,26 +53,24 @@ class LoginPresenter(
 
                 loginView.run{
                     if(!isActive) return@onLoginLoaded
-
                     setLoadingIndicator(false)
 
-//                    respLogin.name
+                    SC.USER_ID = respLogin.name
+                    repository.setUserId(respLogin.userId)
 
-
+                    showMainUi()
                 }
             }
-
 
             override fun onDataNotAvailable() {
 
                 loginView.run {
                     if(!isActive) return@onDataNotAvailable
-
                     setLoadingIndicator(false)
+
+                    showFailLoginTxt()
                 }
-
             }
-
         })
     }
 

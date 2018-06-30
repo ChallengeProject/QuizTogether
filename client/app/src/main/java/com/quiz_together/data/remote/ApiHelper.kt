@@ -22,7 +22,6 @@ interface ApiHelper {
     interface GetUserCallback{
         fun onUserLoaded(user:User)
         fun onDataNotAvailable()
-        fun onUserDataConflict()
     }
 
     interface GetBroadcastsCallback{
@@ -48,7 +47,7 @@ interface ApiHelper {
     fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun getBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
-    fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetBroadcastCallback)
+    fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)
     fun endBroadcast(reqEndBroadcast: ReqEndBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)

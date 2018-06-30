@@ -10,8 +10,9 @@ interface LoadingContract {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
-        fun showLogin()
-
+        fun showLoginUi()
+        fun showMainUi()
+        fun showErrorTxt()
     }
 
     interface Presenter : BasePresenter {
