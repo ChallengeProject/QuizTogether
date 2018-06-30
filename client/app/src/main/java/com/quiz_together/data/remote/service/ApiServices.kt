@@ -30,7 +30,7 @@ interface ApiServices {
     fun createBroadcast(@Body data: Broadcast) : Observable<Resp<RespEmpty>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
-    fun getBroadcastList() : Observable<Resp<List<Broadcast>>>
+    fun getBroadcastList() : Observable<Resp<Broadcasts>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
     fun getBroadcastById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>

@@ -48,7 +48,7 @@ class LoadingPresenter(
                 }
 
             })
-        }.let {
+        }?:let {
             view.run {
                 if(!isActive) return@run
                 setLoadingIndicator(false)

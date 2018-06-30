@@ -1,17 +1,17 @@
 package com.quiz_together.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import com.quiz_together.App
 import com.quiz_together.R
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.ui.profile.ProfileActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.toast
 import kotlinx.android.synthetic.main.frag_main.*
@@ -62,7 +62,6 @@ class MainFragment : Fragment(), MainContract.View {
         super.onActivityCreated(savedInstanceState)
 
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
-            //            presenter.editTask()
         }
 
 
@@ -77,6 +76,17 @@ class MainFragment : Fragment(), MainContract.View {
             setOnRefreshListener { presenter.loadBroadcastTask() }
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.frag_main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_profile -> startActivity(Intent(activity?.applicationContext,ProfileActivity::class.java))
+        }
+        return true
     }
 
     override fun showBroadcasts(broadcasts: List<Broadcast>) {

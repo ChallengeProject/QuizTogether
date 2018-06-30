@@ -2,6 +2,7 @@ package com.quiz_together.ui.main
 
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.Broadcasts
 import com.quiz_together.data.remote.ApiHelper
 
 

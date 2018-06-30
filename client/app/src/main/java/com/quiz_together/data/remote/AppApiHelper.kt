@@ -105,7 +105,7 @@ class AppApiHelper : ApiHelper {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onBroadcastsLoaded(it.data)
+                        cb.onBroadcastsLoaded(it.data.broadcasts)
                     else
                         cb.onDataNotAvailable()
                 }, { error ->
