@@ -18,19 +18,22 @@ data class User(val userId:String, val name :String, val profilePath:String, val
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
 data class QustionList(val answerNo:Int, val questionTitle : String,val options:List<String>, val category:Int)
+
+data class userRes(val userId: String,val name:String)
+
 data class Broadcast(
         val broadcastId:String,
         val title:String,
         val description:String,
-        val scheduledTime:String,
-        val giftType:String,
-        val prize:String,
+        val scheduledTime:Long,
+        val giftType:Int,
+        val prize:Long,
         val giftDescription:String,
 
         var userId:String,
-        var broadcastStatus:String,
+        var broadcastStatus:Int,
         var winnerMessage:String,
-        var userRes:String,
+        var userRes:userRes,
         var QuestionList:List<QustionList>,
         var questionCount:Int
 )
