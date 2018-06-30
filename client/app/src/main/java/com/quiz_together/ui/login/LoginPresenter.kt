@@ -1,7 +1,7 @@
 package com.quiz_together.ui.login
 
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.RespIdPw
+import com.quiz_together.data.model.RespLogin
 import com.quiz_together.data.remote.ApiHelper
 
 class LoginPresenter(
@@ -24,20 +24,20 @@ class LoginPresenter(
 
         loginView.setLoadingIndicator(true)
 
-        repository.login(id,pw, object : ApiHelper.LoginCallback {
-
-            override fun onLoginLoaded(respIdPw: RespIdPw) {
+        repository.login(id, object : ApiHelper.LoginCallback {
+            override fun onLoginLoaded(respLogin: RespLogin) {
 
                 loginView.run{
                     if(!isActive) return@onLoginLoaded
 
                     setLoadingIndicator(false)
 
-                    if(respIdPw.result == "success")
-                        showMainUi(id)
-                }
+//                    respLogin.name
 
+
+                }
             }
+
 
             override fun onDataNotAvailable() {
 
