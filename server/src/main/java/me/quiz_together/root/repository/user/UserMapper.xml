@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.quiz_together.root.repository.user.UserMapper">
+      <sql id="UserColumns">
+          user.id
+        , user.name
+        ,	user.user_status
+        , user.profile_path
+        , user.money
+        ,	user.created_time
+        ,	user.updated_time
+        ,	user.deleted_time
+      </sql>
+
+  <select id="selectUserById" parameterType="map" resultType="User">
+    SELECT
+    /* user.selectUserById */
+       <include refid="UserColumns" />
+    FROM
+        user
+    WHERE
+        id = #{id}
+  </select>
+
+  <select id="selectUserByName" parameterType="map" resultType="int">
+    SELECT
+    /* user.selectUserByName */
+      count(*)
+    FROM
+      user
+    WHERE
+      name = #{name}
+  </select>
+
+  <select id="login" resultType="User" parameterType="map">
+    SELECT
+    /* user.login */
+      <include refid="UserColumns" />
+    FROM
+      user
+    WHERE
+      name = #{name}
+  </select>
+
+  <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="map">
+       INSERT INTO /* user.insertUser */
+        user(id, name, profile_path, user_status, money, created_time, updated_time)
+        value(#{id}, #{name}, #{profilePath}, #{userStatus}, #{money}, NOW(), NOW())
+  </insert>
+
+  <update id="updateUserProfile" parameterType="map">
+      UPDATE /* user.updateUserProfile */
+        user
+      SET
+        , profile_path = #{profileImageUrl}
+        , updated_time = NOW()
+      WHERE
+        id = #{userId}
+    </update>
+
+  <update id="deleteUserById" parameterType="map">
+      UPDATE /* user.deleteUserById */
+        user
+      SET
+        user_status = 1
+        , updated_time = NOW()
+        , deleted_time = NOW()
+      WHERE
+        id = #{id}
+    </update>
+
+
+</mapper>

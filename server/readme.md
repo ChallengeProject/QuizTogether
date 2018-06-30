@@ -1,1 +1,1 @@
-server
+#Default Project
