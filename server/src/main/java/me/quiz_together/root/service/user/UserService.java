@@ -12,6 +12,8 @@ import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
 import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Service
 public class UserService {
@@ -22,7 +24,7 @@ public class UserService {
     @Autowired
     private AmazonS3Service amazonS3Service;
 
-    public void insertUser(UserSignupRequest userSignupRequest) {
+    public String insertUser(UserSignupRequest userSignupRequest) {
         // user 중복 검사
         findUserByName(userSignupRequest.getName());
 
@@ -34,6 +36,7 @@ public class UserService {
         userDevice.setPushToken(userSignupRequest.getPushToken());
         userDeviceService.insertUserDevice(userDevice);
 
+        return HashIdUtils.encryptId(HashIdType.USER_ID, user.getId());
     }
 
     public User getUserById(long id) {

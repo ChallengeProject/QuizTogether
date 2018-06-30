@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,41 +18,39 @@ import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.service.user.UserViewService;
-import me.quiz_together.root.support.Constant;
 import me.quiz_together.root.support.HashIdUtils;
 import me.quiz_together.root.support.HashIdUtils.HashIdType;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @RestController
-@RequestMapping(Constant.USER_URI)
 public class UserController implements ApiController{
     @Autowired
     private UserViewService userViewService;
     @Autowired
     private UserService userService;
 
-    @PostMapping("/signup")
-    public ResultContainer<Void> signup(@RequestBody UserSignupRequest user) {
-        userService.insertUser(user);
+    @PostMapping("/user/signup")
+    public ResultContainer<String> signup(@RequestBody UserSignupRequest user) {
 
-        return new ResultContainer<>();
+
+        return new ResultContainer<>(userService.insertUser(user));
     }
 
-    @PostMapping("/deleteUserById")
+    @PostMapping("/user/deleteUserById")
     public ResultContainer<Void> deleteUserById(@RequestBody UserIdReq userIdReq) {
         userService.deleteUserById(userIdReq.getUserId());
 
         return new ResultContainer<>();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResultContainer<UserView> login(@RequestBody UserLoginRequest userLoginRequest) {
         return new ResultContainer<>(userViewService.login(userLoginRequest));
     }
 
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
-    @PostMapping("/updateUserProfile")
+    @PostMapping("/user/updateUserProfile")
     public ResultContainer<Void> updateUserProfile(@RequestParam @HashUserId Long userId,
                                                      @RequestPart MultipartFile profileImage) {
         userService.updateUserProfile(userId, profileImage);
@@ -62,7 +59,7 @@ public class UserController implements ApiController{
 
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
-    @GetMapping("/getUserProfile")
+    @GetMapping("/user/getUserProfile")
     public ResultContainer<UserProfileView> getUserProfile(@RequestParam @HashUserId Long userId) {
 
         return new ResultContainer<>(userViewService.getUserProfileView(userId));
@@ -70,19 +67,19 @@ public class UserController implements ApiController{
 
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
-    @GetMapping("/logout")
+    @GetMapping("/user/logout")
     public ResultContainer<Void> logout(@RequestParam @HashUserId Long userId) {
 
         return new ResultContainer<>();
     }
 
-    @GetMapping("/findUserByName")
+    @GetMapping("/user/findUserByName")
     public ResultContainer<Void> findUserByName(@RequestParam String name) {
         userService.findUserByName(name);
         return new ResultContainer<>();
     }
 
-    @GetMapping("/generateId")
+    @GetMapping("/user/generateId")
     public ResultContainer<String> generateId(@RequestParam Long id) {
         return new ResultContainer<>(HashIdUtils.encryptId(HashIdType.USER_ID, id));
     }
