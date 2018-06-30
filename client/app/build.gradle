@@ -20,10 +20,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'REST_PREFIX', '"/api/v1"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }
         debug {
             buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'REST_PREFIX', '"/api/v1"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }
     }
