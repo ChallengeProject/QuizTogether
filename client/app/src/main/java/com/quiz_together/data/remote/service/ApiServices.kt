@@ -16,8 +16,11 @@ interface ApiServices {
     fun getEvents(): Observable<Resp<Events>>
 
     // user
+    @POST("${BuildConfig.REST_PREFIX}/user/signup")
+    fun signup(@Body data: ReqSignup) : Observable<Resp<UserRes>>
+
     @POST("${BuildConfig.REST_PREFIX}/user/login")
-    fun login(@Body data: ReqLogin) : Observable<Resp<RespLogin>>
+    fun login(@Body data: ReqLogin) : Observable<Resp<UserRes>>
 
     @GET("${BuildConfig.REST_PREFIX}/user/findUserByName")
     fun findUserByName(@Query("name") name:String) : Observable<Resp<RespEmpty>>

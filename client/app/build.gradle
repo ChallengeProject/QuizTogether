@@ -18,13 +18,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'SERVER_URL', '"http://seose11.iptime.org:8080"'
             buildConfigField "String", 'REST_PREFIX', '"/api/v1.0"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }
         debug {
-            buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'SERVER_URL', '"http://seose11.iptime.org:8080"'
             buildConfigField "String", 'REST_PREFIX', '"/api/v1.0"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }

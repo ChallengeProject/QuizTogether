@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.frag_login.*
 import com.quiz_together.R
+import com.quiz_together.ui.loading.LoadingActivity
 import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
@@ -51,15 +52,15 @@ class LoginFragment : Fragment(), LoginContract.View {
         }
 
         btStart.setOnClickListener { v->
-            presenter.loginTask(etId.text.toString())
+            presenter.signupTask(etId.text.toString())
         }
 
     }
 
-    override fun showMainUi() {
+    override fun showLoadingUi() {
 
         activity?.run{
-            startActivity(Intent(context, MainActivity::class.java))
+            startActivity(Intent(context, LoadingActivity::class.java))
             finish()
         }
     }

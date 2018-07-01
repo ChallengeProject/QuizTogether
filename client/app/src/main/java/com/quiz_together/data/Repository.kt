@@ -16,7 +16,11 @@ object Repository : PreferenceHelper, ApiHelper {
     private val preferenceHelper = AppPreferenceHelper()
     private val apiHelper = AppApiHelper()
 
-    override fun login(name: String, cb: ApiHelper.LoginCallback) {
+    override fun signup(name: String, pushToken: String, cb: ApiHelper.UserResCallback) {
+        apiHelper.signup(name,pushToken,cb)
+    }
+
+    override fun login(name: String, cb: ApiHelper.UserResCallback) {
         apiHelper.login(name,cb)
     }
 

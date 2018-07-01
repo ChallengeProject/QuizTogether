@@ -9,14 +9,14 @@ interface LoginContract {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
-        fun showMainUi()
+        fun showLoadingUi()
         fun isCheckSuccess(isSuccess:Boolean)
         fun showFailLoginTxt()
 
     }
 
     interface Presenter : BasePresenter {
-        fun loginTask(id: String )
+        fun signupTask(id: String )
         fun checkTask(id:String)
 
     }

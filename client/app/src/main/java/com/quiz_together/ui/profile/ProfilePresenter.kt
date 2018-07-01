@@ -21,14 +21,24 @@ class ProfilePresenter(
 
     fun getProfileTask() {
 
+        view.setLoadingIndicator(true)
         SC.USER_ID?.run {
             repository.getUserProfile(this,object:ApiHelper.GetUserCallback {
                 override fun onUserLoaded(user: User) {
-                    view.updateUserView(user)
+
+                    view.run{
+                        if(!isActive) return@onUserLoaded
+                        setLoadingIndicator(false)
+                        updateUserView(user)
+                    }
                 }
 
                 override fun onDataNotAvailable() {
-                    view.showFailGetProfileTxt()
+                    view.run{
+                        if(!isActive) return@onDataNotAvailable
+                        setLoadingIndicator(false)
+                        showFailGetProfileTxt()
+                    }
                 }
 
             })
@@ -36,30 +46,6 @@ class ProfilePresenter(
             throw Exception("SC.USER_ID is null")
         }
 
-//        repository.login(id, object : ApiHelper.LoginCallback {
-//            override fun onLoginLoaded(respLogin: RespLogin) {
-//
-//                loginView.run{
-//                    if(!isActive) return@onLoginLoaded
-//                    setLoadingIndicator(false)
-//
-//                    SC.USER_ID = respLogin.name
-//                    repository.setUserId(respLogin.userId)
-//
-//                    showMainUi()
-//                }
-//            }
-//
-//            override fun onDataNotAvailable() {
-//
-//                loginView.run {
-//                    if(!isActive) return@onDataNotAvailable
-//                    setLoadingIndicator(false)
-//
-//                    showFailLoginTxt()
-//                }
-//            }
-//        })
     }
 
 

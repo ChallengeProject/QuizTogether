@@ -1,7 +1,7 @@
 package com.quiz_together.ui.login
 
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.RespLogin
+import com.quiz_together.data.model.UserRes
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
@@ -44,12 +44,12 @@ class LoginPresenter(
     }
 
 
-    override fun loginTask(id: String ) {
+    override fun signupTask(id: String ) {
 
         loginView.setLoadingIndicator(true)
 
-        repository.login(id, object : ApiHelper.LoginCallback {
-            override fun onLoginLoaded(respLogin: RespLogin) {
+        repository.signup(id,"this is dummy", object : ApiHelper.UserResCallback{
+            override fun onLoginLoaded(respLogin: UserRes) {
 
                 loginView.run{
                     if(!isActive) return@onLoginLoaded
@@ -58,7 +58,7 @@ class LoginPresenter(
                     SC.USER_ID = respLogin.name
                     repository.setUserId(respLogin.userId)
 
-                    showMainUi()
+                    showLoadingUi()
                 }
             }
 

@@ -36,7 +36,28 @@ class AppApiHelper : ApiHelper {
 
     /////
 
-    override fun login(name: String , cb: ApiHelper.LoginCallback) {
+
+
+    override fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback) {
+
+        apiServices.signup(ReqSignup(name,pushToken))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+
+                    if(it.code == 200)
+                        cb.onLoginLoaded(it.data)
+                    else
+                        cb.onDataNotAvailable()
+
+                }, { error ->
+                    cb.onDataNotAvailable()
+                })
+
+
+    }
+
+    override fun login(name: String , cb: ApiHelper.UserResCallback) {
 
         apiServices.login(ReqLogin(name))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,7 +75,6 @@ class AppApiHelper : ApiHelper {
 
 
     }
-
 
     override fun findUserByName(name: String , cb: ApiHelper.GetSuccessCallback) {
         apiServices.findUserByName(name)

@@ -9,8 +9,8 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
-    interface LoginCallback{
-        fun onLoginLoaded(respLogin: RespLogin)
+    interface UserResCallback{
+        fun onLoginLoaded(respLogin: UserRes)
         fun onDataNotAvailable()
     }
 
@@ -39,7 +39,8 @@ interface ApiHelper {
     fun getEvents(cb: GetEventsCallback)
 
     // user
-    fun login(name:String , cb:LoginCallback)
+    fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback)
+    fun login(name:String , cb:UserResCallback)
     fun findUserByName(name: String , cb: ApiHelper.GetSuccessCallback)
     fun getUserProfile(userId: String , cb: ApiHelper.GetUserCallback)
 

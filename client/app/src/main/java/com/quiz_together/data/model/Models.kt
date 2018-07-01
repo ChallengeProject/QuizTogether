@@ -10,8 +10,8 @@ data class Events(val events:List<Event>)
 // login
 class RespEmpty()
 
+data class ReqSignup(val name:String, val pushToken :String)
 data class ReqLogin(val name:String)
-data class RespLogin(val userId:String, val name:String)
 
 //updateUserProfile
 data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
@@ -19,7 +19,7 @@ data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Lo
 
 data class QustionList(val answerNo:Int, val questionTitle : String,val options:List<String>, val category:Int)
 
-data class userRes(val userId: String,val name:String)
+data class UserRes(val userId: String,val name:String)
 
 data class Broadcast(
         val broadcastId:String,
@@ -33,7 +33,7 @@ data class Broadcast(
         var userId:String,
         var broadcastStatus:Int,
         var winnerMessage:String,
-        var userRes:userRes,
+        var userRes:UserRes,
         var QuestionList:List<QustionList>,
         var questionCount:Int
 )
