@@ -20,7 +20,15 @@ public class ResponseExceptionHandler {
     public final ResultContainer<Object> handleNotFoundUserException(HttpServletRequest request, NotFoundUserException e) {
         log.warn(e.toString(), e);
 
-        return new ResultContainer<>(ExceptionCode.NOT_FOUND_USER, e.toString(), e);
+        return new ResultContainer<>(ExceptionCode.NOT_FOUND_USER, e.toString(), null);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ConflictUserException.class)
+    public final ResultContainer<Object> handleNotFoundUserException(HttpServletRequest request, ConflictUserException e) {
+        log.warn(e.toString(), e);
+
+        return new ResultContainer<>(ExceptionCode.CONFLICT_USER, e.toString(), null);
     }
 
 }

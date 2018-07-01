@@ -24,8 +24,8 @@
 
   <insert id="insertUserDevice" parameterType="map">
        INSERT INTO /* user_device.insertUserDevice */
-        user(id, user_id, push_token, created_time, updated_time)
-        value(#{id}, #{userId}, #{pushToken}, NOW(), NOW())
+        user_device(user_id, push_token, created_time, updated_time)
+        value(#{userId}, #{pushToken}, NOW(), NOW())
   </insert>
 
 

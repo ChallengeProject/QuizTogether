@@ -10,6 +10,7 @@ import me.quiz_together.root.model.request.UserLoginRequest;
 import me.quiz_together.root.model.request.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
+import me.quiz_together.root.model.user.UserStatus;
 import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
 import me.quiz_together.root.support.HashIdUtils;
@@ -67,7 +68,8 @@ public class UserService {
     public User buildUser(UserSignupRequest userRequest) {
         User user = new User();
         user.setName(userRequest.getName());
-
+        user.setUserStatus(UserStatus.NORMAL);
+        user.setMoney(0L);
         return user;
     }
 }
