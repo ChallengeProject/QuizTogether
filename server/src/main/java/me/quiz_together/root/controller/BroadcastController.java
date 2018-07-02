@@ -1,17 +1,26 @@
 package me.quiz_together.root.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import me.quiz_together.root.model.response.broadcast.CurrentBroadcastListView;
 import me.quiz_together.root.model.supoort.ResultContainer;
+import me.quiz_together.root.service.broadcast.BroadcastViewService;
 
 @RestController
 public class BroadcastController implements ApiController {
+    @Autowired
+    private BroadcastViewService broadcastViewService;
 
-    @GetMapping("/broadcast/getBroadcastList")
-    public ResultContainer getBroadcastList() {
-        return new ResultContainer();
+    @GetMapping("/broadcast/getPagingBroadcastList")
+    public ResultContainer<List<CurrentBroadcastListView>> getPagingBroadcastList(@RequestParam Long next, @RequestParam int limit) {
+
+        return new ResultContainer<>(broadcastViewService.getCurrentBroadcastListView(next, limit));
     }
 
     @GetMapping("/broadcast/getBroadcastById")

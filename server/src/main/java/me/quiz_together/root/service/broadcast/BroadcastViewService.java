@@ -26,7 +26,6 @@ public class BroadcastViewService {
 
     public List<CurrentBroadcastListView> getCurrentBroadcastListView(long next, int limit) {
         List<Broadcast> broadcastList = broadcastService.getPagingBroadcastList(next, limit);
-        // ids로 user정보 가져오는 logic 필요
         List<Long> userIds = broadcastList.stream().map(Broadcast::getUserId).collect(Collectors.toList());
 
         List<User> userList = userService.getUserByIds(userIds);
