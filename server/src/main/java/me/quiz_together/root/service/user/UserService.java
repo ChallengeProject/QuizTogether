@@ -1,5 +1,8 @@
 package me.quiz_together.root.service.user;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +47,10 @@ public class UserService {
         return userRepository.selectUserById(id);
     }
 
+    public List<User> getUserByIds(List<Long> ids) {
+        return userRepository.getUserByIds(ids);
+    }
+
     public void updateUserProfile(long userId, MultipartFile profileImage) {
         String profileImageUrl = amazonS3Service.uploadImage(profileImage);
         if(userRepository.updateUserProfile(userId, profileImageUrl) != 1) {
@@ -60,7 +67,8 @@ public class UserService {
     }
 
     public void findUserByName(String name) {
-        if (userRepository.selectUserByName(name)) {
+        User user = userRepository.selectUserByName(name);
+        if (Objects.nonNull(user)) {
             throw new ConflictUserException();
         }
     }

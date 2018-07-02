@@ -1,5 +1,7 @@
 package me.quiz_together.root.repository.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,10 @@ public class UserRepository {
         return userMapper.selectUserById(id);
     }
 
+    public List<User> getUserByIds(List<Long> ids) {
+        return userMapper.getUserByIds(ids);
+    }
+
     public int updateUserProfile(long userId, String profileImageUrl) {
         return userMapper.updateUserProfile(userId, profileImageUrl);
     }
@@ -27,8 +33,8 @@ public class UserRepository {
         return userMapper.deleteUserById(id);
     }
 
-    public boolean selectUserByName(String name) {
-        return userMapper.selectUserByName(name) > 0;
+    public User selectUserByName(String name) {
+        return userMapper.selectUserByName(name);
     }
 
     public User login(UserLoginRequest userLoginRequest) {
