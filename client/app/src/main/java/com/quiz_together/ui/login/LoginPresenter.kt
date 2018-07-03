@@ -44,11 +44,11 @@ class LoginPresenter(
     }
 
 
-    override fun signupTask(id: String ) {
+    override fun signupTask(name: String ) {
 
         loginView.setLoadingIndicator(true)
 
-        repository.signup(id,"this is dummy", object : ApiHelper.UserResCallback{
+        repository.signup(name,"THIS_IS_DUMMY_DATA", object : ApiHelper.UserResCallback{
             override fun onLoginLoaded(respLogin: UserRes) {
 
                 loginView.run{

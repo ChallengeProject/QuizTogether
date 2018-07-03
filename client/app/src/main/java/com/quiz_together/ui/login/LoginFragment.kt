@@ -6,13 +6,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.frag_login.*
 import com.quiz_together.R
 import com.quiz_together.ui.loading.LoadingActivity
-import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import com.quiz_together.util.toast
+import kotlinx.android.synthetic.main.frag_login.*
 
 class LoginFragment : Fragment(), LoginContract.View {
 

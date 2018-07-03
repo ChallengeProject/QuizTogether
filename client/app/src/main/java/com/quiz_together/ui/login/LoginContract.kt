@@ -16,7 +16,7 @@ interface LoginContract {
     }
 
     interface Presenter : BasePresenter {
-        fun signupTask(id: String )
+        fun signupTask(name: String )
         fun checkTask(id:String)
 
     }

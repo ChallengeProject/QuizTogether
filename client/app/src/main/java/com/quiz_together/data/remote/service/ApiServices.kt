@@ -1,13 +1,26 @@
 package com.quiz_together.data.remote.service
 
-import com.google.gson.GsonBuilder
 import com.quiz_together.BuildConfig
-import com.quiz_together.data.model.*
+import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.Broadcasts
+import com.quiz_together.data.model.Events
+import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqLogin
+import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSignup
+import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.Resp
+import com.quiz_together.data.model.RespEmpty
+import com.quiz_together.data.model.User
+import com.quiz_together.data.model.UserRes
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiServices {
 

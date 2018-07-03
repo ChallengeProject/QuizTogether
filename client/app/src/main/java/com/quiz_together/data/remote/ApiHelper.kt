@@ -1,6 +1,13 @@
 package com.quiz_together.data.remote
 
-import com.quiz_together.data.model.*
+import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.Events
+import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.User
+import com.quiz_together.data.model.UserRes
+
 
 interface ApiHelper {
 
@@ -20,7 +27,7 @@ interface ApiHelper {
     }
 
     interface GetUserCallback{
-        fun onUserLoaded(user:User)
+        fun onUserLoaded(user: User)
         fun onDataNotAvailable()
     }
 
@@ -30,6 +37,7 @@ interface ApiHelper {
     }
 
     interface GetBroadcastCallback{
+
         fun onBroadcastLoaded(broadcasts: Broadcast)
         fun onDataNotAvailable()
     }

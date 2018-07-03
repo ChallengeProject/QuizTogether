@@ -1,7 +1,5 @@
 package com.quiz_together.data.model
 
-import com.google.gson.annotations.Expose
-
 // dummy method
 data class Event(val id:Int, val topics:String, val thumbnail:String)
 data class Events(val events:List<Event>)
@@ -17,7 +15,11 @@ data class ReqLogin(val name:String)
 data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
-data class QustionList(val answerNo:Int, val questionTitle : String,val options:List<String>, val category:Int)
+
+
+data class Question(val title:String, val options:List<String>)
+
+data class QustionList(val answerNo:Int, val questionId : String,val question:List<Question>, val category:Int)
 
 data class UserRes(val userId: String,val name:String)
 
@@ -34,7 +36,7 @@ data class Broadcast(
         var broadcastStatus:Int,
         var winnerMessage:String,
         var userRes:UserRes,
-        var QuestionList:List<QustionList>,
+        var questionList:List<QustionList>,
         var questionCount:Int
 )
 
