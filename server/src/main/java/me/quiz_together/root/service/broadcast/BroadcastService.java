@@ -26,8 +26,8 @@ public class BroadcastService {
         broadcastRepository.insertBroadcast(broadcast);
     }
 
-    public int updateBroadcast(Broadcast broadcast, long broadcastId) {
-        return broadcastRepository.updateBroadcast(broadcast, broadcastId);
+    public int updateBroadcast(Broadcast broadcast) {
+        return broadcastRepository.updateBroadcast(broadcast);
     }
 
     public int updateBroadcastStatus(BroadcastStatus broadcastStatus, long broadcastId) {

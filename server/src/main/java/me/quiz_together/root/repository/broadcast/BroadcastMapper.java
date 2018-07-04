@@ -17,7 +17,7 @@ public interface BroadcastMapper {
 
     void insertBroadcast(Broadcast broadcast);
 
-    int updateBroadcast(Broadcast broadcast, @Param("broadcastId") long broadcastId);
+    int updateBroadcast(Broadcast broadcast);
 
     int updateBroadcastStatus(@Param("broadcastStatus") BroadcastStatus broadcastStatus, @Param("broadcastId") long broadcastId);
 

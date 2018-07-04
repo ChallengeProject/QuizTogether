@@ -2,9 +2,10 @@ package me.quiz_together.root.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import me.quiz_together.root.model.request.UserIdReq;
-import me.quiz_together.root.model.request.UserSignupRequest;
+import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.user.User;
@@ -41,5 +42,17 @@ public class UserViewService {
                 .userId(user.getId())
                 .name(user.getName())
                 .build();
+    }
+
+    public void deleteUserById(UserIdReq userIdReq) {
+        userService.deleteUserById(userIdReq.getUserId());
+    }
+
+    public void updateUserProfile(long userId, MultipartFile profileImage) {
+        userService.updateUserProfile(userId, profileImage);
+    }
+
+    public void findUserByName(String name) {
+        userService.findUserByName(name);
     }
 }

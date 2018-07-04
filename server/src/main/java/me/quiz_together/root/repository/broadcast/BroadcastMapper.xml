@@ -65,13 +65,13 @@
       , gift_description = #{giftDescription}
       , gift_type = #{giftType}
       , winner_message = #{winnerMessage}
-      , code = #{code}
-      , is_public = #{isPublic}
+--       , code = #{code}
+--       , is_public = #{isPublic}
       , question_count = #{questionCount}
       ,	updated_time = NOW()
       , scheduled_time = #{scheduledTime}
     WHERE
-        id = #{broadcastId}
+        id = #{id}
   </update>
 
   <update id="deleteBroadcastById" parameterType="map">

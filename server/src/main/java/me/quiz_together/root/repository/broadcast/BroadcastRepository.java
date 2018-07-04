@@ -25,8 +25,8 @@ public class BroadcastRepository {
         broadcastMapper.insertBroadcast(broadcast);
     }
 
-    public int updateBroadcast(Broadcast broadcast, long broadcastId) {
-        return broadcastMapper.updateBroadcast(broadcast, broadcastId);
+    public int updateBroadcast(Broadcast broadcast) {
+        return broadcastMapper.updateBroadcast(broadcast);
     }
 
     public int updateBroadcastStatus(BroadcastStatus broadcastStatus, long broadcastId) {

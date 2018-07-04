@@ -10,23 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiImplicitParam;
-import me.quiz_together.root.model.request.UserIdReq;
-import me.quiz_together.root.model.request.UserSignupRequest;
+import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.supoort.ResultContainer;
-import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.service.user.UserViewService;
 import me.quiz_together.root.support.HashIdUtils;
 import me.quiz_together.root.support.HashIdUtils.HashIdType;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @RestController
-public class UserController implements ApiController{
+public class UserController implements ApiController {
     @Autowired
     private UserViewService userViewService;
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/user/signup")
     public ResultContainer<UserView> signup(@RequestBody UserSignupRequest user) {
@@ -36,7 +33,7 @@ public class UserController implements ApiController{
 
     @PostMapping("/user/deleteUserById")
     public ResultContainer<Void> deleteUserById(@RequestBody UserIdReq userIdReq) {
-        userService.deleteUserById(userIdReq.getUserId());
+        userViewService.deleteUserById(userIdReq);
 
         return new ResultContainer<>();
     }
@@ -51,7 +48,7 @@ public class UserController implements ApiController{
     @PostMapping("/user/updateUserProfile")
     public ResultContainer<Void> updateUserProfile(@RequestParam @HashUserId Long userId,
                                                      @RequestPart MultipartFile profileImage) {
-        userService.updateUserProfile(userId, profileImage);
+        userViewService.updateUserProfile(userId, profileImage);
         return new ResultContainer<>();
     }
 
@@ -73,7 +70,7 @@ public class UserController implements ApiController{
 
     @GetMapping("/user/findUserByName")
     public ResultContainer<Void> findUserByName(@RequestParam String name) {
-        userService.findUserByName(name);
+        userViewService.findUserByName(name);
         return new ResultContainer<>();
     }
 

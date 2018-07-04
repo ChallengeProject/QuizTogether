@@ -9,7 +9,7 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 
 @Data
 @Builder
-public class CurrentBroadcastListView {
+public class CurrentBroadcastView {
     @HashBroadcastId
     private Long broadcastId;
     private String title;

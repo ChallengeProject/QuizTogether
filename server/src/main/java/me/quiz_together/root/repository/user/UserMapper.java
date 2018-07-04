@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import me.quiz_together.root.model.request.UserIdReq;
 import me.quiz_together.root.model.user.User;
 
 @Mapper
@@ -23,5 +22,5 @@ public interface UserMapper {
 
     User selectUserByName(@Param("name") String name);
 
-    User login(UserIdReq userIdReq);
+    User login(@Param("userId") long userId);
 }

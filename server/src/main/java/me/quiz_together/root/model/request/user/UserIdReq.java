@@ -1,4 +1,4 @@
-package me.quiz_together.root.model.request;
+package me.quiz_together.root.model.request.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

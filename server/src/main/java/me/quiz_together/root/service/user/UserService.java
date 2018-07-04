@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
-import me.quiz_together.root.model.request.UserIdReq;
-import me.quiz_together.root.model.request.UserSignupRequest;
+import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
 import me.quiz_together.root.model.user.UserStatus;
@@ -61,7 +61,7 @@ public class UserService {
     }
 
     public User login(UserIdReq userIdReq) {
-        return userRepository.login(userIdReq);
+        return userRepository.login(userIdReq.getUserId());
     }
 
     public void findUserByName(String name) {

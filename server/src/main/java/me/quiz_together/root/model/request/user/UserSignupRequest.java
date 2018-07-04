@@ -1,4 +1,4 @@
-package me.quiz_together.root.model.request;
+package me.quiz_together.root.model.request.user;
 
 import lombok.Data;
 
