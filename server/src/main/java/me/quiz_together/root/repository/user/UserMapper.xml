@@ -40,7 +40,7 @@
     FROM
       user
     WHERE
-      name = #{name}
+      id = #{userId}
   </select>
 
   <select id="getUserByIds" resultType="User" parameterType="map">

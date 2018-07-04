@@ -9,15 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
-import me.quiz_together.root.model.request.UserLoginRequest;
+import me.quiz_together.root.model.request.UserIdReq;
 import me.quiz_together.root.model.request.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
 import me.quiz_together.root.model.user.UserStatus;
 import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
-import me.quiz_together.root.support.HashIdUtils;
-import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Service
 public class UserService {
@@ -28,7 +26,7 @@ public class UserService {
     @Autowired
     private AmazonS3Service amazonS3Service;
 
-    public String insertUser(UserSignupRequest userSignupRequest) {
+    public User insertUser(UserSignupRequest userSignupRequest) {
         // user 중복 검사
         findUserByName(userSignupRequest.getName());
 
@@ -40,7 +38,7 @@ public class UserService {
         userDevice.setPushToken(userSignupRequest.getPushToken());
         userDeviceService.insertUserDevice(userDevice);
 
-        return HashIdUtils.encryptId(HashIdType.USER_ID, user.getId());
+        return user;
     }
 
     public User getUserById(long id) {
@@ -62,8 +60,8 @@ public class UserService {
         return userRepository.deleteUserById(id);
     }
 
-    public User login(UserLoginRequest userLoginRequest) {
-        return userRepository.login(userLoginRequest);
+    public User login(UserIdReq userIdReq) {
+        return userRepository.login(userIdReq);
     }
 
     public void findUserByName(String name) {

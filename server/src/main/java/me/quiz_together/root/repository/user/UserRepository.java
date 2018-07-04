@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import me.quiz_together.root.model.request.UserLoginRequest;
+import me.quiz_together.root.model.request.UserIdReq;
 import me.quiz_together.root.model.user.User;
 
 @Repository
@@ -37,7 +37,7 @@ public class UserRepository {
         return userMapper.selectUserByName(name);
     }
 
-    public User login(UserLoginRequest userLoginRequest) {
-        return userMapper.login(userLoginRequest);
+    public User login(UserIdReq userIdReq) {
+        return userMapper.login(userIdReq);
     }
 }
