@@ -1,9 +1,10 @@
 package me.quiz_together.root.repository.user;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import me.quiz_together.root.model.request.UserLoginRequest;
 import me.quiz_together.root.model.user.User;
 
 @Mapper
@@ -13,11 +14,13 @@ public interface UserMapper {
 
     User selectUserById(@Param("id")long id);
 
+    List<User> getUserByIds(List<Long> ids);
+
     int updateUserProfile(long userId, String profileImageUrl);
 
     int deleteUserById(@Param("id")long id);
 
-    int selectUserByName(@Param("name") String name);
+    User selectUserByName(@Param("name") String name);
 
-    User login(UserLoginRequest userLoginRequest);
+    User login(@Param("userId") long userId);
 }

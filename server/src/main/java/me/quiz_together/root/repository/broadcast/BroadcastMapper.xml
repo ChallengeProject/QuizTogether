@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.quiz_together.root.repository.broadcast.BroadcastMapper">
+  <sql id="BroadcastColumns">
+          broadcast.id
+        , broadcast.user_id
+        , broadcast.title
+        , broadcast.description
+        , broadcast.broadcast_status
+        , broadcast.prize
+        , broadcast.gift_description
+        , broadcast.gift_type
+        , broadcast.winner_message
+        , broadcast.code
+        , broadcast.is_public
+        , broadcast.question_count
+        ,	broadcast.created_time
+        ,	broadcast.updated_time
+        , broadcast.scheduled_time
+      </sql>
+
+  <select id="selectBroadcastById" parameterType="map" resultType="Broadcast">
+    SELECT
+    /* broadcast.selectBroadcastById */
+    <include refid="BroadcastColumns" />
+    FROM
+    broadcast
+    WHERE
+    id = #{broadcastId}
+  </select>
+
+  <select id="selectPagingBroadcastList" parameterType="map" resultType="Broadcast">
+    SELECT
+    /* broadcast.selectPagingBroadcastList */
+    <include refid="BroadcastColumns" />
+    FROM
+    broadcast
+    <where>
+      <if test="next > 0">
+        id &lt; #{next}
+      </if>
+    </where>
+    ORDER BY
+    id DESC
+    LIMIT
+    #{limit}
+  </select>
+
+  <insert id="insertBroadcast" parameterType="map">
+       INSERT INTO /* broadcast.insertBroadcast */
+        broadcast(id, user_id, title, description, broadcast_status, prize, gift_description, gift_type, winner_message
+        , code, is_public, question_count,	created_time,	updated_time, scheduled_time)
+        value(#{userId}, #{title}, #{description}, #{broadcastStatus}, #{prize}, #{giftDescription}, #{giftType}, #{winnerMessage}
+        , #{code}, #{isPublic}, #{questionCount},	NOW(), NOW(), scheduledTime)
+  </insert>
+
+  <update id="updateBroadcast" parameterType="map">
+    UPDATE /* broadcast.updateBroadcast */
+      broadcast
+    SET
+      , title = #{title}
+      , description = #{title}
+      , prize = #{prize}
+      , gift_description = #{giftDescription}
+      , gift_type = #{giftType}
+      , winner_message = #{winnerMessage}
+--       , code = #{code}
+--       , is_public = #{isPublic}
+      , question_count = #{questionCount}
+      ,	updated_time = NOW()
+      , scheduled_time = #{scheduledTime}
+    WHERE
+        id = #{id}
+  </update>
+
+  <update id="deleteBroadcastById" parameterType="map">
+    UPDATE /* broadcast.deleteBroadcastById */
+      broadcast
+    SET
+      broadcast_status = #{broadcastStatus}
+      ,	updated_time = NOW()
+      , deleted_time = NOW()
+    WHERE
+        id = #{broadcastId}
+  </update>
+
+  <update id="updateBroadcastStatus" parameterType="map">
+    UPDATE /* broadcast.updateBroadcast */
+      broadcast
+    SET
+      broadcast_status = #{broadcastStatus}
+      ,	updated_time = NOW()
+    WHERE
+        id = #{broadcastId}
+  </update>
+
+
+
+</mapper>

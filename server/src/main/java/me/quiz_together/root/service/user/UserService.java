@@ -1,20 +1,21 @@
 package me.quiz_together.root.service.user;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
-import me.quiz_together.root.model.request.UserLoginRequest;
-import me.quiz_together.root.model.request.UserSignupRequest;
+import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
 import me.quiz_together.root.model.user.UserStatus;
 import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
-import me.quiz_together.root.support.HashIdUtils;
-import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Service
 public class UserService {
@@ -25,7 +26,7 @@ public class UserService {
     @Autowired
     private AmazonS3Service amazonS3Service;
 
-    public String insertUser(UserSignupRequest userSignupRequest) {
+    public User insertUser(UserSignupRequest userSignupRequest) {
         // user 중복 검사
         findUserByName(userSignupRequest.getName());
 
@@ -37,11 +38,15 @@ public class UserService {
         userDevice.setPushToken(userSignupRequest.getPushToken());
         userDeviceService.insertUserDevice(userDevice);
 
-        return HashIdUtils.encryptId(HashIdType.USER_ID, user.getId());
+        return user;
     }
 
     public User getUserById(long id) {
         return userRepository.selectUserById(id);
+    }
+
+    public List<User> getUserByIds(List<Long> ids) {
+        return userRepository.getUserByIds(ids);
     }
 
     public void updateUserProfile(long userId, MultipartFile profileImage) {
@@ -55,12 +60,13 @@ public class UserService {
         return userRepository.deleteUserById(id);
     }
 
-    public User login(UserLoginRequest userLoginRequest) {
-        return userRepository.login(userLoginRequest);
+    public User login(UserIdReq userIdReq) {
+        return userRepository.login(userIdReq.getUserId());
     }
 
     public void findUserByName(String name) {
-        if (userRepository.selectUserByName(name)) {
+        User user = userRepository.selectUserByName(name);
+        if (Objects.nonNull(user)) {
             throw new ConflictUserException();
         }
     }
