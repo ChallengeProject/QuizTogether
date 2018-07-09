@@ -18,12 +18,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'SERVER_URL', '"http://seose11.iptime.org:8080"'
+            buildConfigField "String", 'REST_PREFIX', '"/api/v1.0"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }
         debug {
-            buildConfigField "String", 'SERVER_URL', '"http://192.168.0.18:3000"'
+            buildConfigField "String", 'SERVER_URL', '"http://seose11.iptime.org:8080"'
+            buildConfigField "String", 'REST_PREFIX', '"/api/v1.0"'
             buildConfigField "String", 'PREF_FILE_NAME', '"EXAMPLE"'
         }
     }
@@ -36,6 +37,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -52,3 +54,5 @@ dependencies {
 
 
 }
+
+apply plugin: 'com.google.gms.google-services'

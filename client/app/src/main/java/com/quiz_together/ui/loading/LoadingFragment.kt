@@ -1,23 +1,32 @@
-package com.quiz_together.ui.login
+package com.quiz_together.ui.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
-import com.quiz_together.ui.loading.LoadingActivity
+import com.quiz_together.ui.login.LoginActivity
+import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import com.quiz_together.util.toast
-import kotlinx.android.synthetic.main.frag_login.*
+import kotlinx.android.synthetic.main.frag_base.*
 
-class LoginFragment : Fragment(), LoginContract.View {
+class LoadingFragment : Fragment(), LoadingContract.View {
 
-    val TAG = "LoginFragment"
 
-    override lateinit var presenter: LoginContract.Presenter
+
+
+
+
+
+    val TAG = "LoadingFragment"
+
+    override lateinit var presenter: LoadingContract.Presenter
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -32,7 +41,7 @@ class LoginFragment : Fragment(), LoginContract.View {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.frag_login, container, false)
+        val root = inflater.inflate(R.layout.frag_base, container, false)
 
         return root
     }
@@ -46,40 +55,34 @@ class LoginFragment : Fragment(), LoginContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btCheckNick.setOnClickListener { v->
-            presenter.checkTask(etId.text.toString())
-        }
-
-        btStart.setOnClickListener { v->
-            presenter.signupTask(etId.text.toString())
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            Log.i(TAG,"findViewById<FloatingActionButton>")
         }
 
     }
 
-    override fun showLoadingUi() {
 
+    override fun showLoginUi() {
         activity?.run{
-            startActivity(Intent(context, LoadingActivity::class.java))
+            startActivity(Intent(applicationContext,LoginActivity::class.java))
             finish()
         }
     }
 
-    override fun isCheckSuccess(isSuccess: Boolean) {
-
-        if(isSuccess) {
-            "can created id".toast()
-        } else {
-            "duplicated id".toast()
+    override fun showMainUi() {
+        activity?.run{
+            startActivity(Intent(applicationContext, MainActivity::class.java))
+            finish()
         }
-        btStart.isEnabled = isSuccess
     }
 
-    override fun showFailLoginTxt() {
-        "error".toast()
+    override fun showErrorTxt() {
+        "Network or Server Err, Plase restart application".toast()
     }
 
     companion object {
-        fun newInstance() = LoginFragment()
+        fun newInstance() = LoadingFragment()
     }
+
 
 }

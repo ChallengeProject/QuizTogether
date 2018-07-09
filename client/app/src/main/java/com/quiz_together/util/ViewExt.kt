@@ -7,6 +7,8 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.quiz_together.App
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun String.toast( duration: Int = Toast.LENGTH_LONG): Toast {
     return Toast.makeText(App.instance, this, duration).apply { show() }
@@ -23,3 +25,5 @@ fun Window.setTouchable(active:Boolean) {
     else
         this.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 }
+
+fun Long.getDateTime() :String =SimpleDateFormat("MM/dd/yyyy HH:mm").format(Date(this))

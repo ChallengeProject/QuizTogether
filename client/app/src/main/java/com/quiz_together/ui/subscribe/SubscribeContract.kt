@@ -1,23 +1,19 @@
-package com.quiz_together.ui.login
+package com.quiz_together.ui.subscribe
 
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
 
-interface LoginContract {
+
+interface SubscribeContract {
 
     interface View : BaseView<Presenter> {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
-        fun showLoadingUi()
-        fun isCheckSuccess(isSuccess:Boolean)
-        fun showFailLoginTxt()
 
     }
 
     interface Presenter : BasePresenter {
-        fun signupTask(name: String )
-        fun checkTask(id:String)
 
     }
 

@@ -20,26 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/etId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="aaa" />
-
-        <Button
-            android:id="@+id/btCheckNick"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="checkNick" />
-
-        <Button
-            android:enabled="false"
-            android:id="@+id/btStart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="start" />
     </LinearLayout>
 
     <ProgressBar

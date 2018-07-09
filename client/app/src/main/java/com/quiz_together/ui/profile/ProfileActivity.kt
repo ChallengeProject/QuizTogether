@@ -1,13 +1,14 @@
-package com.quiz_together.ui.login
+package com.quiz_together.ui.profile
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.util.replaceFragmentInActivity
 import com.quiz_together.util.setupActionBar
 
-class LoginActivity : AppCompatActivity() {
+
+class ProfileActivity : AppCompatActivity() {
 
     private fun initToolbar(){
         setupActionBar(R.id.toolbar) {
@@ -18,17 +19,18 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_base)
 
         initToolbar();
 
-        val loginFragment = supportFragmentManager
-                .findFragmentById(R.id.fl_content) as LoginFragment? ?:
-        LoginFragment.newInstance().also {
+        val fragment = supportFragmentManager
+                .findFragmentById(R.id.fl_content) as ProfileFragment? ?:
+        ProfileFragment.newInstance().also {
+
             replaceFragmentInActivity(it, R.id.fl_content)
         }
 
-        LoginPresenter(Repository ,loginFragment)
+        ProfilePresenter(Repository ,fragment)
 
     }
 

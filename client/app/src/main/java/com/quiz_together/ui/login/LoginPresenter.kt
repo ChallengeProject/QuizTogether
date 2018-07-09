@@ -1,8 +1,9 @@
 package com.quiz_together.ui.login
 
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.RespIdPw
+import com.quiz_together.data.model.UserRes
 import com.quiz_together.data.remote.ApiHelper
+import com.quiz_together.util.SC
 
 class LoginPresenter(
         private val repository: Repository,
@@ -14,41 +15,62 @@ class LoginPresenter(
     }
 
     override fun start() {
-        if(repository.isFirstLaunch()){
-            repository.setIsFirst(false)
-            loginView.showFirstLaunch()
-        }
+
     }
 
-    override fun loginTask(id: String, pw: String) {
+    override fun checkTask(id: String) {
 
         loginView.setLoadingIndicator(true)
 
-        repository.login(id,pw, object : ApiHelper.LoginCallback {
+        repository.findUserByName(id, object : ApiHelper.GetSuccessCallback{
+            override fun onSuccessLoaded() {
+                loginView.run {
+                    if(!isActive) return@onSuccessLoaded
+                    setLoadingIndicator(false)
 
-            override fun onLoginLoaded(respIdPw: RespIdPw) {
+                    isCheckSuccess(true)
+                }
+            }
+
+            override fun onDataNotAvailable() {
+                loginView.run {
+                    if (!isActive) return@onDataNotAvailable
+                    setLoadingIndicator(false)
+
+                    isCheckSuccess(false)
+                }
+            }
+        })
+    }
+
+
+    override fun signupTask(name: String ) {
+
+        loginView.setLoadingIndicator(true)
+
+        repository.signup(name,"THIS_IS_DUMMY_DATA", object : ApiHelper.UserResCallback{
+            override fun onLoginLoaded(respLogin: UserRes) {
 
                 loginView.run{
                     if(!isActive) return@onLoginLoaded
-
                     setLoadingIndicator(false)
 
-                    if(respIdPw.result == "success")
-                        showMainUi(id)
-                }
+                    SC.USER_ID = respLogin.name
+                    repository.setUserId(respLogin.userId)
 
+                    showLoadingUi()
+                }
             }
 
             override fun onDataNotAvailable() {
 
                 loginView.run {
                     if(!isActive) return@onDataNotAvailable
-
                     setLoadingIndicator(false)
+
+                    showFailLoginTxt()
                 }
-
             }
-
         })
     }
 
