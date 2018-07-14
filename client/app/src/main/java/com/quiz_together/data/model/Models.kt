@@ -32,12 +32,12 @@ data class Broadcast(
         val prize:Long,
         val giftDescription:String,
 
-        var userId:String,
-        var broadcastStatus:Int,
-        var winnerMessage:String,
-        var userRes:UserRes,
-        var questionList:List<QustionList>,
-        var questionCount:Int
+        var userId:String?,
+        var broadcastStatus:Int?,
+        var winnerMessage:String?,
+        var userRes:UserRes?,
+        var questionList:List<QustionList>?,
+        var questionCount:Int?
 )
 
 data class Broadcasts(val broadcasts : List<Broadcast>)

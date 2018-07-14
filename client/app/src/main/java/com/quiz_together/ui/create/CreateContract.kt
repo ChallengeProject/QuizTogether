@@ -10,7 +10,6 @@ interface CreateContract {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
-        fun showWriteQuizUi()
 
     }
 

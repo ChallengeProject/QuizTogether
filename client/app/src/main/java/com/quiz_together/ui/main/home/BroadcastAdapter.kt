@@ -40,8 +40,15 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
             tvDate.text = item.scheduledTime.toString()
             tvName.text = item.userId
             tvPrize.text = item.prize.toString()
+            tvContent.text = item.description
+            ivProfile.setImageResource(R.drawable.ic_dummy)
 
-            ll.setOnClickListener({ _ ->
+            rl.setOnClickListener({ _ ->
+                cbOnClickLl.invoke(item.title + item.scheduledTime.toString() + item.userId + item.prize.toString())
+            })
+
+
+            ivShare.setOnClickListener({ _ ->
                 cbOnClickLl.invoke(item.title + item.scheduledTime.toString() + item.userId + item.prize.toString())
             })
 

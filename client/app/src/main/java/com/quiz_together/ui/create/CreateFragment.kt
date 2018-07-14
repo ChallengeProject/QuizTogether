@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
-import com.quiz_together.ui.write.WriteActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import kotlinx.android.synthetic.main.frag_create.*
@@ -52,16 +51,9 @@ class CreateFragment : Fragment(), CreateContract.View {
             Log.i(TAG,"findViewById<FloatingActionButton>")
         }
 
-        btWriteQuiz.setOnClickListener { _ ->
-            showWriteQuizUi()
-        }
-
 
     }
 
-    override fun showWriteQuizUi() {
-        startActivity(Intent(activity?.applicationContext,WriteActivity::class.java))
-    }
 
     companion object {
         fun newInstance() = CreateFragment()
