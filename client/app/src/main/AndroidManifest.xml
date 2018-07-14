@@ -27,7 +27,6 @@
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <!--<activity android:name=".ui.subscribe.SubscribeActivity" />-->
-        <activity android:name=".ui.write.WriteActivity" />
 
         <service
             android:name=".util.MyFirebaseMessagingService">
