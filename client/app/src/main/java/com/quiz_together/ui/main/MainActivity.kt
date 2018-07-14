@@ -9,6 +9,7 @@ import com.quiz_together.ui.main.event.EventFragment
 import com.quiz_together.ui.main.home.HomeFragment
 import com.quiz_together.ui.main.profile.ProfileFragment
 import com.quiz_together.ui.main.search.SearchFragment
+import com.quiz_together.util.disableShiftMode
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         replace(R.id.fl_content, homeFragment)
         initToolbar()
+        bnv.disableShiftMode()
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
