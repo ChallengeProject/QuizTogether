@@ -55,6 +55,8 @@ dependencies {
     // circle imageview ( https://github.com/hdodenhof/CircleImageView , star:10144)
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // for bottom dot in viewpager ( https://github.com/Chabbal/slidingdotsplash )
+//    implementation 'com.chabbal:slidingdotsplash:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

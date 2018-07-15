@@ -38,7 +38,7 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
                     setLoadingIndicator(false)
 
                     //TODO #############################
-                    // TODO need to delete ( for test )
+                    //TODO need to delete ( for test )
 
                     val broadcasts = ArrayList<Broadcast>()
                     broadcasts.add(Broadcast("aa","라인프렌즈의하루1","브라운이연애를한다던데? 1",11111111,

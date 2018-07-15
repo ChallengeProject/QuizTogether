@@ -17,8 +17,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_add"
-        android:title="add"
+        android:id="@+id/menu_create"
+        android:title="menu_create"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_dummy"  />
 

@@ -1,5 +1,6 @@
 package com.quiz_together.ui.main.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import com.quiz_together.App
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.util.setTouchable
 import kotlinx.android.synthetic.main.fragm_home.*
 
@@ -40,8 +42,10 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.menu_add -> {
-                Log.i(TAG, "menu_add")
+            R.id.menu_create -> {
+                val intent = Intent(activity?.applicationContext,CreateActivity::class.java)
+
+                startActivity(intent)
             }
         }
         return true

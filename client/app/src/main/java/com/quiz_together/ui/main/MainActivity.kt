@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initToolbar(){
         setupActionBar(R.id.toolbar) {
-            setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+            setTitle("Qugether")
         }
     }
 

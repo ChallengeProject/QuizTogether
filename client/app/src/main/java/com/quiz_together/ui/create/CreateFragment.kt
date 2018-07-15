@@ -1,5 +1,6 @@
 package com.quiz_together.ui.create
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -12,6 +13,13 @@ import com.quiz_together.R
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import kotlinx.android.synthetic.main.frag_create.*
+import android.support.design.widget.TabLayout
+import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
+import android.widget.LinearLayout
+import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
+import android.widget.ImageView
 
 class CreateFragment : Fragment(), CreateContract.View {
 
@@ -46,10 +54,7 @@ class CreateFragment : Fragment(), CreateContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
-            //            presenter.editTask()
-            Log.i(TAG,"findViewById<FloatingActionButton>")
-        }
+
 
 
     }
