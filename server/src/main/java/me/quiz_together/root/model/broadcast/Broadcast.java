@@ -6,7 +6,7 @@ import lombok.Data;
 public class Broadcast {
     private Long id;
     private Long userId;
-    private String titile;
+    private String title;
     private String description;
     private BroadcastStatus broadcastStatus;
     private Long prize;
