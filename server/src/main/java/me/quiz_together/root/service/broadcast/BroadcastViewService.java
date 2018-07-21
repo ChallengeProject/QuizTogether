@@ -51,7 +51,7 @@ public class BroadcastViewService {
                             .prize(broadcast.getPrize())
                             .questionCount(broadcast.getQuestionCount())
                             .scheduledTime(broadcast.getScheduledTime())
-                            .title(broadcast.getTitile())
+                            .title(broadcast.getTitle())
                             .winnerMessage(broadcast.getWinnerMessage())
                             .build();
     }
@@ -82,7 +82,7 @@ public class BroadcastViewService {
         broadcast.setPrize(broadcastUpdateReq.getPrize());
         broadcast.setQuestionCount(broadcastUpdateReq.getQuestionList().size());
         broadcast.setScheduledTime(broadcastUpdateReq.getScheduledTime());
-        broadcast.setTitile(broadcastUpdateReq.getTitle());
+        broadcast.setTitle(broadcastUpdateReq.getTitle());
         broadcast.setWinnerMessage(broadcastUpdateReq.getWinnerMessage());
 
         int result = broadcastService.updateBroadcast(broadcast);
@@ -110,7 +110,7 @@ public class BroadcastViewService {
         broadcast.setPrize(broadcastReq.getPrize());
         broadcast.setQuestionCount(broadcastReq.getQuestionList().size());
         broadcast.setScheduledTime(broadcastReq.getScheduledTime());
-        broadcast.setTitile(broadcastReq.getTitle());
+        broadcast.setTitle(broadcastReq.getTitle());
         broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
 
         broadcastService.insertBroadcast(broadcast);
@@ -153,7 +153,7 @@ public class BroadcastViewService {
     private CurrentBroadcastView buildCurrentBroadcastView(Broadcast broadcast, User user) {
         return CurrentBroadcastView.builder()
                                    .broadcastId(broadcast.getId())
-                                   .title(broadcast.getTitile())
+                                   .title(broadcast.getTitle())
                                    .scheduledTime(broadcast.getScheduledTime())
                                    .prize(broadcast.getPrize())
                                    .giftDescription(broadcast.getGiftDescription())
