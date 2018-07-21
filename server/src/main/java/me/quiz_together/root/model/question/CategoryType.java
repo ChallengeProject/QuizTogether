@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import me.quiz_together.root.support.enumeration.ValueEnum;
 
 @AllArgsConstructor
-public enum Category implements ValueEnum {
+public enum CategoryType implements ValueEnum {
     NORMAL(0);
 
     private int value;

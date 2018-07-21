@@ -11,7 +11,7 @@ import me.quiz_together.root.model.broadcast.BroadcastStatus;
 @Mapper
 public interface BroadcastMapper {
 
-    Broadcast selectBroadcastById(@Param("broadcastId") long braodcastId);
+    Broadcast selectBroadcastById(@Param("broadcastId") long broadcastId);
 
     List<Broadcast> selectPagingBroadcastList(@Param("next") long next, @Param("limit") int limit);
 

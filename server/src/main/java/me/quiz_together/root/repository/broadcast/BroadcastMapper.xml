@@ -47,12 +47,40 @@
     #{limit}
   </select>
 
-  <insert id="insertBroadcast" parameterType="map">
+  <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">
        INSERT INTO /* broadcast.insertBroadcast */
-        broadcast(id, user_id, title, description, broadcast_status, prize, gift_description, gift_type, winner_message
-        , code, is_public, question_count,	created_time,	updated_time, scheduled_time)
-        value(#{userId}, #{title}, #{description}, #{broadcastStatus}, #{prize}, #{giftDescription}, #{giftType}, #{winnerMessage}
-        , #{code}, #{isPublic}, #{questionCount},	NOW(), NOW(), scheduledTime)
+        broadcast(
+          user_id
+          , title
+          , description
+          , broadcast_status
+          , prize
+          , gift_description
+          , gift_type
+          , winner_message
+          , code
+          , is_public
+          , question_count
+          , scheduled_time
+          ,	created_time
+          ,	updated_time
+          )
+        VALUES (
+          #{userId}
+          , #{title}
+          , #{description}
+          , #{broadcastStatus}
+          , #{prize}
+          , #{giftDescription}
+          , #{giftType}
+          , #{winnerMessage}
+          , #{code}
+          , #{isPublic}
+          , #{questionCount}
+          , #{scheduledTime, jdbcType=TIMESTAMP}
+          ,	NOW(3)
+          , NOW(3)
+          )
   </insert>
 
   <update id="updateBroadcast" parameterType="map">
@@ -65,8 +93,8 @@
       , gift_description = #{giftDescription}
       , gift_type = #{giftType}
       , winner_message = #{winnerMessage}
---       , code = #{code}
---       , is_public = #{isPublic}
+      , code = #{code}
+      , is_public = #{isPublic}
       , question_count = #{questionCount}
       ,	updated_time = NOW()
       , scheduled_time = #{scheduledTime}

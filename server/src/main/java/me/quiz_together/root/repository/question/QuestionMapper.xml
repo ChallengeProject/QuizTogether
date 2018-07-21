@@ -7,7 +7,7 @@
         , question.user_id
         , question.broadcast_id
         , question.step
-        , question.questonProp
+        , question.question_prop
         , question.answer_no
         ,	question.created_time
         ,	question.updated_time
@@ -36,10 +36,10 @@
 
   <insert id="insertQuestionList" parameterType="map">
     INSERT INTO /* question.insertQuestionList */
-    question(user_id, broadcast_id, step, queston_prop, answer_no, created_time, updated_time, category)
+    question(user_id, broadcast_id, step, question_prop, answer_no, created_time, updated_time, category)
     VALUES
     <foreach collection="list" item="question" separator=",">
-      (#{question.userId}, #{question.broadcastId}, #{question.step}, #{question.questonProp},
+      (#{question.userId}, #{question.broadcastId}, #{question.step}, #{question.questionProp},
       #{question.answerNo}, NOW(3), NOW(3), #{question.category})
     </foreach>
   </insert>
@@ -50,8 +50,8 @@
       question
       SET
       , step = #{question.step}
-      , questonProp = #{question.questonProp}
-      , answerNo = #{question.answerNo}
+      , question_prop = #{question.questionProp}
+      , answer_no = #{question.answerNo}
       , category = #{question.category}
       ,	updated_time = NOW()
       WHERE
