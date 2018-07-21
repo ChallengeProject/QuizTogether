@@ -15,11 +15,9 @@ data class ReqLogin(val name:String)
 data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
+data class QuestionProp(val title:String, val options:List<String>)
 
-
-data class Question(val title:String, val options:List<String>)
-
-data class QustionList(val answerNo:Int, val questionId : String,val question:List<Question>, val category:Int)
+data class QustionList(val answerNo:Int, val questionId : String,val question:List<QuestionProp>, val category:Int)
 
 data class UserRes(val userId: String,val name:String)
 

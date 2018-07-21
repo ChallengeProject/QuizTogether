@@ -22,16 +22,36 @@
 
             <TextView
                 android:id="@+id/tvPrize"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="aaa" />
 
-            <TextView
-                android:id="@+id/tvName"
+            <RelativeLayout
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="bbb" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_marginLeft="30dp"
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="bbb" />
+
+                <ImageView
+                    android:id="@+id/ivShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:src="@drawable/ic_dummy" />
+
+
+            </RelativeLayout>
+
+
 
         </LinearLayout>
 
@@ -49,28 +69,13 @@
             android:gravity="center"
             android:text="브라운이 연애를 한다던데?" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvDate"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:text="17. 07. 07 오전 11시 시작" />
 
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="17. 07. 07 오전 11시 시작" />
-
-            <ImageView
-                android:id="@+id/ivShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:src="@drawable/ic_dummy" />
-
-
-        </LinearLayout>
 
 
     </LinearLayout>
