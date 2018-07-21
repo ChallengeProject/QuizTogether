@@ -2,7 +2,6 @@ package com.quiz_together.data.remote.service
 
 import com.quiz_together.BuildConfig
 import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.Broadcasts
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqLogin
@@ -45,8 +44,8 @@ interface ApiServices {
     @POST("${BuildConfig.REST_PREFIX}/broadcast/createBroadcast")
     fun createBroadcast(@Body data: Broadcast) : Observable<Resp<RespEmpty>>
 
-    @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
-    fun getBroadcastList() : Observable<Resp<Broadcasts>>
+    @GET("${BuildConfig.REST_PREFIX}/broadcast/getPagingBroadcastList")
+    fun getPagingBroadcastList() : Observable<Resp<List<Broadcast>>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
     fun getBroadcastById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>

@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 class AppApiHelper : ApiHelper {
 
 
-    val TAG = "AppApiHelper"
+    val TAG = "AppApiHelper#$#"
 
     val apiServices = ApiServices.create()
 
@@ -33,7 +33,7 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -55,7 +55,7 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -74,7 +74,7 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -90,7 +90,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -104,7 +104,7 @@ class AppApiHelper : ApiHelper {
                         cb.onUserLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -119,21 +119,21 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
 
-    override fun getBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
-        apiServices.getBroadcastList()
+    override fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
+        apiServices.getPagingBroadcastList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onBroadcastsLoaded(it.data.broadcasts)
+                        cb.onBroadcastsLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { err ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -147,7 +147,7 @@ class AppApiHelper : ApiHelper {
                         cb.onBroadcastLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -161,7 +161,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -175,7 +175,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -189,7 +189,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -203,13 +203,13 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
 
     override fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback) {
-        apiServices.getBroadcastById(broadcastId )
+        apiServices.getBroadcastForUpdateById(broadcastId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
@@ -217,7 +217,10 @@ class AppApiHelper : ApiHelper {
                         cb.onBroadcastLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { err ->
+
+                    err.printStackTrace()
+
                     cb.onDataNotAvailable()
                 })
     }

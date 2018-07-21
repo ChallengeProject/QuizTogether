@@ -54,7 +54,7 @@ interface ApiHelper {
 
     // broadcast
     fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
-    fun getBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
+    fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)

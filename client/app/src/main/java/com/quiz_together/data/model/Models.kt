@@ -9,36 +9,35 @@ data class Events(val events:List<Event>)
 class RespEmpty()
 
 data class ReqSignup(val name:String, val pushToken :String)
-data class ReqLogin(val name:String)
+data class ReqLogin(val userId:String)
 
 //updateUserProfile
 data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
+
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
 data class QuestionProp(val title:String, val options:List<String>)
 
-data class QustionList(val answerNo:Int, val questionId : String,val question:List<QuestionProp>, val category:Int)
+data class QustionList(val answerNo:Int, val questionId : String?,val questionProp: QuestionProp, val category:CategoryType)
 
 data class UserRes(val userId: String,val name:String)
 
 data class Broadcast(
-        val broadcastId:String,
+        val broadcastId:String?,
         val title:String,
         val description:String,
-        val scheduledTime:Long,
-        val giftType:Int,
+        val scheduledTime:Long?,
+        val giftType: GiftType,
         val prize:Long,
         val giftDescription:String,
 
-        var userId:String?,
-        var broadcastStatus:Int?,
-        var winnerMessage:String?,
-        var userRes:UserRes?,
-        var questionList:List<QustionList>?,
-        var questionCount:Int?
+        val userId:String,
+        val broadcastStatus: BroadcastStatus?,
+        val winnerMessage:String,
+        val userRes:UserRes?,
+        val questionList:List<QustionList>,
+        val questionCount:Int
 )
-
-data class Broadcasts(val broadcasts : List<Broadcast>)
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 
