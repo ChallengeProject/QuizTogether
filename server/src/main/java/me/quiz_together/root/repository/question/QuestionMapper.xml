@@ -21,7 +21,7 @@
     FROM
     question
     WHERE
-    id = #{broadcastId}
+    broadcast_id = #{broadcastId}
   </select>
 
   <select id="selectQuestionByQuestionId" parameterType="map" resultType="Question">
