@@ -3,7 +3,7 @@ package me.quiz_together.root.model.response.question;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
-import me.quiz_together.root.model.question.Category;
+import me.quiz_together.root.model.question.CategoryType;
 import me.quiz_together.root.model.question.QuestionProp;
 import me.quiz_together.root.support.hashid.HashQuestionId;
 
@@ -16,5 +16,5 @@ public class QuestionView {
     private int answerNo;
     private int step;
     private QuestionProp questionProp;
-    private Category category;
+    private CategoryType category;
 }

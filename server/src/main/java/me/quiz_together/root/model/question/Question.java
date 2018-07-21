@@ -12,6 +12,6 @@ public class Question {
     private Integer answerNo;
     private Long createdTime;
     private Long updatedTime;
-    private Category category;
+    private CategoryType category;
 
 }

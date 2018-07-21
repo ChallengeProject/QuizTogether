@@ -17,6 +17,7 @@ import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.broadcast.BroadcastType;
 import me.quiz_together.root.model.broadcast.GiftType;
+import me.quiz_together.root.model.question.CategoryType;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.question.QuestionProp;
 import me.quiz_together.root.model.user.User;
@@ -65,6 +66,7 @@ public class MybatisConfig {
         typeHandlerRegistry.register(BroadcastStatus.class, ValueEnumTypeHandler.class);
         typeHandlerRegistry.register(BroadcastType.class, ValueEnumTypeHandler.class);
         typeHandlerRegistry.register(GiftType.class, ValueEnumTypeHandler.class);
+        typeHandlerRegistry.register(CategoryType.class, ValueEnumTypeHandler.class);
         typeHandlerRegistry.register(QuestionProp.class, QuestionPropTypeHandler.class);
 
 

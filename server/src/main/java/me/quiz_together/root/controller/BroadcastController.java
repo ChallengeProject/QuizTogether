@@ -17,6 +17,8 @@ import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.broadcast.BroadcastViewService;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 import me.quiz_together.root.support.hashid.HashBroadcastId;
 
 @RestController
@@ -27,7 +29,7 @@ public class BroadcastController implements ApiController {
     @ApiImplicitParam(name = "next", value = "broadcast hash Id", paramType = "query",
             dataType = "string")
     @GetMapping("/broadcast/getPagingBroadcastList")
-    public ResultContainer<List<CurrentBroadcastView>> getPagingBroadcastList(@RequestParam @HashBroadcastId Long next, @RequestParam int limit) {
+    public ResultContainer<List<CurrentBroadcastView>> getPagingBroadcastList(@RequestParam(defaultValue = "b0") @HashBroadcastId Long next, @RequestParam(defaultValue = "50") int limit) {
 
         return new ResultContainer<>(broadcastViewService.getCurrentBroadcastViewList(next, limit));
     }
@@ -74,6 +76,11 @@ public class BroadcastController implements ApiController {
     @PostMapping("/broadcast/startBroadcast")
     public ResultContainer startBroadcast() {
         return new ResultContainer();
+    }
+
+    @GetMapping("/broadcast/generateId")
+    public ResultContainer<String> generateId(@RequestParam Long id) {
+        return new ResultContainer<>(HashIdUtils.encryptId(HashIdType.BROADCAST_ID, id));
     }
 
 }

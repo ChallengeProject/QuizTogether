@@ -1,14 +1,14 @@
 package me.quiz_together.root.service.broadcast;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-
 import me.quiz_together.root.model.broadcast.Broadcast;
+import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
@@ -34,7 +34,7 @@ public class BroadcastViewService {
         List<Broadcast> broadcastList = broadcastService.getPagingBroadcastList(next, limit);
         List<Long> userIds = broadcastList.stream().map(Broadcast::getUserId).collect(Collectors.toList());
 
-        List<User> userList = userService.getUserByIds(userIds);
+        Map<Long, User> userList = userService.getUserByIds(userIds);
 
         return buildCurrentBroadcastViewList(broadcastList, userList);
     }
@@ -102,16 +102,16 @@ public class BroadcastViewService {
 
     public void createBroadcast(BroadcastReq broadcastReq) {
         Broadcast broadcast = new Broadcast();
-        broadcast.setId(broadcastReq.getBroadcastId());
         broadcast.setUserId(broadcastReq.getUserId());
+        broadcast.setTitle(broadcastReq.getTitle());
         broadcast.setDescription(broadcastReq.getDescription());
+        broadcast.setBroadcastStatus(BroadcastStatus.CREATED);
+        broadcast.setPrize(broadcastReq.getPrize());
         broadcast.setGiftDescription(broadcastReq.getGiftDescription());
         broadcast.setGiftType(broadcastReq.getGiftType());
-        broadcast.setPrize(broadcastReq.getPrize());
+        broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
         broadcast.setQuestionCount(broadcastReq.getQuestionList().size());
         broadcast.setScheduledTime(broadcastReq.getScheduledTime());
-        broadcast.setTitle(broadcastReq.getTitle());
-        broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
 
         broadcastService.insertBroadcast(broadcast);
 
@@ -122,6 +122,8 @@ public class BroadcastViewService {
                     question.setCategory(questionReq.getCategory());
                     question.setQuestionProp(questionReq.getQuestionProp());
                     question.setStep(questionReq.getStep());
+                    question.setBroadcastId(broadcast.getId());
+                    question.setUserId(broadcastReq.getUserId());
                     return question;
                 }).collect(Collectors.toList()));
     }
@@ -136,18 +138,11 @@ public class BroadcastViewService {
     }
 
     private List<CurrentBroadcastView> buildCurrentBroadcastViewList(List<Broadcast> broadcastList,
-                                                                     List<User> userList) {
-        List<CurrentBroadcastView> currentBroadcastViewList = Lists.newArrayList();
-
-        int length = broadcastList.size();
-
-        for (int i = 0; i < length; ++i) {
-            CurrentBroadcastView currentBroadcastListView = buildCurrentBroadcastView(broadcastList.get(i),
-                                                                                      userList.get(i));
-            currentBroadcastViewList.add(currentBroadcastListView);
-        }
-
-        return currentBroadcastViewList;
+                                                                     Map<Long, User> userList) {
+        return broadcastList.stream()
+                            .map(broadcast -> buildCurrentBroadcastView(broadcast,
+                                                                        userList.get(broadcast.getUserId()))
+                            ).collect(Collectors.toList());
     }
 
     private CurrentBroadcastView buildCurrentBroadcastView(Broadcast broadcast, User user) {

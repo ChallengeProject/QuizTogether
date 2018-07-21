@@ -1,7 +1,9 @@
 package me.quiz_together.root.repository.user;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +16,8 @@ public interface UserMapper {
 
     User selectUserById(@Param("id")long id);
 
-    List<User> getUserByIds(List<Long> ids);
+    @MapKey("id")
+    Map<Long, User> getUserByIds(@Param("userIds") List<Long> userIds);
 
     int updateUserProfile(long userId, String profileImageUrl);
 

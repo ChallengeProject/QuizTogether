@@ -1,6 +1,7 @@
 package me.quiz_together.root.repository.user;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,8 +21,8 @@ public class UserRepository {
         return userMapper.selectUserById(id);
     }
 
-    public List<User> getUserByIds(List<Long> ids) {
-        return userMapper.getUserByIds(ids);
+    public Map<Long, User> getUserByIds(List<Long> userIds) {
+        return userMapper.getUserByIds(userIds);
     }
 
     public int updateUserProfile(long userId, String profileImageUrl) {
