@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/llInput"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="-24dp"
+                android:layout_marginStart="10dp"
+                android:text="방 정보" />
+
+            <LinearLayout
+                android:id="@+id/llInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/back_white_border_for_layout"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:background="@drawable/back_white_rounded_for_button"
+                        android:id="@+id/btMoney"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:text="상금" />
+
+
+                    <Button
+                        android:layout_marginLeft="7dp"
+                        android:background="@drawable/back_white_rounded_for_button"
+                        android:id="@+id/btGoods"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:text="상품" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="bbb" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etTtile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:hint="방 제목을 적어주세요~" />
+
+                <View
+                    android:background="#c9c9c9"
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    />
+
+                <EditText
+                    android:id="@+id/etContent"
+                    android:layout_width="match_parent"
+                    android:background="@android:color/transparent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="내용을 입력해주세요~" />
+
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivProfile"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_dummy"
+                    app:civ_border_color="#ffffff"
+                    app:civ_border_width="5dp" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/back_white_border_for_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etWinnerMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="퀴즈 우승자에게 전할 메세지를 적어주세요\n(축하 메세지, 상금이나 상품 지급 방법 등)"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#c9c9c9"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            />
+
+
+
+        <!-- question numbering start -->
+
+        <TextView
+            android:text="문제 숫자들과 넘어가는 엑션 들어갈 자리"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- question numbering end -->
+
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:background="@drawable/back_white_border_for_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:lines="3"
+                android:hint="문제 질문을 작성해주세요~\n\n"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/ibOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/ibTwo"
+                android:src="@drawable/ic_dummy" />
+
+
+            <ImageButton
+                android:id="@+id/ibTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/ic_dummy" />
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="보기1"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/back_white_rounded_for_button"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/back_white_rounded_for_button"
+            android:hint="보기2"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/back_white_rounded_for_button"
+            android:hint="보기3"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:id="@+id/pb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

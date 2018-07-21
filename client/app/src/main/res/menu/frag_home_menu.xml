@@ -17,8 +17,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_profile"
-        android:title="profile"
-        app:showAsAction="always" />
+        android:id="@+id/menu_create"
+        android:title="menu_create"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_dummy"  />
 
 </menu>

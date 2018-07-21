@@ -1,18 +1,15 @@
-package com.quiz_together.ui.profile
+package com.quiz_together.ui.create
 
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
-import com.quiz_together.data.model.User
 
-interface ProfileContract {
+
+interface CreateContract {
 
     interface View : BaseView<Presenter> {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
-
-        fun updateUserView(user: User)
-        fun showFailGetProfileTxt()
 
     }
 
