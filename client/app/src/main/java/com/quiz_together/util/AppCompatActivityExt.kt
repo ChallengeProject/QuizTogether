@@ -39,6 +39,13 @@ fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: ActionBar.()
     }
 }
 
+fun AppCompatActivity.hideActionBar(@IdRes toolbarId: Int, action: ActionBar.() -> Unit) {
+    setSupportActionBar(findViewById(toolbarId))
+    supportActionBar?.run {
+        action()
+    }
+}
+
 /**
  * Runs a FragmentTransaction, then calls commit().
  */

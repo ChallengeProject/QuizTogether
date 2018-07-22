@@ -48,7 +48,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:background="@drawable/back_white_rounded_for_button"
+                        android:background="@drawable/back_black_border_rounded"
                         android:id="@+id/btMoney"
                         android:layout_width="50dp"
                         android:layout_height="30dp"
@@ -57,7 +57,7 @@
 
                     <Button
                         android:layout_marginLeft="7dp"
-                        android:background="@drawable/back_white_rounded_for_button"
+                        android:background="@drawable/back_black_border_rounded"
                         android:id="@+id/btGoods"
                         android:layout_width="50dp"
                         android:layout_height="30dp"
@@ -202,7 +202,7 @@
             android:hint="보기1"
             android:padding="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/back_white_rounded_for_button"
+            android:background="@drawable/back_black_border_rounded"
             />
 
         <EditText
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/back_white_rounded_for_button"
+            android:background="@drawable/back_black_border_rounded"
             android:hint="보기2"
             />
 
@@ -219,7 +219,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/back_white_rounded_for_button"
+            android:background="@drawable/back_black_border_rounded"
             android:hint="보기3"
             />
 

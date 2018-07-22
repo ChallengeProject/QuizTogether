@@ -1,5 +1,6 @@
 package com.quiz_together.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.quiz_together.ui.main.event.EventFragment
 import com.quiz_together.ui.main.home.HomeFragment
 import com.quiz_together.ui.main.profile.ProfileFragment
 import com.quiz_together.ui.main.search.SearchFragment
+import com.quiz_together.ui.subscribe.SubscribeActivity
 import com.quiz_together.util.disableShiftMode
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
@@ -71,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
         bnv.disableShiftMode()
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        //TODO for subscribe fun test
+        startActivity(Intent(applicationContext,SubscribeActivity::class.java))
     }
 
     override fun onBackPressed() {

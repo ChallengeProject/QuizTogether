@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- for subscribe-->
+    <color name="rcpbColorDefault">#e7e7e7</color>
+    <color name="rcpbColorSelect">#b3b3b3</color>
+    <color name="rcpbColorBorder">#808080</color>
+    <color name="rcpbColorO">#7DEAA9</color>
+    <color name="rcpbColorX">#ffa8a7</color>
+
 </resources>
