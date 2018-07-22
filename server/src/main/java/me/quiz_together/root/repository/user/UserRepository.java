@@ -1,6 +1,6 @@
 package me.quiz_together.root.repository.user;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserRepository {
         return userMapper.selectUserById(id);
     }
 
-    public Map<Long, User> getUserByIds(List<Long> userIds) {
+    public Map<Long, User> getUserByIds(Collection<Long> userIds) {
         return userMapper.getUserByIds(userIds);
     }
 

@@ -21,6 +21,10 @@ public class QuestionService {
         return questionRepository.selectQuestionByQuestionId(questionId);
     }
 
+    public Question getQuestionByBroadcastIdAndStep(long broadcastId, int step) {
+        return questionRepository.selectQuestionByBroadcastIdAndStep(broadcastId, step);
+    }
+
     public void insertQuestionList(List<Question> questionList) {
         questionRepository.insertQuestionList(questionList);
     }

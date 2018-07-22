@@ -34,6 +34,17 @@
     id = #{questionId}
   </select>
 
+  <select id="selectQuestionByBroadcastIdAndStep" parameterType="map" resultType="Question">
+    SELECT
+    /* question.selectQuestionByBroadcastIdAndStep */
+    <include refid="QuestionColumns" />
+    FROM
+    question
+    WHERE
+    broadcast_id = #{broadcastId}
+    AND step = #{step}
+  </select>
+
   <insert id="insertQuestionList" parameterType="map">
     INSERT INTO /* question.insertQuestionList */
     question(user_id, broadcast_id, step, question_prop, answer_no, created_time, updated_time, category)

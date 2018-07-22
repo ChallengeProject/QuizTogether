@@ -17,8 +17,6 @@ import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.broadcast.BroadcastViewService;
-import me.quiz_together.root.support.HashIdUtils;
-import me.quiz_together.root.support.HashIdUtils.HashIdType;
 import me.quiz_together.root.support.hashid.HashBroadcastId;
 
 @RestController
@@ -76,11 +74,6 @@ public class BroadcastController implements ApiController {
     @PostMapping("/broadcast/startBroadcast")
     public ResultContainer startBroadcast() {
         return new ResultContainer();
-    }
-
-    @GetMapping("/broadcast/generateId")
-    public ResultContainer<String> generateId(@RequestParam Long id) {
-        return new ResultContainer<>(HashIdUtils.encryptId(HashIdType.BROADCAST_ID, id));
     }
 
 }

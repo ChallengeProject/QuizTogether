@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -17,13 +18,16 @@ public class RedisConfig {
     private int redisPort;
     @Value("${spring.redis.database}")
     private int database;
+    @Value("${spring.redis.password}")
+    private String password;
 
     @Bean
     public RedisStandaloneConfiguration redisStandaloneConfiguration() {
         RedisStandaloneConfiguration standaloneConfig = new RedisStandaloneConfiguration();
-        standaloneConfig.setDatabase(0);
+        standaloneConfig.setDatabase(database);
         standaloneConfig.setHostName(redisHost);
         standaloneConfig.setPort(redisPort);
+//        standaloneConfig.setPassword(RedisPassword.of(password));
 
         return standaloneConfig;
     }
@@ -40,6 +44,30 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, Long> longRedisTemplate() {
+        RedisTemplate<String, Long> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Long.class));
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericToStringSerializer<>(Long.class));
+
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, Integer> integerRedisTemplate() {
+        RedisTemplate<String, Integer> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericToStringSerializer<>(Integer.class));
 
         return redisTemplate;
     }
