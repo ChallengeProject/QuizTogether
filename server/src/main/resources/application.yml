@@ -18,9 +18,12 @@ spring:
       max-file-size: 10Mb
       max-request-size: 10Mb
   redis:
-    host: http://seose11.iptime.org
+    host: seose11.iptime.org
     port: 6379
-    url: redis://user:password@example.com:6379
     database: 0
+    password: qqqq
+
+fcm:
+  apiKey: AAAAostt5Lo:APA91bF4zAFzydnC4xzmf5q6JSemAFk3CddmpUsb41VAAJY_WUcfFV-wd5LAKYd75t93qieD_JkE17ZXcK1AKzDUvylIpnh9RNQHrFuINxeRwY-xxgQyybqe11aePozKo1SiBEa6QvWXGOZjNt0fqPM5yl5JiMPv8g
 
 

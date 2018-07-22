@@ -16,8 +16,6 @@ import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.user.UserViewService;
-import me.quiz_together.root.support.HashIdUtils;
-import me.quiz_together.root.support.HashIdUtils.HashIdType;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @RestController
@@ -72,10 +70,5 @@ public class UserController implements ApiController {
     public ResultContainer<Void> findUserByName(@RequestParam String name) {
         userViewService.findUserByName(name);
         return new ResultContainer<>();
-    }
-
-    @GetMapping("/user/generateId")
-    public ResultContainer<String> generateId(@RequestParam Long id) {
-        return new ResultContainer<>(HashIdUtils.encryptId(HashIdType.USER_ID, id));
     }
 }

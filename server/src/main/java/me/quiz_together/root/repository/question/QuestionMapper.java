@@ -13,6 +13,8 @@ public interface QuestionMapper {
 
     Question selectQuestionByQuestionId(@Param("questionId") long questionId);
 
+    Question selectQuestionByBroadcastIdAndStep(long broadcastId, int step);
+
     void insertQuestionList(List<Question> questionList);
 
     int updateQuestionListByQuestionId(List<Question> questionList);

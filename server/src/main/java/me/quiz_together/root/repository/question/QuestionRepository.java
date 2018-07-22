@@ -20,6 +20,10 @@ public class QuestionRepository {
         return questionMapper.selectQuestionByQuestionId(questionId);
     }
 
+    public Question selectQuestionByBroadcastIdAndStep(long broadcastId, int step) {
+        return questionMapper.selectQuestionByBroadcastIdAndStep(broadcastId, step);
+    }
+
     public void insertQuestionList(List<Question> questionList) {
         questionMapper.insertQuestionList(questionList);
     }
