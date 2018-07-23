@@ -10,18 +10,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
+import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
+import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
 import me.quiz_together.root.model.response.broadcast.StartBroadcastView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.broadcast.BroadcastViewService;
 import me.quiz_together.root.support.hashid.HashBroadcastId;
+import me.quiz_together.root.support.hashid.HashUserId;
 
 @RestController
 public class BroadcastController implements ApiController {
@@ -36,27 +40,34 @@ public class BroadcastController implements ApiController {
         return new ResultContainer<>(broadcastViewService.getCurrentBroadcastViewList(next, limit));
     }
 
-    @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query",
+    @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query", required = true,
             dataType = "string")
     @GetMapping("/broadcast/getBroadcastById")
     public ResultContainer<BroadcastView> getBroadcastById(@RequestParam @HashBroadcastId Long broadcastId) {
         return new ResultContainer<>(broadcastViewService.getBroadcastView(broadcastId));
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query", required = true,
+                    dataType = "string"),
+            @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query", required = true, dataType = "string")
+    })
     @GetMapping("/broadcast/getBroadcastInfo")
-    public ResultContainer getBroadcastInfo() {
-        return new ResultContainer();
+    public ResultContainer<JoinBroadcastView> getBroadcastInfo(@RequestParam @HashBroadcastId Long broadcastId, @RequestParam @HashUserId
+            Long userId) {
+        return new ResultContainer<>(broadcastViewService.getJoinBroadcastView(broadcastId, userId));
     }
 
-    @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query",
+    @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query", required = true,
             dataType = "string")
     @GetMapping("/broadcast/getBroadcastForUpdateById")
     public ResultContainer<BroadcastForUpdateView> getBroadcastForUpdateById(@RequestParam @HashBroadcastId Long broadcastId) {
         return new ResultContainer<>(broadcastViewService.getBroadcastForUpdateById(broadcastId));
     }
     @PostMapping("/broadcast/updateBroadcast")
-    public ResultContainer updateBroadcast(@RequestBody BroadcastUpdateReq broadcastUpdateReq) {
+    public ResultContainer<Void> updateBroadcast(@RequestBody BroadcastUpdateReq broadcastUpdateReq) {
         broadcastViewService.updateBroadcast(broadcastUpdateReq);
-        return new ResultContainer();
+        return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/sendAnswer")
@@ -66,9 +77,9 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/createBroadcast")
-    public ResultContainer createBroadcast(@RequestBody BroadcastReq broadcastReq) {
+    public ResultContainer<Void> createBroadcast(@RequestBody BroadcastReq broadcastReq) {
         broadcastViewService.createBroadcast(broadcastReq);
-        return new ResultContainer();
+        return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/endBroadcast")
@@ -81,6 +92,12 @@ public class BroadcastController implements ApiController {
     public ResultContainer<StartBroadcastView> startBroadcast(StartBroadcastReq startBroadcastReq) {
         broadcastViewService.startBroadcast(startBroadcastReq);
         return new ResultContainer<>(new StartBroadcastView());
+    }
+
+    @PostMapping("/broadcast/leaveBroadcast")
+    public ResultContainer<Void> leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
+        broadcastViewService.leaveBroadcast(leaveBroadcastReq);
+        return new ResultContainer<>();
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
+import me.quiz_together.root.model.user.PlayUserStatus;
 import me.quiz_together.root.repository.broadcast.BroadcastRedisRepository;
 import me.quiz_together.root.repository.broadcast.BroadcastRepository;
 
@@ -64,6 +65,20 @@ public class BroadcastService {
    public void incrementQuestionAnswerStat(long broadcastId, int step, int answerNo) {
         broadcastRedisRepository.incrementQuestionAnswerStat(broadcastId, step, answerNo);
    }
+
+   public PlayUserStatus getPlayUserStatus(long broadcastId, long userId, int step) {
+        boolean isFirstStepJoinUser = broadcastRedisRepository.isPlayUser(broadcastId, 1, userId);
+        boolean isPlayUser = broadcastRedisRepository.isPlayUser(broadcastId, step-1, userId);
+
+        if (isFirstStepJoinUser && isPlayUser) {
+            return PlayUserStatus.PLAY;
+        } else if (isFirstStepJoinUser) {
+            return PlayUserStatus.LOSER;
+        }
+
+        return PlayUserStatus.VIEWER;
+   }
+
    public boolean isPlayUser(long broadcastId, long userId, int step) {
         return broadcastRedisRepository.isPlayUser(broadcastId, step, userId);
    }
@@ -75,4 +90,20 @@ public class BroadcastService {
    public boolean isCurrentBroadcastStep(long broadcastId, int step) {
         return broadcastRedisRepository.isCurrentBroadcastStep(broadcastId, step);
    }
+
+   public Long getCurrentBroadcastStep(long broadcastId) {
+        return broadcastRedisRepository.getCurrentBroadcastStep(broadcastId);
+   }
+
+    public void insertViewer(long broadcastId, long userId) {
+        broadcastRedisRepository.insertViewer(broadcastId, userId);
+    }
+
+    public void deleteViewer(long broadcastId, long userId) {
+        broadcastRedisRepository.deleteViewer(broadcastId, userId);
+    }
+
+    public Long getCurrentViewers(long broadcastId) {
+        return broadcastRedisRepository.getCurrentViewers(broadcastId);
+    }
 }
