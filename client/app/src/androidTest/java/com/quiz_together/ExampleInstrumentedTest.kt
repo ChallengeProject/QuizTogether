@@ -11,11 +11,18 @@ import com.quiz_together.data.model.CategoryType
 import com.quiz_together.data.model.GiftType
 import com.quiz_together.data.model.UserRes
 import com.quiz_together.data.remote.ApiHelper
+import org.json.JSONObject
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.quiz_together.data.model.EndMsg
+import com.quiz_together.data.model.PushType
+import com.quiz_together.data.model.QuestionMsg
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -173,9 +180,74 @@ class ExampleInstrumentedTest {
 
     }
 
+    @Test
+    fun json2string2json2objectTest() {
+        val jsObj = JSONObject()
+
+        jsObj.accumulate("pushType","END_MESSAGE")
+        println("jsObj >> ${jsObj.toString()}")
+
+        val strObj = jsObj.toString()
+        println("jsStr >> ${strObj}")
+
+        val jsObj2 = JSONObject(strObj)
+        println("jsObj2 >> ${jsObj2.toString()}")
+
+        val gson = Gson()
+
+        val gsObj = gson.fromJson(jsObj2.toString(),EndMsg::class.java)
+
+        println("gsObj >> ${gsObj.toString()}")
 
 
 
 
+    }
+
+
+    @Test
+    fun json2string2json2objectTest2() {
+
+        val gson = Gson()
+
+        val jsObj = JSONObject()
+
+        val bb = arrayListOf<String>()
+        bb.add("A1")
+        bb.add("A2")
+        bb.add("A3")
+
+        val questionMsg = QuestionMsg(PushType.ADMIN_MESSAGE, QuestionProp("title2",bb),100)
+
+        println("questionMsg >> ${questionMsg.toString()}")
+
+        val strObj = gson.toJson(questionMsg)
+        println("strObj >> ${strObj.toString()}")
+
+        val questionMsg2 = gson.fromJson(strObj.toString(),QuestionMsg::class.java)
+        println("questionMsg2 >> ${questionMsg2.toString()}")
+
+
+
+    }
+
+
+
+    @Test
+    fun json2string2json2objectTest3() {
+
+        val m = mutableMapOf<String,String>()
+
+        m.put("AA","AA1")
+        m.put("BB","BB2")
+
+        val gson = Gson()
+        val mm =  gson.toJson(m)
+
+        println("mm >> ${mm.toString()}")
+
+
+
+    }
 
 }

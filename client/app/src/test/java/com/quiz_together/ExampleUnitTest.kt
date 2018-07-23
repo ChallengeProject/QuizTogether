@@ -1,9 +1,6 @@
 package com.quiz_together
 
-import android.util.Log
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -33,4 +30,9 @@ class ExampleUnitTest {
 
 
     }
+
+
+
+
+
 }

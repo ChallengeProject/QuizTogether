@@ -68,6 +68,10 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.getEvents(cb)
     }
 
+    override fun joinBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetJoinBroadcastInfoCallback) {
+        apiHelper.joinBroadcast(broadcastId,userId,cb)
+    }
+
 
     // shared prefrenece
 

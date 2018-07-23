@@ -33,7 +33,7 @@
         />
 
         <service
-            android:name=".util.MyFirebaseMessagingService">
+            android:name=".data.remote.FirebaseHelper">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

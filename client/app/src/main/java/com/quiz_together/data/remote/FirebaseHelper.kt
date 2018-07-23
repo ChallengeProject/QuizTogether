@@ -1,10 +1,12 @@
-package com.quiz_together.util
+package com.quiz_together.data.remote
 
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class MyFirebaseMessagingService : FirebaseMessagingService() {
+class FirebaseHelper : FirebaseMessagingService() {
 
     val TAG = "MyFirebaseMessagi...#$#"
 
@@ -19,23 +21,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         if (remoteMessage.data.size > 0) {
-            Log.i(TAG, "Message data payload: " + remoteMessage.getData());
-
-
+            Log.i(TAG, "Message data payload: " + remoteMessage.getData())
         }
 
         remoteMessage.notification.let {
             Log.i(TAG, "Message Notification Body 1: ${it?.body.toString()}");
-        }
+            val intent = Intent(FMC_ACTION)
+            intent.putExtra(FMC_IN_QUIZING, it?.body.toString())
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.notification != null) {
-            Log.i(TAG, "Message Notification Body 2: ${remoteMessage.notification!!.body.toString()}");
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         }
 
 
     }
 
+    companion object {
+        const val FMC_IN_QUIZING = "FMC_IN_QUIZING"
+        const val FMC_ACTION = "FMC_ACTION"
+    }
 
 
 }

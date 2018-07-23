@@ -1,6 +1,7 @@
 package com.quiz_together.data.remote
 
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastJoinInfo
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
@@ -42,6 +43,12 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
+    interface GetJoinBroadcastInfoCallback{
+
+        fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo)
+        fun onDataNotAvailable()
+    }
+
 
     // dummy method
     fun getEvents(cb: GetEventsCallback)
@@ -61,7 +68,7 @@ interface ApiHelper {
     fun endBroadcast(reqEndBroadcast: ReqEndBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
-
+    fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
 
 
 

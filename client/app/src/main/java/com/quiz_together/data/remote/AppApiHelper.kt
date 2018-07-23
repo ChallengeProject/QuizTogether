@@ -218,11 +218,25 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
                 }, { err ->
-
-                    err.printStackTrace()
-
                     cb.onDataNotAvailable()
                 })
+    }
+
+    override fun joinBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetJoinBroadcastInfoCallback) {
+
+        apiServices.joinBroadcast(broadcastId,userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onJoinBroadcastInfoLoaded(it.data)
+                    else
+                        cb.onDataNotAvailable()
+                }, { err ->
+                    err.printStackTrace()
+                    cb.onDataNotAvailable()
+                })
+
     }
 
 

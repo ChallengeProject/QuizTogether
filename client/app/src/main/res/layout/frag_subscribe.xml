@@ -240,13 +240,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textAlignment="textEnd"
+                    android:id="@+id/tvAdminMsg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:text="진행자의 한마디\n 총 2줄까지입력가능"
-                    android:textColor="#000000"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="#000000" />
 
 
             </LinearLayout>
@@ -286,7 +287,14 @@
             android:layout_marginTop="5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="#ffffff"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="5dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_dummy"
@@ -294,11 +302,12 @@
                 app:civ_border_width="5dp" />
 
             <TextView
+                android:id="@+id/tvQuizNum"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Q1"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
         </RelativeLayout>
     </RelativeLayout>
 

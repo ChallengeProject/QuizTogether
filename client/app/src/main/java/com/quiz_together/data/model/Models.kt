@@ -39,6 +39,8 @@ data class Broadcast(
         val questionCount:Int
 )
 
+data class BroadcastJoinInfo(val broadcastView:Broadcast, val question:String, val setp:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
+
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 
 data class ReqEndBroadcast(val broadcastId: String, val userId: String, var streamId:String, var chatId:String)

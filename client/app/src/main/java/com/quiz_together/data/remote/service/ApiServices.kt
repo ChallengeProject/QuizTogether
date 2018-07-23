@@ -2,6 +2,7 @@ package com.quiz_together.data.remote.service
 
 import com.quiz_together.BuildConfig
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastJoinInfo
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqLogin
@@ -38,7 +39,7 @@ interface ApiServices {
     fun findUserByName(@Query("name") name:String) : Observable<Resp<RespEmpty>>
 
     @GET("${BuildConfig.REST_PREFIX}/user/getUserProfile")
-    fun getUserProfile(@Query("userId") usrId:String) : Observable<Resp<User>>
+    fun getUserProfile(@Query("userId") userId:String) : Observable<Resp<User>>
 
     // broadcast
     @POST("${BuildConfig.REST_PREFIX}/broadcast/createBroadcast")
@@ -65,7 +66,9 @@ interface ApiServices {
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastForUpdateById")
     fun getBroadcastForUpdateById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>
 
-
+    @GET("${BuildConfig.REST_PREFIX}/broadcast/joinBroadcast")
+    fun joinBroadcast(@Query("broadcastId") broadcastId:String,
+                      @Query("userId") userId:String) : Observable<Resp<BroadcastJoinInfo>>
 
     companion object Factory {
         fun create(): ApiServices {

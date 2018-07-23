@@ -20,14 +20,17 @@ import kotlinx.android.synthetic.main.frag_subscribe.*
 import android.widget.GridView
 import android.text.Html
 import android.R.attr.name
-
-
-
+import com.quiz_together.data.model.AdminMsg
+import com.quiz_together.data.model.AnswerMsg
+import com.quiz_together.data.model.ChatMsg
+import com.quiz_together.data.model.EndMsg
+import com.quiz_together.data.model.QuestionMsg
+import com.quiz_together.data.model.WinnersMsg
 
 
 class SubscribeFragment : Fragment(), SubscribeContract.View {
 
-    val TAG = "SubscribeFragment"
+    val TAG = "SubscribeFragment#$#"
 
     override lateinit var presenter: SubscribeContract.Presenter
 
@@ -40,7 +43,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter.start()
     }
 
 
@@ -63,9 +65,12 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        presenter.start()
+
+
 //        cvToolbar.visibility = View.VISIBLE
-        llNotice.visibility = View.INVISIBLE
-        llQuestion.visibility = View.VISIBLE
+        llNotice.visibility = View.VISIBLE
+        llQuestion.visibility = View.INVISIBLE
         llResult.visibility = View.INVISIBLE
 
 
@@ -85,11 +90,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         rcpbController.setQuestions("aa","bb","cc")
         rcpbController.setNumbers("111","222","333")
 
-        val sourceString = "<b>aaaa</b><br>" +
-                "bbbbb<br>" +
-                "ccccc<br>" +
-                "ddddd"
-        tvUserMsg.setText(Html.fromHtml(sourceString))
 
         //TODO this is dummy data for check ui
         val users = mutableListOf<Pair<String,String>>()
@@ -116,6 +116,30 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         gvResult.adapter = gvAdapter
         setDynamicWidth(gvResult)
 
+        setAdminMsg("에베벱베벱ㅂ")
+//        setQuizNum(4)
+//        setIcon()
+    }
+
+    fun setAdminMsg(msg:String) {
+        tvAdminMsg.text = msg
+    }
+
+    fun setQuizNum(num :Int) {
+        tvQuizNum.text = "Q$num"
+        tvQuizNum.visibility = View.VISIBLE
+        ivIcon.visibility = View.INVISIBLE
+    }
+
+    fun setUsersMsg(msg:String) {
+        tvUserMsg.text = msg
+    }
+
+    // TODO first, use dummy data
+    fun setIcon() {
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_dummy))
+        ivIcon.visibility = View.VISIBLE
+        tvQuizNum.visibility = View.INVISIBLE
     }
 
     private fun setDynamicWidth(gridView: GridView) {
@@ -129,6 +153,31 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         val params = gridView.layoutParams
         params.width = totalWidth
         gridView.layoutParams = params
+    }
+
+    // firebase
+    override fun showAdminMsg(adminMsg: AdminMsg) {
+        Log.i(TAG,"showAdminMsg : ${adminMsg.toString()}")
+    }
+
+    override fun showChatMsg(chatMsg: ChatMsg) {
+        Log.i(TAG,"showChatMsg : ${chatMsg.toString()}")
+    }
+
+    override fun showQuestionView(questionMsg: QuestionMsg) {
+        Log.i(TAG,"showQuestionView : ${questionMsg.toString()}")
+    }
+
+    override fun showAnswerView(answerMsg: AnswerMsg) {
+        Log.i(TAG,"showAnswerView : ${answerMsg.toString()}")
+    }
+
+    override fun showWinnerView(winnersMsg: WinnersMsg) {
+        Log.i(TAG,"showWinnerView : ${winnersMsg.toString()}")
+    }
+
+    override fun endQuiz(endMsg: EndMsg) {
+        Log.i(TAG,"endQuiz : ${endMsg.toString()}")
     }
 
     companion object {
