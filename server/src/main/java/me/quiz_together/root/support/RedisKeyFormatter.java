@@ -19,8 +19,8 @@ public class RedisKeyFormatter {
         return QUESTION_ANSWER_STATISTICS + broadcastId + ':' + step;
     }
 
-    public static String getCurrentViewers(long broadcastId, long userId) {
-        return VIEWERS + broadcastId + ':' + userId;
+    public static String getCurrentViewers(long broadcastId) {
+        return VIEWERS + broadcastId;
     }
 
     public static String getCurrentBroadcastStep(long broadcastId) {

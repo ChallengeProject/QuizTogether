@@ -18,6 +18,25 @@ public class BroadcastRedisRepository {
     private RedisTemplate<String, Integer> integerRedisTemplate;
 
     /////////////////////////
+    // currentViewers
+    /////////////////////////
+    public void insertViewer(long broadcastId, long userId) {
+        longRedisTemplate.opsForSet().add(RedisKeyFormatter.getCurrentViewers(broadcastId), userId);
+    }
+
+    public void deleteViewer(long broadcastId, long userId) {
+        longRedisTemplate.opsForSet().remove(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), userId);
+    }
+
+    public Long getCurrentViewers(long broadcastId) {
+        return longRedisTemplate.opsForSet().size(RedisKeyFormatter.getCurrentViewers(broadcastId));
+    }
+
+    public void deleteViewers(long broadcastId) {
+        longRedisTemplate.delete(RedisKeyFormatter.getCurrentViewers(broadcastId));
+    }
+
+    /////////////////////////
     // playUser
     /////////////////////////
     public void insertPlayUser(long broadcastId, int step, long userId) {
@@ -69,6 +88,26 @@ public class BroadcastRedisRepository {
 
     public void deleteQuestionAnswerStat(long broadcastId, int step) {
         integerRedisTemplate.delete(RedisKeyFormatter.getQuestionAnswerStat(broadcastId, step));
+    }
+
+    /////////////////////////
+    // broadcastStep
+    /////////////////////////
+
+    public void insertBroadcastStep(long broadcastId, int step) {
+        integerRedisTemplate.opsForSet().add(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
+    }
+
+    public boolean isCurrentBroadcastStep(long broadcastId, int step) {
+        return integerRedisTemplate.opsForSet().isMember(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
+    }
+
+    public void deleteBroadcastStep(long broadcastId) {
+        integerRedisTemplate.delete(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
+    }
+
+    public Long getCurrentBroadcastStep(long broadcastId) {
+        return integerRedisTemplate.opsForSet().size(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
     }
 
 }
