@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiImplicitParam;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
+import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
+import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
+import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
+import me.quiz_together.root.model.response.broadcast.StartBroadcastView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.broadcast.BroadcastViewService;
 import me.quiz_together.root.support.hashid.HashBroadcastId;
@@ -56,8 +60,9 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/sendAnswer")
-    public ResultContainer sendAnswer() {
-        return new ResultContainer();
+    public ResultContainer<Void> sendAnswer(SendAnswerReq sendAnswerReq) {
+        broadcastViewService.sendAnswer(sendAnswerReq);
+        return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/createBroadcast")
@@ -67,13 +72,15 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/endBroadcast")
-    public ResultContainer endBroadcast() {
-        return new ResultContainer();
+    public ResultContainer<Void> endBroadcast(EndBroadcastReq endBroadcastReq) {
+        broadcastViewService.endBroadcast(endBroadcastReq);
+        return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/startBroadcast")
-    public ResultContainer startBroadcast() {
-        return new ResultContainer();
+    public ResultContainer<StartBroadcastView> startBroadcast(StartBroadcastReq startBroadcastReq) {
+        broadcastViewService.startBroadcast(startBroadcastReq);
+        return new ResultContainer<>(new StartBroadcastView());
     }
 
 }

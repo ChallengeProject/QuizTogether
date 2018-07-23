@@ -71,4 +71,20 @@ public class BroadcastRedisRepository {
         integerRedisTemplate.delete(RedisKeyFormatter.getQuestionAnswerStat(broadcastId, step));
     }
 
+    /////////////////////////
+    // broadcastStep
+    /////////////////////////
+
+    public void insertBroadcastStep(long broadcastId, int step) {
+        integerRedisTemplate.opsForSet().add(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
+    }
+
+    public boolean isCurrentBroadcastStep(long broadcastId, int step) {
+        return integerRedisTemplate.opsForSet().isMember(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
+    }
+
+    public void deleteBroadcastStep(long broadcastId) {
+        integerRedisTemplate.delete(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
+    }
+
 }

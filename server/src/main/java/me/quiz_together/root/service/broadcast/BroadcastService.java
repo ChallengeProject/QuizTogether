@@ -52,4 +52,27 @@ public class BroadcastService {
         Map<String, Long> questionAnswerStat = broadcastRedisRepository.selectQuestionAnswerStat(broadcastId, step);
         return questionAnswerStat.entrySet().stream().collect(Collectors.toMap(e -> Integer.valueOf(e.getKey()), e-> e.getValue()));
     }
+
+    public void insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
+        broadcastRedisRepository.insertPlayUserAnswer(broadcastId, userId, step, answerNo);
+   }
+
+   public void insertPlayUser(long broadcastId, long userId, int step) {
+        broadcastRedisRepository.insertPlayUser(broadcastId, step, userId);
+   }
+
+   public void incrementQuestionAnswerStat(long broadcastId, int step, int answerNo) {
+        broadcastRedisRepository.incrementQuestionAnswerStat(broadcastId, step, answerNo);
+   }
+   public boolean isPlayUser(long broadcastId, long userId, int step) {
+        return broadcastRedisRepository.isPlayUser(broadcastId, step, userId);
+   }
+
+   public void insertBroadcastStep(long broadcastId, int step) {
+        broadcastRedisRepository.insertBroadcastStep(broadcastId, step);
+   }
+
+   public boolean isCurrentBroadcastStep(long broadcastId, int step) {
+        return broadcastRedisRepository.isCurrentBroadcastStep(broadcastId, step);
+   }
 }
