@@ -16,6 +16,9 @@ interface SubscribeContract {
 
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
+
+        fun initQuiz()
+
         fun showAdminMsg(adminMsg: AdminMsg)
         fun showChatMsg(chatMsg: ChatMsg)
         fun showQuestionView(questionMsg: QuestionMsg)

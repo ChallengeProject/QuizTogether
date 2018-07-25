@@ -26,17 +26,28 @@ import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     val TAG = "SubscribeFragment#$#"
 
+    val MSG_LINE_CNT_WHEN_REDUCE_WINDOW = 5
+
     override lateinit var presenter: SubscribeContract.Presenter
 
     lateinit var gvAdapter : SubscribeAdapter
     lateinit var rcpbController: SelectorController
 
+    var isAlive = false;
+    var quizStatus = QuizStatus.BEFORE_START
+    var userMsgs = arrayOf("","","","","","","","","")
+    var isExpandChatWindow = true
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -74,6 +85,15 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         llResult.visibility = View.INVISIBLE
 
 
+        for ( i in 0 .. 10) {
+            updateUserMsg("$i$i$i$i$i")
+        }
+
+        btSendMsg.setOnClickListener{
+
+
+
+        }
 
         rcpbController = SelectorController(
                 arrayOf(rcpbQ1,rcpbQ2,rcpbQ3),
@@ -155,33 +175,91 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         gridView.layoutParams = params
     }
 
+    /**
+     * start when success to subscribe firebase topic
+     */
+    override fun initQuiz() {
+        isAlive = true
+
+        startTimer()
+    }
+
     // firebase
     override fun showAdminMsg(adminMsg: AdminMsg) {
         Log.i(TAG,"showAdminMsg : ${adminMsg.toString()}")
+
+
     }
 
     override fun showChatMsg(chatMsg: ChatMsg) {
         Log.i(TAG,"showChatMsg : ${chatMsg.toString()}")
+
+
     }
 
     override fun showQuestionView(questionMsg: QuestionMsg) {
         Log.i(TAG,"showQuestionView : ${questionMsg.toString()}")
+
+
     }
 
     override fun showAnswerView(answerMsg: AnswerMsg) {
         Log.i(TAG,"showAnswerView : ${answerMsg.toString()}")
+
+
     }
 
     override fun showWinnerView(winnersMsg: WinnersMsg) {
         Log.i(TAG,"showWinnerView : ${winnersMsg.toString()}")
+
+
     }
 
     override fun endQuiz(endMsg: EndMsg) {
         Log.i(TAG,"endQuiz : ${endMsg.toString()}")
+
+
+    }
+
+    fun startTimer() {
+
+        Observable.interval(5, TimeUnit.SECONDS)
+                .take(3)
+                .map { (it+1)*5 }
+                .subscribe {
+
+                }
+
     }
 
     companion object {
         fun newInstance() = SubscribeFragment()
+    }
+
+    fun updateUserMsg(msg:String) {
+        var msgRst = ""
+        userMsgs
+                .filterIndexed { index, _ ->index != userMsgs.size - 1 }
+                .forEachIndexed { index, _ ->
+                    userMsgs.set(index,userMsgs.get(index+1))
+
+                    if(isExpandChatWindow)
+                        msgRst += userMsgs.get(index) + "\n"
+                    if(!isExpandChatWindow && index >= MSG_LINE_CNT_WHEN_REDUCE_WINDOW)
+                        msgRst += userMsgs.get(index) + "\n"
+                }
+
+        userMsgs.set(userMsgs.size - 1 , msg)
+        msgRst += userMsgs.last()
+
+        tvUserMsg.text = msgRst
+    }
+
+    enum class QuizStatus(val value:Int) {
+        BEFORE_START(100),
+        RESTING(200),
+        QUIZING(300),
+        ANSWERING(400),
     }
 
 }

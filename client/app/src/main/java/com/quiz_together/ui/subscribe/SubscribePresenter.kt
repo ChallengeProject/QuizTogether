@@ -32,14 +32,14 @@ class SubscribePresenter(
 
     override fun start() {
 
-        regestFirbaseSubscribe()
+        registFirbaseSubscribe()
 
         //TODO need to remove, now using test
         return
 
         repository.joinBroadcast(broadcastId, SC.USER_ID!!,object : ApiHelper.GetJoinBroadcastInfoCallback{
             override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
-                regestFirbaseSubscribe()
+                registFirbaseSubscribe()
             }
 
             override fun onDataNotAvailable() {
@@ -49,13 +49,14 @@ class SubscribePresenter(
         })
     }
 
-    fun regestFirbaseSubscribe(){
+    fun registFirbaseSubscribe(){
 
 //        FirebaseMessaging.getInstance().unsubscribeFromTopic(broadcastId)
         FirebaseMessaging.getInstance().subscribeToTopic(broadcastId).addOnSuccessListener {
             Log.i(TAG,"success regist topic >> ${broadcastId}") // empty same key
         }.addOnCompleteListener {
             Log.i(TAG,"complete regist topic >> ${broadcastId}") // duplicate
+            view.initQuiz()
         }
     }
 
