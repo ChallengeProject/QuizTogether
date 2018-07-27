@@ -1,5 +1,6 @@
 package com.quiz_together
 
+import android.util.Log
 import org.junit.Test
 
 /**
@@ -31,6 +32,22 @@ class ExampleUnitTest {
 
     }
 
+    @Test
+    fun calculTest() {
+        val pick1Cnt = 100
+        val pick2Cnt = 200
+        val pick3Cnt = 300
+
+        println((100/600*100))
+
+
+        println((pick1Cnt/(pick1Cnt+pick2Cnt+pick3Cnt).toDouble()*100).toString())
+        println((pick2Cnt/(pick1Cnt+pick2Cnt+pick3Cnt)*100).toString())
+        println((pick3Cnt/(pick1Cnt+pick2Cnt+pick3Cnt)*100).toString())
+
+
+
+    }
 
 
 

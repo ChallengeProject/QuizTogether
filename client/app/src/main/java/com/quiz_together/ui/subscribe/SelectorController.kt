@@ -42,6 +42,13 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
         }
     }
 
+    fun setRCPBOnlyColor(pos:Int, color:SelectorColor = SelectorColor.DEFAULT) {
+        RCPBBg[pos-1].apply {
+            progressColor = ContextCompat.getColor(App.instance.applicationContext,color.value)
+        }
+    }
+
+
     fun setQuestions(str1:String,str2:String,str3:String) {
         tvQustions[0].text = str1
         tvQustions[1].text = str2

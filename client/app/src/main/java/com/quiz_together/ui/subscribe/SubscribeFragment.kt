@@ -1,26 +1,13 @@
 package com.quiz_together.ui.subscribe
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-import com.quiz_together.R
-import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserRes
-import com.quiz_together.util.setTouchable
-import com.quiz_together.util.setVisibilityFromBoolean
-import kotlinx.android.synthetic.main.frag_subscribe.*
 import android.widget.GridView
-import android.text.Html
-import android.R.attr.name
-import android.os.AsyncTask
+import com.quiz_together.R
 import com.quiz_together.data.model.AdminMsg
 import com.quiz_together.data.model.AnswerMsg
 import com.quiz_together.data.model.ChatMsg
@@ -28,10 +15,10 @@ import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.util.SC
+import com.quiz_together.util.setTouchable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.*
+import kotlinx.android.synthetic.main.frag_subscribe.*
 import java.util.concurrent.TimeUnit
 
 
@@ -128,7 +115,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        fortest()
 
         presenter.start()
 
@@ -138,19 +124,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
         initOnclickListeners()
         initQuizCalledByOncreate()
-
-
-
-
-//        //TODO this is dummy data for check ui
-//        rcpbController.setRCPB(1,SelectorController.SelectorColor.O,80)
-//        rcpbController.setRCPB(2,SelectorController.SelectorColor.X,50)
-//        rcpbController.setRCPB(3,SelectorController.SelectorColor.SELECT,20)
-//
-//        rcpbController.tvQustions[1].text = "ASD"
-//        rcpbController.cleanNumbers()
-//        rcpbController.setQuestions("aa","bb","cc")
-//        rcpbController.setNumbers("111","222","333")
 
 
 //        //TODO this is dummy data for check ui
@@ -177,10 +150,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 //        gvAdapter.users = users
 //        gvResult.adapter = gvAdapter
 //        setDynamicWidth(gvResult)
-//
-//        setAdminMsg("에베벱베벱ㅂ")
-//        setQuizNum(4)
-//        setIcon()
     }
 
     fun setQuizNum(num :Int) {
@@ -234,23 +203,23 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     }
 
     override fun initQuizCalledByPresenter() {
-
-
-
-
-
+        fortest()
     }
 
     fun viewUpdate(quizStatus_: QuizStatus, questionNum:Int,cvToolbarShow:Int,
-                   llNoticeShow:Int,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_:Boolean) {
+                   llNoticeShow:Int?,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_:Boolean) {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
         if(questionNum == ICON_IS_IMG_SATUS) setIcon()
         else setQuizNum(questionNum)
         cvToolbar.visibility = cvToolbarShow
-        llNotice.visibility = llNoticeShow
+        llNoticeShow?.let {
+            llNotice.visibility = it
+        }
         llQuestion.visibility = llQuestionShow
         llResult.visibility = llResultShow
+
+        updateExpandChatWindow()
     }
 
     // firebase
@@ -275,6 +244,8 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun showChatMsg(chatMsg: ChatMsg) {
         Log.i(TAG,"showChatMsg : ${chatMsg.toString()}")
 
+        updateUserMsg("${chatMsg.userName} : ${chatMsg.message}")
+
 
     }
 
@@ -292,15 +263,21 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         pickNum = CAN_PICK
         setAnswerClickable(true)
 
-        rcpbController.setRCPB(1,SelectorController.SelectorColor.DEFAULT,0)
-        rcpbController.setRCPB(2,SelectorController.SelectorColor.DEFAULT,0)
-        rcpbController.setRCPB(3,SelectorController.SelectorColor.DEFAULT,0)
+        rcpbController.apply {
 
-        rcpbController.tvQustions[1].text = questionMsg.questionProp.title
-        rcpbController.cleanPickNumbers()
-        questionMsg.questionProp.options.let {
-            rcpbController.setQuestions(it.get(0),it.get(1),it.get(2))
+            setRCPB(1,SelectorController.SelectorColor.DEFAULT,0)
+            setRCPB(2,SelectorController.SelectorColor.DEFAULT,0)
+            setRCPB(3,SelectorController.SelectorColor.DEFAULT,0)
+
+            tvQuestion.text = questionMsg.questionProp.title
+            cleanPickNumbers()
+
+            questionMsg.questionProp.options.let {
+                setQuestions(it.get(0),it.get(1),it.get(2))
+            }
         }
+
+
 
         startTimer(null,pickEnd,turnRestView)
 
@@ -309,11 +286,81 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun showAnswerView(answerMsg: AnswerMsg) {
         Log.i(TAG,"showAnswerView : ${answerMsg.toString()}")
 
+        viewUpdate(quizStatus_ = QuizStatus.ANSWERING,
+                questionNum = answerMsg.step,
+                cvToolbarShow = View.GONE,
+                llNoticeShow = View.INVISIBLE,
+                llQuestionShow = View.VISIBLE,
+                llResultShow = View.INVISIBLE,
+                isExpandChatWindow_ = false)
 
+        val pick1Cnt = answerMsg.questionStatistics.get(0)
+        val pick2Cnt = answerMsg.questionStatistics.get(1)
+        val pick3Cnt = answerMsg.questionStatistics.get(2)
+
+        val sumPick = (pick1Cnt+pick2Cnt+pick3Cnt).toDouble()
+
+        rcpbController.apply {
+
+            setRCPB(1,SelectorController.SelectorColor.DEFAULT,(pick1Cnt/sumPick*100).toInt())
+            setRCPB(2,SelectorController.SelectorColor.DEFAULT,(pick2Cnt/sumPick*100).toInt())
+            setRCPB(3,SelectorController.SelectorColor.DEFAULT,(pick3Cnt/sumPick*100).toInt())
+
+            setRCPBOnlyColor(answerMsg.answerNo,SelectorController.SelectorColor.O)
+            if(answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
+                setRCPBOnlyColor(pickNum,SelectorController.SelectorColor.X)
+                isAlive = false
+            }
+
+            tvQuestion.text = answerMsg.questionProp.title
+
+            answerMsg.questionProp.options.let {
+                setQuestions(it.get(0),it.get(1),it.get(2))
+                setNumbers(pick1Cnt.toString(),pick2Cnt.toString(),pick3Cnt.toString())
+            }
+        }
+
+        startTimer(null,turnRestView,null)
     }
 
     override fun showWinnerView(winnersMsg: WinnersMsg) {
         Log.i(TAG,"showWinnerView : ${winnersMsg.toString()}")
+
+        // TODO
+        llNotice.visibility = View.VISIBLE
+        tvAdminMsg.text = winnersMsg.winnerMessage
+
+        viewUpdate(quizStatus_ = QuizStatus.RESTING,
+                questionNum = ICON_IS_IMG_SATUS,
+                cvToolbarShow = View.GONE,
+                llNoticeShow = null,
+                llQuestionShow = View.INVISIBLE,
+                llResultShow = View.VISIBLE,
+                isExpandChatWindow_ = true)
+
+        val users = mutableListOf<Pair<String,String>>()
+
+        var tmpStr :String? = null
+
+        winnersMsg.userName.forEach{
+
+            tmpStr?.run{
+                users.add(Pair(it,tmpStr!!))
+                tmpStr = null
+            }?: run{
+                tmpStr = it
+            }
+
+        }
+
+
+
+        gvResult.numColumns = users.size
+
+        gvAdapter = SubscribeAdapter(this.context!!)
+        gvAdapter.users = users
+        gvResult.adapter = gvAdapter
+        setDynamicWidth(gvResult)
 
 
     }
@@ -371,6 +418,19 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         fun newInstance() = SubscribeFragment()
     }
 
+    fun updateExpandChatWindow(){
+        var msgRst = ""
+        userMsgs
+                .forEachIndexed { index, _ ->
+                    if(isExpandChatWindow)
+                        msgRst += userMsgs.get(index) + "\n"
+                    if(!isExpandChatWindow && index >= MSG_LINE_CNT_WHEN_REDUCE_WINDOW)
+                        msgRst += userMsgs.get(index) + "\n"
+                }
+
+        tvUserMsg.text = msgRst
+    }
+
     fun updateUserMsg(msg:String) {
         var msgRst = ""
         userMsgs
@@ -399,6 +459,10 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     fun fortest(){
         SC.USER_ID = "THIS_IS_USER_ID"
+
+        for(i in 1..10) {
+            updateUserMsg("$i$i$i$i$i$i$i")
+        }
     }
 
 }
