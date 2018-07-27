@@ -29,7 +29,7 @@ class SubscribeActivity : AppCompatActivity() {
 
         //TODO using dummy [broadcastId] now
 //        val broadcastId = intent.getStringExtra(BROADCAST_ID)
-        val broadcastId = "thisisdummy"
+        val broadcastId = "thisisdummy-asdfasdf"
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as SubscribeFragment? ?:

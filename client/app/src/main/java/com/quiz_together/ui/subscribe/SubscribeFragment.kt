@@ -27,6 +27,7 @@ import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
+import com.quiz_together.util.SC
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -83,12 +84,13 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
 
     fun pickAnswer(num:Int) {
+        Log.i(TAG,"pickAnswer >> $num")
         pickNum = num
         setAnswerClickable(false)
         presenter.sendAnswer(curQuizStep,pickNum)
 
         if(pickNum > 0)
-            rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 0)
+            rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100)
     }
 
     fun initOnclickListeners() {
@@ -125,6 +127,8 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        fortest()
 
         presenter.start()
 
@@ -223,7 +227,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         setAnswerClickable(false)
 
         cvToolbar.visibility = View.VISIBLE
-        llNotice.visibility = View.VISIBLE
+        llNotice.visibility = View.INVISIBLE
         llQuestion.visibility = View.INVISIBLE
         llResult.visibility = View.INVISIBLE
 
@@ -253,10 +257,15 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun showAdminMsg(adminMsg: AdminMsg) {
         Log.i(TAG,"showAdminMsg : ${adminMsg.toString()}")
 
+
         Observable.just(adminMsg.message)
-                .filter{ quizStatus != QuizStatus.RESTING &&
-                        quizStatus != QuizStatus.BEFORE_START }
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter{ quizStatus == QuizStatus.RESTING ||
+                        quizStatus == QuizStatus.BEFORE_START }
                 .subscribe{
+
+                    Log.i(TAG,"showAdminMsg - ${adminMsg.message}")
+
                     llNotice.visibility = View.VISIBLE
                     tvAdminMsg.text = adminMsg.message
                 }
@@ -327,9 +336,8 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     val turnRestView : () -> Any = {
         Log.i(TAG,"turnRestView")
-        setIcon()
-        quizStatus = QuizStatus.QUIZING
-        viewUpdate(quizStatus_ = QuizStatus.QUIZING,
+
+        viewUpdate(quizStatus_ = QuizStatus.RESTING,
                 questionNum = ICON_IS_IMG_SATUS,
                 cvToolbarShow = View.VISIBLE,
                 llNoticeShow = View.INVISIBLE,
@@ -345,6 +353,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         Log.i(TAG,"startTimer start")
 
         Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
                 .map { ((it+1)*5).toInt() }
                 .subscribe {
@@ -386,6 +395,10 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         RESTING(200),
         QUIZING(300),
         ANSWERING(400),
+    }
+
+    fun fortest(){
+        SC.USER_ID = "THIS_IS_USER_ID"
     }
 
 }
