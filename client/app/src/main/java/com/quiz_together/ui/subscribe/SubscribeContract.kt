@@ -17,7 +17,7 @@ interface SubscribeContract {
         fun setLoadingIndicator(active: Boolean)
         var isActive: Boolean
 
-        fun initQuiz()
+        fun initQuizCalledByPresenter()
 
         fun showAdminMsg(adminMsg: AdminMsg)
         fun showChatMsg(chatMsg: ChatMsg)
@@ -29,6 +29,9 @@ interface SubscribeContract {
     }
 
     interface Presenter : BasePresenter {
+
+        fun sendAnswer(step :Int,  answerNo: Int)
+
 
     }
 

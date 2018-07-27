@@ -13,6 +13,7 @@ import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.PushType
 import com.quiz_together.data.model.QuestionMsg
+import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
@@ -37,7 +38,7 @@ class SubscribePresenter(
         //TODO need to remove, now using test
         return
 
-        repository.joinBroadcast(broadcastId, SC.USER_ID!!,object : ApiHelper.GetJoinBroadcastInfoCallback{
+        repository.joinBroadcast(broadcastId, SC.USER_ID,object : ApiHelper.GetJoinBroadcastInfoCallback{
             override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
                 registFirbaseSubscribe()
             }
@@ -56,7 +57,7 @@ class SubscribePresenter(
             Log.i(TAG,"success regist topic >> ${broadcastId}") // empty same key
         }.addOnCompleteListener {
             Log.i(TAG,"complete regist topic >> ${broadcastId}") // duplicate
-            view.initQuiz()
+            view.initQuizCalledByPresenter()
         }
     }
 
@@ -72,14 +73,29 @@ class SubscribePresenter(
             PushType.QUESTION_MESSAGE.name -> view.showQuestionView(SC.gson.fromJson(fcmMsg, QuestionMsg::class.java))
             PushType.WINNERS_MESSAGE.name -> view.showWinnerView(SC.gson.fromJson(fcmMsg, WinnersMsg::class.java))
         }
+    }
 
+    override fun sendAnswer(step: Int, answerNo: Int) {
+        repository.sendAnswer(ReqSendAnswer(step,SC.USER_ID,broadcastId,answerNo), object : ApiHelper.GetSuccessCallback{
+            override fun onSuccessLoaded() {
+                Log.i(TAG,"sendAnswer - onSuccessLoaded()")
+            }
 
+            override fun onDataNotAvailable() {
+                Log.i(TAG,"sendAnswer - onDataNotAvailable()")
+            }
 
-
-
-
-
+        })
 
     }
+
+
+
+
+
+
+
+
+
 
 }

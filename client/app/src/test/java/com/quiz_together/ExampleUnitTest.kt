@@ -15,7 +15,7 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
 //        assertEquals(4, 2 + 2)
 
-        val aaa:String? = "asdf"
+        val aaa:String? = null
 //        aaa?.let {
 //            print("AA")
 //        }?:let {
@@ -23,9 +23,9 @@ class ExampleUnitTest {
 //        }
 
         aaa?.run {
-            print("CC")
+            print("call when value is not null")
         }?:run {
-            print("DD")
+            print("call when value is null")
         }
 
 

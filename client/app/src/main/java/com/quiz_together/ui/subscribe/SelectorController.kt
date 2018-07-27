@@ -54,7 +54,7 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
         tvNumbers[2].text = str3
     }
 
-    fun cleanNumbers() = tvNumbers.forEach { it.text ="" }
+    fun cleanPickNumbers() = tvNumbers.forEach { it.text ="" }
 
 
 
