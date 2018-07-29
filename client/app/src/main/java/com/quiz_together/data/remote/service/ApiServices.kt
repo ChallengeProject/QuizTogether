@@ -74,6 +74,9 @@ interface ApiServices {
     @POST("${BuildConfig.REST_PREFIX}/firebase/sendChatMessage")
     fun sendChatMsg(@Body data: ReqSendChatMsg) : Observable<Resp<RespEmpty>>
 
+    @POST("${BuildConfig.REST_PREFIX}/firebase/sendAdminChatMessage")
+    fun sendAdminChatMsg(@Body data: ReqSendChatMsg) : Observable<Resp<RespEmpty>>
+
     companion object Factory {
         fun create(): ApiServices {
             val retrofit = Retrofit.Builder()

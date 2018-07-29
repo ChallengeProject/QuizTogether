@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.quizing
 
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
@@ -10,7 +10,7 @@ import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
 
 
-interface SubscribeContract {
+interface QuizingContract {
 
     interface View : BaseView<Presenter> {
 
@@ -32,7 +32,7 @@ interface SubscribeContract {
 
         fun sendAnswer(step :Int,  answerNo: Int)
 
-        fun sendUserMsg(msg:String)
+        fun sendMsg(msg:String)
 
         fun unsubscribeFirebase(isSendLeaveBroadcast :Boolean )
 

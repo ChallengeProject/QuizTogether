@@ -77,6 +77,10 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.sendChatMsg(broadcastId,userId ,msg,cb)
     }
 
+    override fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.sendChatMsg(broadcastId,userId ,msg,cb)
+    }
+
 
     // shared prefrenece
 

@@ -1,4 +1,4 @@
-package com.quiz_together.ui.fortest
+package com.quiz_together.ui.deprecated.fortest
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,9 +7,7 @@ import android.content.IntentFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.google.firebase.messaging.FirebaseMessaging
 import com.quiz_together.R
 import com.quiz_together.data.remote.FirebaseHelper

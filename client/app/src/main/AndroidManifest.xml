@@ -14,8 +14,7 @@
         android:theme="@style/AppTheme">
 
         <!-- <activity android:name=".ui.loading.LoadingActivity"> -->
-        <!--<activity android:name=".ui.main.MainActivity">-->
-            <activity android:name=".ui.fortest.FirebaseTest">
+        <activity android:name=".ui.main.MainActivity">
 
             <!-- <activity android:name=".ui.subscribe.SubscribeActivity"> -->
             <intent-filter>
@@ -31,7 +30,11 @@
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <activity
-            android:name=".ui.subscribe.SubscribeActivity"
+            android:name=".ui.quizing.QuizingActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.quiz_together.ui.deprecated.publish.PublishActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <service android:name=".data.remote.FirebaseHelper">

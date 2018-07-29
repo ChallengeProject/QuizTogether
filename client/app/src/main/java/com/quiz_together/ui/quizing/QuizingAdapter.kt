@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.quizing
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.quiz_together.R
-import com.quiz_together.data.model.UserRes
-import kotlinx.android.synthetic.main.item_subscribe_user.view.*
 
-class SubscribeAdapter(val context:Context) : BaseAdapter() {
+class QuizingAdapter(val context:Context) : BaseAdapter() {
 
 
     var users = mutableListOf<Pair<String,String>>()
@@ -31,7 +29,7 @@ class SubscribeAdapter(val context:Context) : BaseAdapter() {
 
         var inflator = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        var retView = inflator.inflate(R.layout.item_subscribe_user, null)
+        var retView = inflator.inflate(R.layout.item_quizing_user, null)
         val tvName1 = retView.findViewById<TextView>(R.id.tvName1)
         val tvName2 = retView.findViewById<TextView>(R.id.tvName2)
 

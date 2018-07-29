@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.quizing
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -16,29 +16,33 @@ import com.quiz_together.data.remote.FirebaseHelper
 import com.quiz_together.util.replaceFragmentInActivity
 
 
-class SubscribeActivity : AppCompatActivity() {
+class QuizingActivity : AppCompatActivity() {
 
-    val TAG = "SubscribeActi#$#"
+    val TAG = "QuzingActi#$#"
 
-    lateinit var subscribePresenter:SubscribePresenter
+    lateinit var quizingPresenter:QuizingPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_subscribe)
+        setContentView(R.layout.activity_quizing)
 
         //TODO using dummy [broadcastId] now
-//        val broadcastId = intent.getStringExtra(BROADCAST_ID)
         val broadcastId = "thisisdummy-asdfasdf"
+        val isAdmin = true
+
+//        val broadcastId = intent.getStringExtra(BROADCAST_ID)
+//        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
+
 
         val fragment = supportFragmentManager
-                .findFragmentById(R.id.fl_content) as SubscribeFragment? ?:
-        SubscribeFragment.newInstance().also {
+                .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
+        QuizingFragment.newInstance(isAdmin).also {
 
             replaceFragmentInActivity(it, R.id.fl_content)
         }
 
-        subscribePresenter = SubscribePresenter(broadcastId,Repository ,fragment)
+        quizingPresenter = QuizingPresenter(broadcastId,isAdmin,Repository ,fragment)
 
     }
 
@@ -66,19 +70,20 @@ class SubscribeActivity : AppCompatActivity() {
             Log.i(TAG, "onReceive : $fcmMsg")
             Toast.makeText(applicationContext, fcmMsg, Toast.LENGTH_LONG).show()
 
-            subscribePresenter.onFcmListener(fcmMsg)
+            quizingPresenter.onFcmListener(fcmMsg)
 
         }
     }
 
     companion object {
         const val BROADCAST_ID = "BROADCAST_ID"
+        const val IS_ADMIN = "IS_ADMIN"
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
 
-        subscribePresenter.unsubscribeFirebase(true)
+        quizingPresenter.unsubscribeFirebase(true)
 
     }
 

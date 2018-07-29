@@ -1,7 +1,5 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.quizing
 
-import android.content.Context
-import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.widget.TextView
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar

@@ -10,7 +10,7 @@ import com.quiz_together.ui.main.event.EventFragment
 import com.quiz_together.ui.main.home.HomeFragment
 import com.quiz_together.ui.main.profile.ProfileFragment
 import com.quiz_together.ui.main.search.SearchFragment
-import com.quiz_together.ui.subscribe.SubscribeActivity
+import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.disableShiftMode
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         //TODO for subscribe fun test
-        startActivity(Intent(applicationContext,SubscribeActivity::class.java))
+        startActivity(Intent(applicationContext, QuizingActivity::class.java))
     }
 
     override fun onBackPressed() {

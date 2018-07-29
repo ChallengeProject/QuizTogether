@@ -256,5 +256,21 @@ class AppApiHelper : ApiHelper {
 
     }
 
+    override fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.sendAdminChatMsg(ReqSendChatMsg(broadcastId,userId,msg))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
 
 }

@@ -71,7 +71,7 @@ interface ApiHelper {
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
     fun sendChatMsg(broadcastId:String, userId:String,msg:String, cb: ApiHelper.GetSuccessCallback)
-
+    fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback)
 
 
 }

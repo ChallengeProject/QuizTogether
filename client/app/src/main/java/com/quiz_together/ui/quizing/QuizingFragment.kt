@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.quizing
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -20,28 +20,26 @@ import com.quiz_together.util.setTouchable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.frag_subscribe.*
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
+import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
 
 
-class SubscribeFragment : Fragment(), SubscribeContract.View {
+class QuizingFragment : Fragment(), QuizingContract.View {
 
-    val TAG = "SubscribeFragment#$#"
+    val TAG = "QuizingFragment#$#"
     val CAN_PICK = -1
     val ICON_IS_IMG_SATUS = -1
 
     val MSG_LINE_CNT_WHEN_REDUCE_WINDOW = 5
 
-    override lateinit var presenter: SubscribeContract.Presenter
+    override lateinit var presenter: QuizingContract.Presenter
 
-    lateinit var gvAdapter : SubscribeAdapter
+    lateinit var gvAdapter : QuizingAdapter
     lateinit var rcpbController: SelectorController
 
     var curQuizStep = 0
     var isAlive :Boolean= false;
-    lateinit var quizStatus :QuizStatus//= QuizStatus.BEFORE_START
+    lateinit var quizStatus :QuizStatus
     lateinit var userMsgs : Array<String>
     var pickNum:Int = CAN_PICK // -1 is can select, but cant touch when value is more than 0
 
@@ -51,6 +49,8 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     var disposer1:Disposable? = null
     var disposer2:Disposable? = null
+
+    var isAdmin = false
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -65,7 +65,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
             savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        val root = inflater.inflate(R.layout.frag_subscribe, container, false)
+        val root = inflater.inflate(R.layout.frag_quizing, container, false)
 
         return root
     }
@@ -77,6 +77,9 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
 
     fun pickAnswer(num:Int) {
+
+        if(isAdmin) return
+
         Log.i(TAG,"pickAnswer >> $num")
         pickNum = num
         setAnswerClickable(false)
@@ -105,7 +108,9 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         }
 
         // send msg button
-        btSendMsg.setOnClickListener{ presenter.sendUserMsg(etMsg.text.toString()) }
+        btSendMsg.setOnClickListener{
+            presenter.sendMsg(etMsg.text.toString())
+        }
 
 //        etMsg.setOnFocusChangeListener { v, hasFocus ->
 //            Log.i(TAG,"setOnFocusChangeListener")
@@ -134,7 +139,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         initListeners()
         initQuizCalledByOncreate()
 
-
 //        //TODO this is dummy data for check ui
 //        val users = mutableListOf<Pair<String,String>>()
 //        users.add(Pair("aaaaa","bbbb"))
@@ -155,7 +159,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 //
 //        gvResult.numColumns = users.size
 //
-//        gvAdapter = SubscribeAdapter(this.context!!)
+//        gvAdapter = QuizingAdapter(this.context!!)
 //        gvAdapter.users = users
 //        gvResult.adapter = gvAdapter
 //        setDynamicWidth(gvResult)
@@ -260,7 +264,9 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
                 isExpandChatWindow_ = false)
 
         pickNum = CAN_PICK
-        setAnswerClickable(true)
+
+        if(!isAdmin)
+            setAnswerClickable(true)
 
         rcpbController.apply {
 
@@ -306,7 +312,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
             setRCPB(3,SelectorController.SelectorColor.DEFAULT,(pick3Cnt/sumPick*100).toInt())
 
             setRCPBOnlyColor(answerMsg.answerNo,SelectorController.SelectorColor.O)
-            if(answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
+            if(!isAdmin && answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
                 setRCPBOnlyColor(pickNum,SelectorController.SelectorColor.X)
                 isAlive = false
             }
@@ -375,7 +381,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
         gvResult.numColumns = users.size
 
-        gvAdapter = SubscribeAdapter(this.context!!)
+        gvAdapter = QuizingAdapter(this.context!!)
         gvAdapter.users = users
         gvResult.adapter = gvAdapter
         setDynamicWidth(gvResult)
@@ -393,7 +399,8 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     val pickEnd : () -> Any = {
 
         Log.i(TAG,"pickEnd")
-        if(pickNum == CAN_PICK)
+
+        if(!isAdmin && pickNum == CAN_PICK)
             pickAnswer(0)
 
     }
@@ -432,7 +439,12 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     }
 
     companion object {
-        fun newInstance() = SubscribeFragment()
+        private val IS_ADMIN = "IS_ADMIN"
+        fun newInstance(isAdmin_:Boolean) = QuizingFragment().apply {
+            isAdmin = isAdmin_
+
+            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
+        }
     }
 
     fun updateExpandChatWindow(){
