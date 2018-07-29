@@ -52,8 +52,8 @@ public class BroadcastController implements ApiController {
                     dataType = "string"),
             @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query", required = true, dataType = "string")
     })
-    @GetMapping("/broadcast/getBroadcastInfo")
-    public ResultContainer<JoinBroadcastView> getBroadcastInfo(@RequestParam @HashBroadcastId Long broadcastId, @RequestParam @HashUserId
+    @GetMapping("/broadcast/joinBroadcast")
+    public ResultContainer<JoinBroadcastView> joinBroadcast(@RequestParam @HashBroadcastId Long broadcastId, @RequestParam @HashUserId
             Long userId) {
         return new ResultContainer<>(broadcastViewService.getJoinBroadcastView(broadcastId, userId));
     }
@@ -71,7 +71,7 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/sendAnswer")
-    public ResultContainer<Void> sendAnswer(SendAnswerReq sendAnswerReq) {
+    public ResultContainer<Void> sendAnswer(@RequestBody SendAnswerReq sendAnswerReq) {
         broadcastViewService.sendAnswer(sendAnswerReq);
         return new ResultContainer<>();
     }
@@ -83,19 +83,19 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/endBroadcast")
-    public ResultContainer<Void> endBroadcast(EndBroadcastReq endBroadcastReq) {
+    public ResultContainer<Void> endBroadcast(@RequestBody EndBroadcastReq endBroadcastReq) {
         broadcastViewService.endBroadcast(endBroadcastReq);
         return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/startBroadcast")
-    public ResultContainer<StartBroadcastView> startBroadcast(StartBroadcastReq startBroadcastReq) {
+    public ResultContainer<StartBroadcastView> startBroadcast(@RequestBody StartBroadcastReq startBroadcastReq) {
         broadcastViewService.startBroadcast(startBroadcastReq);
         return new ResultContainer<>(new StartBroadcastView());
     }
 
     @PostMapping("/broadcast/leaveBroadcast")
-    public ResultContainer<Void> leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
+    public ResultContainer<Void> leaveBroadcast(@RequestBody LeaveBroadcastReq leaveBroadcastReq) {
         broadcastViewService.leaveBroadcast(leaveBroadcastReq);
         return new ResultContainer<>();
     }
