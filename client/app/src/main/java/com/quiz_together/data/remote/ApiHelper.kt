@@ -5,6 +5,7 @@ import com.quiz_together.data.model.BroadcastJoinInfo
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.User
 import com.quiz_together.data.model.UserRes
@@ -69,6 +70,7 @@ interface ApiHelper {
     fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
+    fun sendChatMsg(broadcastId:String, userId:String,msg:String, cb: ApiHelper.GetSuccessCallback)
 
 
 

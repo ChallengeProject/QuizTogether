@@ -5,6 +5,7 @@ import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqLogin
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.remote.service.ApiServices
@@ -239,6 +240,21 @@ class AppApiHelper : ApiHelper {
 
     }
 
+    override fun sendChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.sendChatMsg(ReqSendChatMsg(broadcastId,userId,msg))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
 
 
 }

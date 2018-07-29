@@ -75,6 +75,12 @@ class SubscribeActivity : AppCompatActivity() {
         const val BROADCAST_ID = "BROADCAST_ID"
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        subscribePresenter.unsubscribeFirebase(true)
+
+    }
 
 
 }

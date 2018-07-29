@@ -14,10 +14,10 @@ import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.PushType
 import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
-
 
 class SubscribePresenter(
         private val broadcastId:String,
@@ -52,7 +52,7 @@ class SubscribePresenter(
 
     fun registFirbaseSubscribe(){
 
-//        FirebaseMessaging.getInstance().unsubscribeFromTopic(broadcastId)
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(broadcastId)
         FirebaseMessaging.getInstance().subscribeToTopic(broadcastId).addOnSuccessListener {
             Log.i(TAG,"success regist topic >> ${broadcastId}") // empty same key
         }.addOnCompleteListener {
@@ -76,7 +76,8 @@ class SubscribePresenter(
     }
 
     override fun sendAnswer(step: Int, answerNo: Int) {
-        repository.sendAnswer(ReqSendAnswer(step,SC.USER_ID,broadcastId,answerNo), object : ApiHelper.GetSuccessCallback{
+        repository.sendAnswer(ReqSendAnswer(step,SC.USER_ID,broadcastId,answerNo),
+                object : ApiHelper.GetSuccessCallback{
             override fun onSuccessLoaded() {
                 Log.i(TAG,"sendAnswer - onSuccessLoaded()")
             }
@@ -89,13 +90,30 @@ class SubscribePresenter(
 
     }
 
+    override fun sendUserMsg(msg: String) {
 
+        repository.sendChatMsg( "b82d4e3b1873ef25f7264af5a2113f5a7",SC.USER_ID,msg,
+                object : ApiHelper.GetSuccessCallback {
+                    override fun onSuccessLoaded() {
+                        Log.i(TAG,"sendChatMsg - onSuccessLoaded()")
+                    }
 
+                    override fun onDataNotAvailable() {
+                        Log.i(TAG,"sendChatMsg - onDataNotAvailable()")
+                    }
 
+                })
 
+    }
 
+    override fun unsubscribeFirebase(isSendLeaveBroadcast :Boolean ) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(broadcastId)
 
+        if(isSendLeaveBroadcast)
+        {
+            //send leaveBroadcast
 
-
+        }
+    }
 
 }

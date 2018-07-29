@@ -7,6 +7,7 @@ import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqLogin
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.Resp
@@ -69,6 +70,9 @@ interface ApiServices {
     @GET("${BuildConfig.REST_PREFIX}/broadcast/joinBroadcast")
     fun joinBroadcast(@Query("broadcastId") broadcastId:String,
                       @Query("userId") userId:String) : Observable<Resp<BroadcastJoinInfo>>
+
+    @POST("${BuildConfig.REST_PREFIX}/firebase/sendChatMessage")
+    fun sendChatMsg(@Body data: ReqSendChatMsg) : Observable<Resp<RespEmpty>>
 
     companion object Factory {
         fun create(): ApiServices {

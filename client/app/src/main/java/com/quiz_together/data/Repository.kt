@@ -5,6 +5,7 @@ import com.quiz_together.data.local.PreferenceHelper
 import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.data.remote.AppApiHelper
@@ -70,6 +71,10 @@ object Repository : PreferenceHelper, ApiHelper {
 
     override fun joinBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetJoinBroadcastInfoCallback) {
         apiHelper.joinBroadcast(broadcastId,userId,cb)
+    }
+
+    override fun sendChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.sendChatMsg(broadcastId,userId ,msg,cb)
     }
 
 

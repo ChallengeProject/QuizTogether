@@ -12,13 +12,17 @@ import com.quiz_together.data.model.AdminMsg
 import com.quiz_together.data.model.AnswerMsg
 import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
+import com.quiz_together.data.model.GiftType
 import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.frag_subscribe.*
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import java.util.concurrent.TimeUnit
 
 
@@ -38,12 +42,15 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     var curQuizStep = 0
     var isAlive :Boolean= false;
     lateinit var quizStatus :QuizStatus//= QuizStatus.BEFORE_START
-    lateinit var userMsgs : Array<String>//("","","","","","","","","")
+    lateinit var userMsgs : Array<String>
     var pickNum:Int = CAN_PICK // -1 is can select, but cant touch when value is more than 0
 
-    //    var userMsgs = arrayOf("","","","","","","","","")
     var isExpandChatWindow = true
 
+    var finalMsg = arrayListOf<String>()
+
+    var disposer1:Disposable? = null
+    var disposer2:Disposable? = null
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -51,7 +58,6 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun onResume() {
         super.onResume()
     }
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -80,7 +86,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
             rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100)
     }
 
-    fun initOnclickListeners() {
+    fun initListeners() {
 
         rcpbQ1.setOnClickListener { _ ->
             if (pickNum != CAN_PICK)
@@ -99,11 +105,14 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         }
 
         // send msg button
-        btSendMsg.setOnClickListener{
+        btSendMsg.setOnClickListener{ presenter.sendUserMsg(etMsg.text.toString()) }
 
+//        etMsg.setOnFocusChangeListener { v, hasFocus ->
+//            Log.i(TAG,"setOnFocusChangeListener")
+//            isExpandChatWindow = !hasFocus
+//            updateExpandChatWindow()
+//        }
 
-
-        }
     }
 
     fun setAnswerClickable(isClickable : Boolean) {
@@ -122,7 +131,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
                 arrayOf(rcpbQ1,rcpbQ2,rcpbQ3),
                 arrayOf(tvQuestion1,tvQuestion2,tvQuestion3,tvCnt1,tvCnt2,tvCnt3))
 
-        initOnclickListeners()
+        initListeners()
         initQuizCalledByOncreate()
 
 
@@ -207,37 +216,27 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     }
 
     fun viewUpdate(quizStatus_: QuizStatus, questionNum:Int,cvToolbarShow:Int,
-                   llNoticeShow:Int?,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_:Boolean) {
+                   llNoticeShow:Int,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_:Boolean) {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
         if(questionNum == ICON_IS_IMG_SATUS) setIcon()
         else setQuizNum(questionNum)
         cvToolbar.visibility = cvToolbarShow
-        llNoticeShow?.let {
-            llNotice.visibility = it
-        }
+        llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
         llResult.visibility = llResultShow
 
         updateExpandChatWindow()
     }
 
+
+
     // firebase
     override fun showAdminMsg(adminMsg: AdminMsg) {
         Log.i(TAG,"showAdminMsg : ${adminMsg.toString()}")
 
+        updateAdminMsg(adminMsg.message)
 
-        Observable.just(adminMsg.message)
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter{ quizStatus == QuizStatus.RESTING ||
-                        quizStatus == QuizStatus.BEFORE_START }
-                .subscribe{
-
-                    Log.i(TAG,"showAdminMsg - ${adminMsg.message}")
-
-                    llNotice.visibility = View.VISIBLE
-                    tvAdminMsg.text = adminMsg.message
-                }
 
     }
 
@@ -326,14 +325,33 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun showWinnerView(winnersMsg: WinnersMsg) {
         Log.i(TAG,"showWinnerView : ${winnersMsg.toString()}")
 
-        // TODO
+        var msgTurn = 0;
+
+        finalMsg.add("") // admin msg is finalMsg[0]
+        finalMsg.add("${if(winnersMsg.giftType==GiftType.PRIZE) winnersMsg.prize else winnersMsg.giftDescription}" )
+
+        if(isAlive) {
+            finalMsg.add("${winnersMsg.winnerMessage}")
+        } else {
+            finalMsg.add("수고하셨습니다. 담에도 파이팅!")
+        }
+
         llNotice.visibility = View.VISIBLE
         tvAdminMsg.text = winnersMsg.winnerMessage
 
-        viewUpdate(quizStatus_ = QuizStatus.RESTING,
+        disposer2 = Observable.interval(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    updateAdminMsg( finalMsg.get(msgTurn++))
+                    if(msgTurn==3) msgTurn = 0
+                }
+
+
+
+        viewUpdate(quizStatus_ = QuizStatus.ENDING,
                 questionNum = ICON_IS_IMG_SATUS,
                 cvToolbarShow = View.GONE,
-                llNoticeShow = null,
+                llNoticeShow = View.VISIBLE,
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.VISIBLE,
                 isExpandChatWindow_ = true)
@@ -367,10 +385,9 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
     override fun endQuiz(endMsg: EndMsg) {
         Log.i(TAG,"endQuiz : ${endMsg.toString()}")
-
-
+        presenter.unsubscribeFirebase(false)
+        activity?.finish()
     }
-
 
     // for showQuestionView
     val pickEnd : () -> Any = {
@@ -399,7 +416,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
 
         Log.i(TAG,"startTimer start")
 
-        Observable.interval(5, TimeUnit.SECONDS)
+        disposer1 = Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
                 .map { ((it+1)*5).toInt() }
@@ -431,6 +448,21 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         tvUserMsg.text = msgRst
     }
 
+    fun updateAdminMsg(msg:String){
+        Observable.just(msg)
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter{ quizStatus == QuizStatus.RESTING ||
+                        quizStatus == QuizStatus.BEFORE_START||
+                        quizStatus == QuizStatus.ENDING}
+                .subscribe{
+
+                    Log.i(TAG,"showAdminMsg - ${msg}")
+
+                    llNotice.visibility = View.VISIBLE
+                    tvAdminMsg.text = msg
+                }
+    }
+
     fun updateUserMsg(msg:String) {
         var msgRst = ""
         userMsgs
@@ -455,14 +487,23 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
         RESTING(200),
         QUIZING(300),
         ANSWERING(400),
+        ENDING(500),
     }
 
     fun fortest(){
-        SC.USER_ID = "THIS_IS_USER_ID"
+        SC.USER_ID = "u51746133bf56b26c7e0988465c5e8c31"
 
         for(i in 1..10) {
             updateUserMsg("$i$i$i$i$i$i$i")
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        disposer1?.dispose()
+        disposer2?.dispose()
+
     }
 
 }

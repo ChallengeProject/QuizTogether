@@ -32,6 +32,9 @@ interface SubscribeContract {
 
         fun sendAnswer(step :Int,  answerNo: Int)
 
+        fun sendUserMsg(msg:String)
+
+        fun unsubscribeFirebase(isSendLeaveBroadcast :Boolean )
 
     }
 

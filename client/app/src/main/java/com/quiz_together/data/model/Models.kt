@@ -47,3 +47,4 @@ data class ReqEndBroadcast(val broadcastId: String, val userId: String, var stre
 
 data class ReqStartBroadcast(val broadcastId: String, val userId: String, var streamingUrl:String, var scheduledTime:String)
 
+data class ReqSendChatMsg(val broadcastId: String, val userId: String,val message:String)
