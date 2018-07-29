@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.quiz_together.root.model.firebase.FcmResponse;
+import me.quiz_together.root.model.firebase.PushType;
 import me.quiz_together.root.model.request.firebase.ChatMessageReq;
 import me.quiz_together.root.model.request.firebase.OpenAnswerReq;
 import me.quiz_together.root.model.request.firebase.OpenQuestionReq;
@@ -35,7 +36,12 @@ public class FireBaseController implements ApiController {
 
     @PostMapping("/firebase/sendChatMessage")
     public ResultContainer<FcmResponse> sendChatMessage(@RequestBody ChatMessageReq chatMessageReq) {
-        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageReq));
+        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageReq, PushType.CHAT_MESSAGE));
+    }
+
+    @PostMapping("/firebase/sendAdminChatMessage")
+    public ResultContainer<FcmResponse> sendAdminChatMessage(@RequestBody ChatMessageReq chatMessageReq) {
+        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageReq, PushType.ADMIN_MESSAGE));
     }
 
 }

@@ -41,7 +41,7 @@ public class FcmService {
     @Autowired
     private FcmRestTemplate fcmRestTemplate;
 
-    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq) {
+    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq, PushType pushType) {
         User user = userService.getUserById(chatMessageReq.getUserId());
 
         String to = TO_PREFIX + chatMessageReq.getBroadcastId();
@@ -50,7 +50,7 @@ public class FcmService {
                                              .userName(user.getName())
                                              .build();
 
-        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, PushType.CHAT_MESSAGE);
+        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, pushType);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -125,9 +125,9 @@ public class FcmService {
         checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
         String to = TO_PREFIX + endBroadcastReq.getBroadcastId();
 
-        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
+//        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
 
-        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage, PushType.END_BROADCAST);
+        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, null, PushType.END_BROADCAST);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
