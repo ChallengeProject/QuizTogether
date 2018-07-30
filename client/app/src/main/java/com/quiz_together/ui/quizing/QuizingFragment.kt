@@ -299,9 +299,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 llResultShow = View.INVISIBLE,
                 isExpandChatWindow_ = false)
 
-        val pick1Cnt = answerMsg.questionStatistics.get(0)
-        val pick2Cnt = answerMsg.questionStatistics.get(1)
-        val pick3Cnt = answerMsg.questionStatistics.get(2)
+        val pick1Cnt = answerMsg.questionStatistics.get(1)
+        val pick2Cnt = answerMsg.questionStatistics.get(2)
+        val pick3Cnt = answerMsg.questionStatistics.get(3)
 
         val sumPick = (pick1Cnt+pick2Cnt+pick3Cnt).toDouble()
 
@@ -503,7 +503,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     fun fortest(){
-        SC.USER_ID = "u51746133bf56b26c7e0988465c5e8c31"
+//        SC.USER_ID = "u51746133bf56b26c7e0988465c5e8c31"
 
         for(i in 1..10) {
             updateUserMsg("$i$i$i$i$i$i$i")

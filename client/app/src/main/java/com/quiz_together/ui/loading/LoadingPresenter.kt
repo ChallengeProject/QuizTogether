@@ -2,7 +2,7 @@ package com.quiz_together.ui.base
 
 import android.os.Handler
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.UserRes
+import com.quiz_together.data.model.UserView
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
@@ -31,10 +31,9 @@ class LoadingPresenter(
 
         repository.getUserId()?.let {
 
-            repository.login(it, object :ApiHelper.UserResCallback {
+            repository.login(it, object :ApiHelper.UserViewCallback {
 
-
-                override fun onLoginLoaded(respLogin: UserRes) {
+                override fun onLoginLoaded(respLogin: UserView) {
                     view.run {
                         if(!isActive) return@onLoginLoaded
                         setLoadingIndicator(false)
@@ -44,7 +43,6 @@ class LoadingPresenter(
 
                         showMainUi()
                     }
-
                 }
 
                 override fun onDataNotAvailable() {

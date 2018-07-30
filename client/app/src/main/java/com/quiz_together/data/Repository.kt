@@ -5,7 +5,6 @@ import com.quiz_together.data.local.PreferenceHelper
 import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.data.remote.AppApiHelper
@@ -17,11 +16,11 @@ object Repository : PreferenceHelper, ApiHelper {
     private val preferenceHelper = AppPreferenceHelper()
     private val apiHelper = AppApiHelper()
 
-    override fun signup(name: String, pushToken: String, cb: ApiHelper.UserResCallback) {
+    override fun signup(name: String, pushToken: String, cb: ApiHelper.UserViewCallback) {
         apiHelper.signup(name,pushToken,cb)
     }
 
-    override fun login(name: String, cb: ApiHelper.UserResCallback) {
+    override fun login(name: String, cb: ApiHelper.UserViewCallback) {
         apiHelper.login(name,cb)
     }
 

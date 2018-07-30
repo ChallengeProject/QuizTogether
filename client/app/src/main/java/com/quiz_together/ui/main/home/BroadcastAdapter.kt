@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.util.toStringTemplate
 import kotlinx.android.synthetic.main.item_home_broadcast.view.*
 
 class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -37,8 +38,8 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
         private fun View.onBind(item: Broadcast) {
 
             tvTitle.text = item.title
-            tvDate.text = item.scheduledTime.toString()
-            tvName.text = item.userId
+            tvDate.text = item.scheduledTime?.toStringTemplate()?.substring(2)
+            tvName.text = item.userView?.name
             tvPrize.text = item.prize.toString()
             tvContent.text = item.description
             ivProfile.setImageResource(R.drawable.ic_dummy)

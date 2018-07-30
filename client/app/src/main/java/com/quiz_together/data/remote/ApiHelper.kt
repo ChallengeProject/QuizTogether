@@ -5,10 +5,9 @@ import com.quiz_together.data.model.BroadcastJoinInfo
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserRes
+import com.quiz_together.data.model.UserView
 
 
 interface ApiHelper {
@@ -18,8 +17,8 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
-    interface UserResCallback{
-        fun onLoginLoaded(respLogin: UserRes)
+    interface UserViewCallback{
+        fun onLoginLoaded(respLogin: UserView)
         fun onDataNotAvailable()
     }
 
@@ -55,8 +54,8 @@ interface ApiHelper {
     fun getEvents(cb: GetEventsCallback)
 
     // user
-    fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback)
-    fun login(name:String , cb:UserResCallback)
+    fun signup(name: String ,pushToken :String, cb: ApiHelper.UserViewCallback)
+    fun login(name:String , cb:UserViewCallback)
     fun findUserByName(name: String , cb: ApiHelper.GetSuccessCallback)
     fun getUserProfile(userId: String , cb: ApiHelper.GetUserCallback)
 

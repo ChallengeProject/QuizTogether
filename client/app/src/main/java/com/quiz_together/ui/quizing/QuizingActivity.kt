@@ -29,7 +29,7 @@ class QuizingActivity : AppCompatActivity() {
 
         //TODO using dummy [broadcastId] now
         val broadcastId = "thisisdummy-asdfasdf"
-        val isAdmin = true
+        val isAdmin = false
 
 //        val broadcastId = intent.getStringExtra(BROADCAST_ID)
 //        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)

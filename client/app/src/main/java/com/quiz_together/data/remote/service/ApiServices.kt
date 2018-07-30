@@ -13,7 +13,7 @@ import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.Resp
 import com.quiz_together.data.model.RespEmpty
 import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserRes
+import com.quiz_together.data.model.UserView
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -31,10 +31,10 @@ interface ApiServices {
 
     // user
     @POST("${BuildConfig.REST_PREFIX}/user/signup")
-    fun signup(@Body data: ReqSignup) : Observable<Resp<UserRes>>
+    fun signup(@Body data: ReqSignup) : Observable<Resp<UserView>>
 
     @POST("${BuildConfig.REST_PREFIX}/user/login")
-    fun login(@Body data: ReqLogin) : Observable<Resp<UserRes>>
+    fun login(@Body data: ReqLogin) : Observable<Resp<UserView>>
 
     @GET("${BuildConfig.REST_PREFIX}/user/findUserByName")
     fun findUserByName(@Query("name") name:String) : Observable<Resp<RespEmpty>>

@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         //TODO for subscribe fun test
-        startActivity(Intent(applicationContext, QuizingActivity::class.java))
+//        startActivity(Intent(applicationContext, QuizingActivity::class.java))
     }
 
     override fun onBackPressed() {

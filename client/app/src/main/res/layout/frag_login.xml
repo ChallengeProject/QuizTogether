@@ -4,41 +4,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#e7e7e7"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingLeft="38dp"
+        android:paddingRight="38dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/etId"
+        <TextView
+            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="128dp"
+            android:lineSpacingExtra="3sp"
+            android:gravity="center"
+            android:textColor="#212544"
+            android:textSize="14sp"
+            tools:text="함께 만드는 퀴즈쇼" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="4dp"
+            android:lineSpacingExtra="5sp"
+            android:textColor="#212544"
+            android:textSize="28sp"
+            tools:text="Qugether" />
+
+        <EditText
+            android:id="@+id/etId"
+            android:layout_width="323dp"
+            android:layout_height="38dp"
+            android:background="@drawable/back_white_border_for_edittext"
             android:ems="10"
+            android:hint="닉네임을 입력해주세요"
             android:inputType="textPersonName"
-            android:text="aaa" />
+            android:lineSpacingExtra="10sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text=""
+            android:textColor="#212544"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btCheckNick"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="328dp"
+            android:layout_height="38dp"
+            android:background="@drawable/back_gray_border_for_layout"
             android:text="checkNick" />
 
         <Button
-            android:enabled="false"
             android:id="@+id/btStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="start" />
     </LinearLayout>
 

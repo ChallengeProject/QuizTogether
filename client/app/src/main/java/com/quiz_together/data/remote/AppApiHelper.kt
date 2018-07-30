@@ -44,7 +44,7 @@ class AppApiHelper : ApiHelper {
 
 
 
-    override fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback) {
+    override fun signup(name: String ,pushToken :String, cb: ApiHelper.UserViewCallback) {
 
         apiServices.signup(ReqSignup(name,pushToken))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -63,7 +63,7 @@ class AppApiHelper : ApiHelper {
 
     }
 
-    override fun login(name: String , cb: ApiHelper.UserResCallback) {
+    override fun login(name: String , cb: ApiHelper.UserViewCallback) {
 
         apiServices.login(ReqLogin(name))
                 .observeOn(AndroidSchedulers.mainThread())

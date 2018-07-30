@@ -23,6 +23,8 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
                 view.run{
                     if(!isActive) return@onBroadcastsLoaded
 
+                    Log.i(TAG,broadcasts.toString())
+
                     setLoadingIndicator(false)
 
                     showBroadcasts(broadcasts)

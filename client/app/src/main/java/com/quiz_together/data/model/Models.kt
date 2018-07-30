@@ -20,7 +20,7 @@ data class QuestionProp(val title:String, val options:List<String>)
 
 data class QustionList(val answerNo:Int, val questionId : String?,val questionProp: QuestionProp, val category:CategoryType)
 
-data class UserRes(val userId: String,val name:String)
+data class UserView(val userId: String,val name:String)
 
 data class Broadcast(
         val broadcastId:String?,
@@ -34,7 +34,7 @@ data class Broadcast(
         val userId:String,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage:String,
-        val userRes:UserRes?,
+        val userView:UserView?,
         val questionList:List<QustionList>,
         val questionCount:Int
 )

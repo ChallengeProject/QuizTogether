@@ -9,7 +9,7 @@ import com.quiz_together.data.model.QuestionProp
 import com.quiz_together.data.model.QustionList
 import com.quiz_together.data.model.CategoryType
 import com.quiz_together.data.model.GiftType
-import com.quiz_together.data.model.UserRes
+import com.quiz_together.data.model.UserView
 import com.quiz_together.data.remote.ApiHelper
 import org.json.JSONObject
 
@@ -58,8 +58,8 @@ class ExampleInstrumentedTest {
         // bbb
         // u51746133bf56b26c7e0988465c5e8c31
 
-        Repository.signup("aaa","dummy",object:ApiHelper.UserResCallback{
-            override fun onLoginLoaded(respLogin: UserRes) {
+        Repository.signup("aaa","dummy",object:ApiHelper.UserViewCallback{
+            override fun onLoginLoaded(respLogin: UserView) {
                 tt(respLogin.name)
                 tt(respLogin.userId)
             }
@@ -75,8 +75,8 @@ class ExampleInstrumentedTest {
     fun testLogin() {
         testRunText("testLogin")
 
-        Repository.login("u51746133bf56b26c7e0988465c5e8c31",object:ApiHelper.UserResCallback{
-            override fun onLoginLoaded(respLogin: UserRes) {
+        Repository.login("u51746133bf56b26c7e0988465c5e8c31",object:ApiHelper.UserViewCallback{
+            override fun onLoginLoaded(respLogin: UserView) {
                 tt(respLogin.name)
                 tt(respLogin.userId)
             }
