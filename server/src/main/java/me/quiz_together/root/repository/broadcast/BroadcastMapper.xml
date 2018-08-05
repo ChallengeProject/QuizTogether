@@ -114,7 +114,7 @@
   </update>
 
   <update id="updateBroadcastStatus" parameterType="map">
-    UPDATE /* broadcast.updateBroadcast */
+    UPDATE /* broadcast.updateBroadcastStatus */
       broadcast
     SET
       broadcast_status = #{broadcastStatus}
