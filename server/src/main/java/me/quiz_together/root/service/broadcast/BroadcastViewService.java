@@ -16,6 +16,7 @@ import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
+import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
@@ -52,22 +53,17 @@ public class BroadcastViewService {
     public BroadcastView getBroadcastView(long broadcastId) {
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
 
-        return BroadcastView.builder()
-                            .broadcastId(broadcast.getId())
-                            .broadcastStatus(broadcast.getBroadcastStatus())
-                            .description(broadcast.getDescription())
-                            .giftDescription(broadcast.getGiftDescription())
-                            .giftType(broadcast.getGiftType())
-                            .prize(broadcast.getPrize())
-                            .questionCount(broadcast.getQuestionCount())
-                            .scheduledTime(broadcast.getScheduledTime())
-                            .title(broadcast.getTitle())
-                            .winnerMessage(broadcast.getWinnerMessage())
-                            .build();
+        return buildBroadcastView(broadcast);
+
     }
 
     public BroadcastForUpdateView getBroadcastForUpdateById(long broadcastId) {
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
+
+        if (broadcast.getBroadcastStatus() != BroadcastStatus.CREATED) {
+            // update fail
+            throw new IllegalArgumentException(broadcast.getBroadcastStatus().name() + "상태에서는 변경할 수 없습니다.");
+        }
         List<Question> questionList = questionService.getQuestionListByBroadcastId(broadcastId);
 
         return BroadcastForUpdateView.builder()
@@ -193,13 +189,20 @@ public class BroadcastViewService {
     }
 
     public JoinBroadcastView getJoinBroadcastView(long broadcastId, long userId) {
-        //viewer 수 증가
-        broadcastService.insertViewer(broadcastId, userId);
-
         BroadcastView broadcastView = getBroadcastView(broadcastId);
+
+        //방송 상태 validate
+        // wating, openQuation, openAnswer, openWinners에서만 가능
+        if (!broadcastView.getBroadcastStatus().isAccessibleBroadcast()) {
+            //TODO : 에러 코드 및 Exception 정하기
+            throw new IllegalArgumentException("입장 불가능한 방입니다.");
+        }
+
         JoinBroadcastView joinBroadcastView = new JoinBroadcastView();
         joinBroadcastView.setBroadcastView(broadcastView);
 
+        //viewer 수 증가
+        broadcastService.insertViewer(broadcastId, userId);
         //현재 몇 단계 방송 중인지 확인
         Long currentStep = broadcastService.getCurrentBroadcastStep(broadcastId);
         Question question = questionService.getQuestionByBroadcastIdAndStep(broadcastId, currentStep.intValue());
@@ -234,6 +237,14 @@ public class BroadcastViewService {
         broadcastService.deleteViewer(leaveBroadcastReq.getBroadcastId(), leaveBroadcastReq.getUserId());
     }
 
+    public void updateBroadcastStatus(UpdateBroadcastStatusReq updateBroadcastStatusReq) {
+        // TODO : broadcast status 검증 필요
+        Broadcast broadcast = broadcastService.getBroadcastById(updateBroadcastStatusReq.getBroadcastId());
+        checkPermissionBroadcast(broadcast.getId(), updateBroadcastStatusReq.getUserId());
+
+        broadcastService.updateBroadcastStatus(updateBroadcastStatusReq.getBroadcastStatus(), updateBroadcastStatusReq.getBroadcastId());
+    }
+
     public QuestionView buildQuestionView(Question question) {
         return QuestionView.builder()
                            .answerNo(question.getAnswerNo())
@@ -241,6 +252,21 @@ public class BroadcastViewService {
                            .category(question.getCategory())
                            .questionProp(question.getQuestionProp())
                            .build();
+    }
+
+    private BroadcastView buildBroadcastView(Broadcast broadcast) {
+        return BroadcastView.builder()
+                            .broadcastId(broadcast.getId())
+                            .broadcastStatus(broadcast.getBroadcastStatus())
+                            .description(broadcast.getDescription())
+                            .giftDescription(broadcast.getGiftDescription())
+                            .giftType(broadcast.getGiftType())
+                            .prize(broadcast.getPrize())
+                            .questionCount(broadcast.getQuestionCount())
+                            .scheduledTime(broadcast.getScheduledTime())
+                            .title(broadcast.getTitle())
+                            .winnerMessage(broadcast.getWinnerMessage())
+                            .build();
     }
 
     private List<CurrentBroadcastView> buildCurrentBroadcastViewList(List<Broadcast> broadcastList,

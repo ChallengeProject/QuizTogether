@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import me.quiz_together.root.model.broadcast.Broadcast;
+import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.firebase.AnswerMessage;
 import me.quiz_together.root.model.firebase.ChatMessage;
 import me.quiz_together.root.model.firebase.EndBroadcastMessage;
@@ -41,7 +42,7 @@ public class FcmService {
     @Autowired
     private FcmRestTemplate fcmRestTemplate;
 
-    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq) {
+    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq, PushType pushType) {
         User user = userService.getUserById(chatMessageReq.getUserId());
 
         String to = TO_PREFIX + chatMessageReq.getBroadcastId();
@@ -50,7 +51,7 @@ public class FcmService {
                                              .userName(user.getName())
                                              .build();
 
-        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, PushType.CHAT_MESSAGE);
+        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, pushType);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -74,11 +75,22 @@ public class FcmService {
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
+        // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임
+        //방송 상태 validation
+        Broadcast broadcast = broadcastService.getBroadcastById(openQuestionReq.getBroadcastId());
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_QUESTION);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_QUESTION, openQuestionReq.getBroadcastId());
+        //문제 제출 마감시간 설정
+
         return fcmResponse;
     }
 
     public FcmResponse sendAnswer(OpenAnswerReq openAnswerReq) {
         checkPermissionBroadcast(openAnswerReq.getBroadcastId(), openAnswerReq.getUserId());
+        // TODO: 방송 마감 시간 이후 인지 확인하는 로직 추가
+        ///// this ///////
+
         Question question = questionService.getQuestionByBroadcastIdAndStep(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
         String to = TO_PREFIX + openAnswerReq.getBroadcastId();
@@ -93,6 +105,12 @@ public class FcmService {
         FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage, PushType.ANSWER_MESSAGE);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
+        //방송 상태 validation
+        Broadcast broadcast = broadcastService.getBroadcastById(openAnswerReq.getBroadcastId());
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_ANSWER);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_ANSWER, openAnswerReq.getBroadcastId());
 
         return fcmResponse;
     }
@@ -118,6 +136,11 @@ public class FcmService {
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
+        //방송 상태 validation
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_WINNER);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_WINNER, openWinnersReq.getBroadcastId());
+
         return fcmResponse;
     }
 
@@ -125,9 +148,10 @@ public class FcmService {
         checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
         String to = TO_PREFIX + endBroadcastReq.getBroadcastId();
 
-        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
+        // TODO: 방송 종료시에 무조건 위너 상태여야 하는지?
+//        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
 
-        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage, PushType.END_BROADCAST);
+        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, null, PushType.END_BROADCAST);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 

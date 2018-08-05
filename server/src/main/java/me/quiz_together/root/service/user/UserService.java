@@ -1,6 +1,7 @@
 package me.quiz_together.root.service.user;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +48,9 @@ public class UserService {
     }
 
     public Map<Long, User> getUserByIds(Collection<Long> userIds) {
+        if (userIds.isEmpty()) {
+            return Collections.EMPTY_MAP;
+        }
         return userRepository.getUserByIds(userIds);
     }
 
