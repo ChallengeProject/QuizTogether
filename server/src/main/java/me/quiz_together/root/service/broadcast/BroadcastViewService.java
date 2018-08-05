@@ -16,6 +16,7 @@ import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
+import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
@@ -234,6 +235,14 @@ public class BroadcastViewService {
 
     public void leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
         broadcastService.deleteViewer(leaveBroadcastReq.getBroadcastId(), leaveBroadcastReq.getUserId());
+    }
+
+    public void updateBroadcastStatus(UpdateBroadcastStatusReq updateBroadcastStatusReq) {
+        // TODO : broadcast status 검증 필요
+        Broadcast broadcast = broadcastService.getBroadcastById(updateBroadcastStatusReq.getBroadcastId());
+        checkPermissionBroadcast(broadcast.getId(), updateBroadcastStatusReq.getUserId());
+
+        broadcastService.updateBroadcastStatus(updateBroadcastStatusReq.getBroadcastStatus(), updateBroadcastStatusReq.getBroadcastId());
     }
 
     public QuestionView buildQuestionView(Question question) {

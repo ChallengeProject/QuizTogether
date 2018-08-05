@@ -17,6 +17,7 @@ import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
+import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
@@ -64,6 +65,13 @@ public class BroadcastController implements ApiController {
     public ResultContainer<BroadcastForUpdateView> getBroadcastForUpdateById(@RequestParam @HashBroadcastId Long broadcastId) {
         return new ResultContainer<>(broadcastViewService.getBroadcastForUpdateById(broadcastId));
     }
+
+    @PostMapping("/broadcast/updateBroadcastStatus")
+    public ResultContainer<Void> updateBroadcastStatus(@RequestBody UpdateBroadcastStatusReq updateBroadcastStatusReq) {
+        broadcastViewService.updateBroadcastStatus(updateBroadcastStatusReq);
+        return new ResultContainer<>();
+    }
+
     @PostMapping("/broadcast/updateBroadcast")
     public ResultContainer<Void> updateBroadcast(@RequestBody BroadcastUpdateReq broadcastUpdateReq) {
         broadcastViewService.updateBroadcast(broadcastUpdateReq);
