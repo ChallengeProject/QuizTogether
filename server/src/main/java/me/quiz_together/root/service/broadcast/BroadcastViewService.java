@@ -239,8 +239,7 @@ public class BroadcastViewService {
 
     public void updateBroadcastStatus(UpdateBroadcastStatusReq updateBroadcastStatusReq) {
         // TODO : broadcast status 검증 필요
-        Broadcast broadcast = broadcastService.getBroadcastById(updateBroadcastStatusReq.getBroadcastId());
-        checkPermissionBroadcast(broadcast.getId(), updateBroadcastStatusReq.getUserId());
+        checkPermissionBroadcast(updateBroadcastStatusReq.getBroadcastId(), updateBroadcastStatusReq.getUserId());
 
         broadcastService.updateBroadcastStatus(updateBroadcastStatusReq.getBroadcastStatus(), updateBroadcastStatusReq.getBroadcastId());
     }
