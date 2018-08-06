@@ -30,6 +30,8 @@ import me.quiz_together.root.service.broadcast.BroadcastService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.support.FcmRestTemplate;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Slf4j
 @Service
@@ -47,7 +49,7 @@ public class FcmService {
     public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq, PushType pushType) {
         User user = userService.getUserById(chatMessageReq.getUserId());
 
-        String to = TO_PREFIX + chatMessageReq.getBroadcastId();
+        String to = generateTopics(chatMessageReq.getBroadcastId(), HashIdType.BROADCAST_ID);
         ChatMessage chatMessage = ChatMessage.builder()
                                              .message(chatMessageReq.getMessage())
                                              .userName(user.getName())
@@ -69,7 +71,7 @@ public class FcmService {
         broadcastService.insertBroadcastStep(openQuestionReq.getBroadcastId(), openQuestionReq.getStep());
         Question question = questionService.getQuestionByBroadcastIdAndStep(openQuestionReq.getBroadcastId(), openQuestionReq.getStep());
 
-        String to = TO_PREFIX + openQuestionReq.getBroadcastId();
+        String to = generateTopics(openQuestionReq.getBroadcastId(), HashIdType.BROADCAST_ID);
         QuestionMessage questionMessage = QuestionMessage.builder()
                                                          .questionProp(question.getQuestionProp())
                                                          .step(openQuestionReq.getStep())
@@ -99,7 +101,7 @@ public class FcmService {
 
         Question question = questionService.getQuestionByBroadcastIdAndStep(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
-        String to = TO_PREFIX + openAnswerReq.getBroadcastId();
+        String to = generateTopics(openAnswerReq.getBroadcastId(), HashIdType.BROADCAST_ID);
         Map<Integer, Long> questionAnswerStat = broadcastService.getQuestionAnswerStat(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
         AnswerMessage answerMessage = AnswerMessage.builder()
@@ -127,7 +129,7 @@ public class FcmService {
     public FcmResponse sendWinners(OpenWinnersReq openWinnersReq) {
         checkPermissionBroadcast(openWinnersReq.getBroadcastId(), openWinnersReq.getUserId());
         Broadcast broadcast = broadcastService.getBroadcastById(openWinnersReq.getBroadcastId());
-        String to = TO_PREFIX + openWinnersReq.getBroadcastId();
+        String to = generateTopics(openWinnersReq.getBroadcastId(), HashIdType.BROADCAST_ID);
 
         int lastStep = broadcast.getQuestionCount();
         Set<Long> userIds = broadcastService.getPlayUserIds(openWinnersReq.getBroadcastId(), lastStep);
@@ -158,7 +160,7 @@ public class FcmService {
 
     public FcmResponse sendEndBroadcast(EndBroadcastReq endBroadcastReq) {
         checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
-        String to = TO_PREFIX + endBroadcastReq.getBroadcastId();
+        String to = generateTopics(endBroadcastReq.getBroadcastId(), HashIdType.BROADCAST_ID);
 
         // TODO: 방송 종료시에 무조건 위너 상태여야 하는지?
         EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder()
@@ -182,6 +184,8 @@ public class FcmService {
         }
     }
 
-//    private String topic
+    private String generateTopics(Long id, HashIdType hashIdType) {
+        return String.format("%s%s", TO_PREFIX, HashIdUtils.encryptId(hashIdType, id));
+    }
 
 }
