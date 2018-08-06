@@ -14,4 +14,5 @@ public class WinnersMessage {
     private Long prize;
     private String giftDescription;
     private GiftType giftType;
+    private PushType pushType;
 }

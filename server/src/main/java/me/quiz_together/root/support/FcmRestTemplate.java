@@ -25,6 +25,9 @@ public class FcmRestTemplate extends RestTemplate {
         httpHeaders.add("Authorization", "key = " + apiKey);
 
         HttpEntity<FcmContainer> httpEntity = new HttpEntity<>(fcmContainer, httpHeaders);
+
+        log.debug("fcm httpEntity : [{}]", httpEntity);
+
         ResponseEntity<T> response = exchange(FCM_URL, HttpMethod.POST, httpEntity, responseType);
 
         log.debug("fcm request status code : [{}]", response.getStatusCode());

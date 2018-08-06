@@ -6,4 +6,5 @@ import lombok.Getter;
 @Builder
 @Getter
 public class EndBroadcastMessage {
+    private PushType pushType;
 }
