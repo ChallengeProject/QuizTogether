@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
@@ -30,6 +31,7 @@ import me.quiz_together.root.service.FcmService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
 
+@Slf4j
 @Service
 public class BroadcastViewService {
     @Autowired
@@ -145,6 +147,7 @@ public class BroadcastViewService {
                                                                        sendAnswerReq.getUserId(), sendAnswerReq.getStep());
         if (PlayUserStatus.PLAY != playUserStatus) {
             // 이전 정답자가 아니기 때문에 필터링
+            log.debug("이전 정답자가 아니기 때문에 필터링 되었습니다. userId : {}, broadcastId : {}, step : {}", sendAnswerReq.getUserId(), sendAnswerReq.getBroadcastId(), sendAnswerReq.getStep());
             return;
         }
         // 1. 유저 정답 등록
