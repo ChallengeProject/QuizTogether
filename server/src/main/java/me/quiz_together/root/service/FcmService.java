@@ -56,11 +56,11 @@ public class FcmService {
                                              .pushType(pushType)
                                              .build();
 
+        log.debug("chatMessage : {}", chatMessage);
         FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
-        log.debug("{}", fcmContainer);
         return fcmResponse;
     }
 
@@ -78,8 +78,8 @@ public class FcmService {
                                                          .pushType(PushType.QUESTION_MESSAGE)
                                                          .build();
 
+        log.debug("questionMessage : {}", questionMessage);
         FcmContainer<QuestionMessage> fcmContainer = new FcmContainer<>(to, questionMessage);
-        log.debug("{}", fcmContainer);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -102,7 +102,7 @@ public class FcmService {
         Question question = questionService.getQuestionByBroadcastIdAndStep(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
         String to = generateTopics(openAnswerReq.getBroadcastId(), HashIdType.BROADCAST_ID);
-        Map<Integer, Long> questionAnswerStat = broadcastService.getQuestionAnswerStat(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
+        Map<Integer, Integer> questionAnswerStat = broadcastService.getQuestionAnswerStat(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
         AnswerMessage answerMessage = AnswerMessage.builder()
                                                    .step(openAnswerReq.getStep())
@@ -111,6 +111,9 @@ public class FcmService {
                                                    .questionStatistics(questionAnswerStat)
                                                    .pushType(PushType.ANSWER_MESSAGE)
                                                    .build();
+
+        log.debug("answerMessage {}", answerMessage);
+
         FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
@@ -121,7 +124,6 @@ public class FcmService {
         //방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_ANSWER, openAnswerReq.getBroadcastId());
 
-        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
@@ -144,6 +146,7 @@ public class FcmService {
                                                          .pushType(PushType.WINNERS_MESSAGE)
                                                          .build();
 
+        log.debug("winnersMessage : {}", winnersMessage);
         FcmContainer<WinnersMessage> fcmContainer = new FcmContainer<>(to, winnersMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
@@ -153,7 +156,6 @@ public class FcmService {
         //방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_WINNER, openWinnersReq.getBroadcastId());
 
-        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
@@ -167,11 +169,11 @@ public class FcmService {
                                                                      .pushType(PushType.END_BROADCAST)
                                                                      .build();
 
+        log.debug("endBroadcastMessage {}", endBroadcastMessage);
         FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
-        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
