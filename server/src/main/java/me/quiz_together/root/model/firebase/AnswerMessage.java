@@ -13,4 +13,5 @@ public class AnswerMessage {
     private int answerNo;
     private int step;
     private Map<Integer, Long> questionStatistics;
+    private PushType pushType;
 }

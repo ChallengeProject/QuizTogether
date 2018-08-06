@@ -24,6 +24,7 @@ spring:
     password: qqqq
 
 fcm:
-  apiKey: AAAAostt5Lo:APA91bF4zAFzydnC4xzmf5q6JSemAFk3CddmpUsb41VAAJY_WUcfFV-wd5LAKYd75t93qieD_JkE17ZXcK1AKzDUvylIpnh9RNQHrFuINxeRwY-xxgQyybqe11aePozKo1SiBEa6QvWXGOZjNt0fqPM5yl5JiMPv8g
+  apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
+
 
 

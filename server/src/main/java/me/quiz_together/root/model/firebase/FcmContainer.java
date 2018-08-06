@@ -8,5 +8,4 @@ import lombok.Data;
 public class FcmContainer<T> {
     private String to;
     private T data;
-    private PushType pushType;
 }

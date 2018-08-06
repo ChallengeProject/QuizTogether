@@ -9,4 +9,5 @@ import me.quiz_together.root.model.question.QuestionProp;
 public class QuestionMessage {
     private QuestionProp questionProp;
     private int step;
+    private PushType pushType;
 }

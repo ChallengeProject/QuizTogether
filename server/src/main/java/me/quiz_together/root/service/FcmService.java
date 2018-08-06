@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.firebase.AnswerMessage;
@@ -30,6 +31,7 @@ import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.support.FcmRestTemplate;
 
+@Slf4j
 @Service
 public class FcmService {
     private static final String TO_PREFIX = "/topics/";
@@ -49,12 +51,14 @@ public class FcmService {
         ChatMessage chatMessage = ChatMessage.builder()
                                              .message(chatMessageReq.getMessage())
                                              .userName(user.getName())
+                                             .pushType(pushType)
                                              .build();
 
-        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, pushType);
+        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
+        log.debug("{}", fcmContainer);
         return fcmResponse;
     }
 
@@ -69,9 +73,11 @@ public class FcmService {
         QuestionMessage questionMessage = QuestionMessage.builder()
                                                          .questionProp(question.getQuestionProp())
                                                          .step(openQuestionReq.getStep())
+                                                         .pushType(PushType.QUESTION_MESSAGE)
                                                          .build();
 
-        FcmContainer<QuestionMessage> fcmContainer = new FcmContainer<>(to, questionMessage, PushType.QUESTION_MESSAGE);
+        FcmContainer<QuestionMessage> fcmContainer = new FcmContainer<>(to, questionMessage);
+        log.debug("{}", fcmContainer);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -101,8 +107,9 @@ public class FcmService {
                                                    .questionProp(question.getQuestionProp())
                                                    .answerNo(question.getAnswerNo())
                                                    .questionStatistics(questionAnswerStat)
+                                                   .pushType(PushType.ANSWER_MESSAGE)
                                                    .build();
-        FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage, PushType.ANSWER_MESSAGE);
+        FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -111,6 +118,8 @@ public class FcmService {
         BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_ANSWER);
         //방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_ANSWER, openAnswerReq.getBroadcastId());
+
+        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
@@ -130,9 +139,10 @@ public class FcmService {
                                                          .prize(broadcast.getPrize())
                                                          .userName(userNameList)
                                                          .winnerMessage(broadcast.getWinnerMessage())
+                                                         .pushType(PushType.WINNERS_MESSAGE)
                                                          .build();
 
-        FcmContainer<WinnersMessage> fcmContainer = new FcmContainer<>(to, winnersMessage, PushType.WINNERS_MESSAGE);
+        FcmContainer<WinnersMessage> fcmContainer = new FcmContainer<>(to, winnersMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -140,6 +150,8 @@ public class FcmService {
         BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_WINNER);
         //방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_WINNER, openWinnersReq.getBroadcastId());
+
+        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
@@ -149,11 +161,15 @@ public class FcmService {
         String to = TO_PREFIX + endBroadcastReq.getBroadcastId();
 
         // TODO: 방송 종료시에 무조건 위너 상태여야 하는지?
-//        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
+        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder()
+                                                                     .pushType(PushType.END_BROADCAST)
+                                                                     .build();
 
-        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, null, PushType.END_BROADCAST);
+        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
+        log.debug("{}", fcmContainer);
 
         return fcmResponse;
     }
@@ -165,5 +181,7 @@ public class FcmService {
             throw new IllegalArgumentException("해당 유저는 권한이 없습니다.!!");
         }
     }
+
+//    private String topic
 
 }
