@@ -182,7 +182,7 @@ public class FcmService {
         //TODO: 인터셉터에서 권한 체크가 필요할듯
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
         if (broadcast.getUserId() != userId) {
-            throw new IllegalArgumentException("해당 유저는 권한이 없습니다.!!");
+            throw new IllegalArgumentException("해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
         }
     }
 
