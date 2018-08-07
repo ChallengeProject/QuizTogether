@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.firebase.FcmResponse;
 import me.quiz_together.root.model.firebase.PushType;
 import me.quiz_together.root.model.request.firebase.ChatMessageReq;
@@ -14,6 +15,7 @@ import me.quiz_together.root.model.request.firebase.OpenWinnersReq;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.FcmService;
 
+@Slf4j
 @RestController
 public class FireBaseController implements ApiController {
     @Autowired
@@ -21,16 +23,20 @@ public class FireBaseController implements ApiController {
 
     @PostMapping("/firebase/openAnswer")
     public ResultContainer<FcmResponse> openAnswer(@RequestBody OpenAnswerReq openAnswerReq) {
+        log.debug("openAnswerReq : {}", openAnswerReq.toString());
         return new ResultContainer<>(fcmService.sendAnswer(openAnswerReq));
     }
 
     @PostMapping("/firebase/openQuestion")
     public ResultContainer<FcmResponse> openQuestion(@RequestBody OpenQuestionReq openQuestionReq) {
+        log.debug("openQuestionReq : {}", openQuestionReq.toString());
         return new ResultContainer<>(fcmService.sendQuestion(openQuestionReq));
     }
 
     @PostMapping("/firebase/openWinners")
     public ResultContainer<FcmResponse> openWinners(@RequestBody OpenWinnersReq openWinnersReq) {
+        log.debug("openWinnersReq : {}", openWinnersReq.toString());
+
         return new ResultContainer<>(fcmService.sendWinners(openWinnersReq));
     }
 
