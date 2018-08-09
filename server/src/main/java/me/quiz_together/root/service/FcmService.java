@@ -137,6 +137,9 @@ public class FcmService {
         Set<Long> userIds = broadcastService.getPlayUserIds(openWinnersReq.getBroadcastId(), lastStep);
         Map<Long, User> userList = userService.getUserByIds(userIds);
         List<String> userNameList = userList.values().stream().map(User::getName).collect(Collectors.toList());
+
+        //TODO : 상금이 PRize인 경우 우승 자 수 만큼 나눈 뒤에 소수 자리 정하기
+
         WinnersMessage winnersMessage = WinnersMessage.builder()
                                                          .giftDescription(broadcast.getGiftDescription())
                                                          .giftType(broadcast.getGiftType())
@@ -166,7 +169,7 @@ public class FcmService {
 
         // TODO: 방송 종료시에 무조건 위너 상태여야 하는지?
         EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder()
-                                                                     .pushType(PushType.END_BROADCAST)
+                                                                     .pushType(PushType.END_MESSAGE)
                                                                      .build();
 
         log.debug("endBroadcastMessage {}", endBroadcastMessage);

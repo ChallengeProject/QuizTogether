@@ -11,7 +11,8 @@ public enum PushType implements ValueEnum {
     ANSWER_MESSAGE(400),
     WINNERS_MESSAGE(500),
     NOTICE_MESSAGE(600),
-    END_BROADCAST(700);
+    END_MESSAGE(700),
+    BROADCAST_PLAY_INFO(800);
 
     private int value;
 
