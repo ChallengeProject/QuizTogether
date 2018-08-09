@@ -22,40 +22,35 @@ public enum BroadcastStatus implements ValueEnum {
         return value;
     }
 
-    public static boolean validateNextBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus) {
+    public static void validateNextBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus) {
         switch (currentBroadcastStatus) {
             case CREATED:
                 if (nextBroadcastStatus == WATING) {
-                    return true;
+                    return;
                 }
                 break;
             case WATING:
                 if (nextBroadcastStatus == OPEN_ANSWER || nextBroadcastStatus == OPEN_QUESTION) {
-                    return true;
+                    return;
                 }
                 break;
             case OPEN_QUESTION:
                 if (nextBroadcastStatus == WATING) {
-                    return true;
+                    return;
                 }
                 break;
             case OPEN_ANSWER:
                 if (nextBroadcastStatus == WATING || nextBroadcastStatus == OPEN_WINNER) {
-                    return true;
+                    return;
                 }
                 break;
             case OPEN_WINNER:
                 if (nextBroadcastStatus == COMPLETED) {
-                    return true;
+                    return;
                 }
                 break;
-            case COMPLETED:
-                break;
-
-                default:
-                    return false;
         }
 
-        return false;
+        throw new IllegalArgumentException("해당 status 변경 할 수 없습니다! currentStatus : " + currentBroadcastStatus.name() + " / nextStatus : " + nextBroadcastStatus.name());
     }
 }
