@@ -1,12 +1,14 @@
 package com.quiz_together.data.remote
 
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastJoinInfo
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserRes
+import com.quiz_together.data.model.UserView
 
 
 interface ApiHelper {
@@ -16,8 +18,8 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
-    interface UserResCallback{
-        fun onLoginLoaded(respLogin: UserRes)
+    interface UserViewCallback{
+        fun onLoginLoaded(respLogin: UserView)
         fun onDataNotAvailable()
     }
 
@@ -42,27 +44,40 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
+    interface GetJoinBroadcastInfoCallback{
+
+        fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo)
+        fun onDataNotAvailable()
+    }
+
 
     // dummy method
     fun getEvents(cb: GetEventsCallback)
 
     // user
-    fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback)
-    fun login(name:String , cb:UserResCallback)
+    fun signup(name: String ,pushToken :String, cb: ApiHelper.UserViewCallback)
+    fun login(name:String , cb:UserViewCallback)
     fun findUserByName(name: String , cb: ApiHelper.GetSuccessCallback)
     fun getUserProfile(userId: String , cb: ApiHelper.GetUserCallback)
 
     // broadcast
     fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
-    fun getBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
+    fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)
     fun endBroadcast(reqEndBroadcast: ReqEndBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
+    fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
+    fun updateBroadcastStatus(broadcastId: String,userId: String,broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback)
+    fun leaveBroadcast(broadcastId: String,userId: String, cb: ApiHelper.GetSuccessCallback)
 
-
-
+    //firebase
+    fun openWinners(broadcastId:String, userId:String,cb: ApiHelper.GetSuccessCallback)
+    fun openQuestion(broadcastId:String, userId:String,step:Int, cb: ApiHelper.GetSuccessCallback)
+    fun openAnswer(broadcastId:String, userId:String,step:Int, cb: ApiHelper.GetSuccessCallback)
+    fun sendChatMsg(broadcastId:String, userId:String,msg:String, cb: ApiHelper.GetSuccessCallback)
+    fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback)
 
 }

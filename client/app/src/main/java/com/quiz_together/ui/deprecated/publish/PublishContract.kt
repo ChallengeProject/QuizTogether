@@ -1,10 +1,10 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.deprecated.publish
 
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
 
 
-interface SubscribeContract {
+interface PublishContract {
 
     interface View : BaseView<Presenter> {
 

@@ -46,14 +46,9 @@ class LoginFragment : Fragment(), LoginContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btCheckNick.setOnClickListener { v->
+        btStart.setOnClickListener { v->
             presenter.checkTask(etId.text.toString())
         }
-
-        btStart.setOnClickListener { v->
-            presenter.signupTask(etId.text.toString())
-        }
-
     }
 
     override fun showLoadingUi() {
@@ -67,11 +62,11 @@ class LoginFragment : Fragment(), LoginContract.View {
     override fun isCheckSuccess(isSuccess: Boolean) {
 
         if(isSuccess) {
-            "can created id".toast()
+            presenter.signupTask(etId.text.toString())
         } else {
+            //TODO 다이얼로그로
             "duplicated id".toast()
         }
-        btStart.isEnabled = isSuccess
     }
 
     override fun showFailLoginTxt() {

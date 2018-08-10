@@ -2,11 +2,16 @@ package com.quiz_together.data.remote
 
 import android.util.Log
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqBrdIdAndUsrId
 import com.quiz_together.data.model.ReqLogin
+import com.quiz_together.data.model.ReqOpenAnsAndQus
 import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.ReqUpdateBroadcast
 import com.quiz_together.data.remote.service.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 class AppApiHelper : ApiHelper {
 
 
-    val TAG = "AppApiHelper"
+    val TAG = "AppApiHelper#$#"
 
     val apiServices = ApiServices.create()
 
@@ -33,7 +38,7 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -43,7 +48,7 @@ class AppApiHelper : ApiHelper {
 
 
 
-    override fun signup(name: String ,pushToken :String, cb: ApiHelper.UserResCallback) {
+    override fun signup(name: String ,pushToken :String, cb: ApiHelper.UserViewCallback) {
 
         apiServices.signup(ReqSignup(name,pushToken))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -55,14 +60,14 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
 
     }
 
-    override fun login(name: String , cb: ApiHelper.UserResCallback) {
+    override fun login(name: String , cb: ApiHelper.UserViewCallback) {
 
         apiServices.login(ReqLogin(name))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -74,7 +79,7 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
 
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -90,7 +95,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -104,7 +109,7 @@ class AppApiHelper : ApiHelper {
                         cb.onUserLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -119,21 +124,21 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
 
-    override fun getBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
-        apiServices.getBroadcastList()
+    override fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
+        apiServices.getPagingBroadcastList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onBroadcastsLoaded(it.data.broadcasts)
+                        cb.onBroadcastsLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { err ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -147,7 +152,7 @@ class AppApiHelper : ApiHelper {
                         cb.onBroadcastLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -161,7 +166,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -175,7 +180,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -189,7 +194,7 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -203,13 +208,13 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
 
     override fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback) {
-        apiServices.getBroadcastById(broadcastId )
+        apiServices.getBroadcastForUpdateById(broadcastId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
@@ -217,11 +222,145 @@ class AppApiHelper : ApiHelper {
                         cb.onBroadcastLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { error ->
+                }, { err ->
                     cb.onDataNotAvailable()
                 })
     }
 
+    override fun joinBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetJoinBroadcastInfoCallback) {
+
+        apiServices.joinBroadcast(broadcastId,userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onJoinBroadcastInfoLoaded(it.data)
+                    else
+                        cb.onDataNotAvailable()
+                }, { err ->
+                    err.printStackTrace()
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun sendChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.sendChatMsg(ReqSendChatMsg(broadcastId,userId,msg))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.sendAdminChatMsg(ReqSendChatMsg(broadcastId,userId,msg))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun updateBroadcastStatus(broadcastId: String, userId: String, broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.updateBroadcastStatus(ReqUpdateBroadcast(broadcastId,userId,broadcastStatus))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun leaveBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.leaveBroadcast(ReqBrdIdAndUsrId(broadcastId,userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun openWinners(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiServices.openWinners(ReqBrdIdAndUsrId(broadcastId,userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+    }
+
+    override fun openQuestion(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+
+        Log.i(TAG,"openQuestion")
+        Log.i(TAG,broadcastId)
+        Log.i(TAG,userId)
+        Log.i(TAG,step.toString())
+
+        apiServices.openQuestion(ReqOpenAnsAndQus(broadcastId,userId,step))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+    }
+
+    override fun openAnswer(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+
+        Log.i(TAG,"openAnswer")
+        Log.i(TAG,broadcastId)
+        Log.i(TAG,userId)
+        Log.i(TAG,step.toString())
+
+        apiServices.openAnswer(ReqOpenAnsAndQus(broadcastId,userId,step))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+    }
 
 
 }

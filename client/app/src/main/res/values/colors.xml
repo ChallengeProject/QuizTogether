@@ -16,4 +16,17 @@
     <color name="separator">#cccdd1</color>
     <color name="inner_separator">#e7e9eb</color>
     <color name="indicator_sub_circle">#e2e3e3</color>
+
+    <!-- for subscribe-->
+    <color name="rcpbColorDefault">#e7e7e7</color>
+    <color name="rcpbColorSelect">#b3b3b3</color>
+    <color name="rcpbColorBorder">#808080</color>
+    <color name="rcpbColorO">#7DEAA9</color>
+    <color name="rcpbColorX">#ffa8a7</color>
+
+    <color name="defaultBackground">#f8f7f6</color>
+
+    <color name="deepBlue">#0e8199</color>
+    <color name="shallowDark">#1a273d</color>
+    <color name="black">#000000</color>
 </resources>

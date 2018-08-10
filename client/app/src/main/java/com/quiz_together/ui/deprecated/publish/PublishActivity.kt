@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.deprecated.publish
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,8 +7,7 @@ import com.quiz_together.data.Repository
 import com.quiz_together.util.replaceFragmentInActivity
 import com.quiz_together.util.setupActionBar
 
-
-class SubscribeActivity : AppCompatActivity() {
+class PublishActivity : AppCompatActivity() {
 
     private fun initToolbar(){
         setupActionBar(R.id.toolbar) {
@@ -19,22 +18,18 @@ class SubscribeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_subscribe)
+        setContentView(R.layout.deprecated_activity_publish)
 
         initToolbar();
 
-//        val broadcastId = intent.getStringExtra(BROADCAST_ID)
-
-        val broadcastId = "tmp"
-
         val fragment = supportFragmentManager
-                .findFragmentById(R.id.fl_content) as SubscribeFragment? ?:
-        SubscribeFragment.newInstance().also {
+                .findFragmentById(R.id.fl_content) as PublishFragment? ?:
+        PublishFragment.newInstance().also {
 
             replaceFragmentInActivity(it, R.id.fl_content)
         }
 
-        SubscribePresenter(broadcastId,Repository ,fragment)
+        PublishPresenter(Repository ,fragment)
 
     }
 
@@ -43,9 +38,7 @@ class SubscribeActivity : AppCompatActivity() {
         return true
     }
 
-    companion object {
-        const val BROADCAST_ID = "BROADCAST_ID"
-    }
+
 
 
 

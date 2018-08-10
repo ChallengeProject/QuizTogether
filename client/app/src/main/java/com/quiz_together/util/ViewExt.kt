@@ -1,30 +1,18 @@
 package com.quiz_together.util
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.quiz_together.App
-import java.text.SimpleDateFormat
 import java.util.*
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable
-import android.opengl.ETC1.getWidth
-import android.R.attr.bitmap
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.opengl.ETC1.getHeight
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import java.text.SimpleDateFormat
 
 val TAG = "ViewExt##"
 
@@ -43,8 +31,6 @@ fun Window.setTouchable(active:Boolean) {
     else
         this.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 }
-
-fun Long.getDateTime() :String =SimpleDateFormat("MM/dd/yyyy HH:mm").format(Date(this))
 
 @SuppressLint("RestrictedApi")
 fun BottomNavigationView.disableShiftMode() {
@@ -66,3 +52,19 @@ fun BottomNavigationView.disableShiftMode() {
         Log.e(TAG, "Unable to change value of shift mode", e)
     }
 }
+
+fun Long.toStringTemplate() :String {
+
+    var long = this
+
+    if(long < 2000000000)
+        long *= 1000
+
+    return SimpleDateFormat("yyyy. MM. dd. HH시 mm분").format(Date(long))
+}
+
+
+
+
+
+

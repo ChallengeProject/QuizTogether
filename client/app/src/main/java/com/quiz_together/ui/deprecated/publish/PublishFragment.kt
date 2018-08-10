@@ -1,4 +1,4 @@
-package com.quiz_together.ui.subscribe
+package com.quiz_together.ui.deprecated.publish
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -7,19 +7,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.messaging.FirebaseMessaging
 import com.quiz_together.R
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
-import kotlinx.android.synthetic.main.frag_subscribe.*
+import kotlinx.android.synthetic.main.frag_base.*
 
-class SubscribeFragment : Fragment(), SubscribeContract.View {
+class PublishFragment : Fragment(), PublishContract.View {
 
-    val TAG = "BaseFragment"
+    val TAG = "PublishFragment"
 
-    override lateinit var presenter: SubscribeContract.Presenter
-
-    lateinit var asdf : String
+    override lateinit var presenter: PublishContract.Presenter
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -34,7 +31,7 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.frag_subscribe, container, false)
+        val root = inflater.inflate(R.layout.deprecated_frag_publish, container, false)
 
         return root
     }
@@ -48,16 +45,15 @@ class SubscribeFragment : Fragment(), SubscribeContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btSendMsg.setOnClickListener{ v->
-            // 메세지 보내기
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            //            presenter.editTask()
+            Log.i(TAG,"findViewById<FloatingActionButton>")
         }
-
-
 
     }
 
     companion object {
-        fun newInstance() = SubscribeFragment()
+        fun newInstance() = PublishFragment()
     }
 
 }

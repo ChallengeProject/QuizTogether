@@ -1,5 +1,6 @@
 package com.quiz_together.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -9,10 +10,19 @@ import com.quiz_together.ui.main.event.EventFragment
 import com.quiz_together.ui.main.home.HomeFragment
 import com.quiz_together.ui.main.profile.ProfileFragment
 import com.quiz_together.ui.main.search.SearchFragment
+import com.quiz_together.ui.quizing.QuizingActivity
+import com.quiz_together.util.SC
 import com.quiz_together.util.disableShiftMode
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
+import android.util.Log
+import android.widget.EditText
+
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun initToolbar(){
         setupActionBar(R.id.toolbar) {
             setDisplayShowHomeEnabled(true)
-            setTitle("Qugether")
+            setTitle("퀴즈홈")
         }
     }
 
@@ -71,6 +81,9 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
         bnv.disableShiftMode()
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+
+
     }
 
     override fun onBackPressed() {
