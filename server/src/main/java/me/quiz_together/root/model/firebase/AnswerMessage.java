@@ -12,5 +12,6 @@ public class AnswerMessage {
     private QuestionProp questionProp;
     private int answerNo;
     private int step;
-    private Map<Integer, Long> questionStatistics;
+    private Map<Integer, Integer> questionStatistics;
+    private PushType pushType;
 }

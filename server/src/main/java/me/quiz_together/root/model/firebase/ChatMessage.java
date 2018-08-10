@@ -8,4 +8,6 @@ import lombok.Getter;
 public class ChatMessage {
     private String message;
     private String userName;
+    private PushType pushType;
+
 }

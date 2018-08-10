@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.broadcast.Broadcast;
+import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.firebase.AnswerMessage;
 import me.quiz_together.root.model.firebase.ChatMessage;
 import me.quiz_together.root.model.firebase.EndBroadcastMessage;
@@ -28,7 +30,10 @@ import me.quiz_together.root.service.broadcast.BroadcastService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.support.FcmRestTemplate;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
+@Slf4j
 @Service
 public class FcmService {
     private static final String TO_PREFIX = "/topics/";
@@ -41,16 +46,18 @@ public class FcmService {
     @Autowired
     private FcmRestTemplate fcmRestTemplate;
 
-    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq) {
+    public FcmResponse sendChatMessage(ChatMessageReq chatMessageReq, PushType pushType) {
         User user = userService.getUserById(chatMessageReq.getUserId());
 
-        String to = TO_PREFIX + chatMessageReq.getBroadcastId();
+        String to = generateTopics(chatMessageReq.getBroadcastId(), HashIdType.BROADCAST_ID);
         ChatMessage chatMessage = ChatMessage.builder()
                                              .message(chatMessageReq.getMessage())
                                              .userName(user.getName())
+                                             .pushType(pushType)
                                              .build();
 
-        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage, PushType.CHAT_MESSAGE);
+        log.debug("chatMessage : {}", chatMessage);
+        FcmContainer<ChatMessage> fcmContainer = new FcmContainer<>(to, chatMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
 
@@ -64,35 +71,59 @@ public class FcmService {
         broadcastService.insertBroadcastStep(openQuestionReq.getBroadcastId(), openQuestionReq.getStep());
         Question question = questionService.getQuestionByBroadcastIdAndStep(openQuestionReq.getBroadcastId(), openQuestionReq.getStep());
 
-        String to = TO_PREFIX + openQuestionReq.getBroadcastId();
+        String to = generateTopics(openQuestionReq.getBroadcastId(), HashIdType.BROADCAST_ID);
         QuestionMessage questionMessage = QuestionMessage.builder()
                                                          .questionProp(question.getQuestionProp())
                                                          .step(openQuestionReq.getStep())
+                                                         .pushType(PushType.QUESTION_MESSAGE)
                                                          .build();
 
-        FcmContainer<QuestionMessage> fcmContainer = new FcmContainer<>(to, questionMessage, PushType.QUESTION_MESSAGE);
+        log.debug("questionMessage : {}", questionMessage);
+        FcmContainer<QuestionMessage> fcmContainer = new FcmContainer<>(to, questionMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
+        // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임
+        //방송 상태 validation
+        Broadcast broadcast = broadcastService.getBroadcastById(openQuestionReq.getBroadcastId());
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_QUESTION);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_QUESTION, openQuestionReq.getBroadcastId());
+        //문제 제출 마감시간 설정
 
         return fcmResponse;
     }
 
     public FcmResponse sendAnswer(OpenAnswerReq openAnswerReq) {
         checkPermissionBroadcast(openAnswerReq.getBroadcastId(), openAnswerReq.getUserId());
+        // TODO: 방송 마감 시간 이후 인지 확인하는 로직 추가
+        ///// this ///////
+
         Question question = questionService.getQuestionByBroadcastIdAndStep(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
-        String to = TO_PREFIX + openAnswerReq.getBroadcastId();
-        Map<Integer, Long> questionAnswerStat = broadcastService.getQuestionAnswerStat(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
+        String to = generateTopics(openAnswerReq.getBroadcastId(), HashIdType.BROADCAST_ID);
+        Map<Integer, Integer> questionAnswerStat = broadcastService.getQuestionAnswerStat(openAnswerReq.getBroadcastId(), openAnswerReq.getStep());
 
         AnswerMessage answerMessage = AnswerMessage.builder()
                                                    .step(openAnswerReq.getStep())
                                                    .questionProp(question.getQuestionProp())
                                                    .answerNo(question.getAnswerNo())
                                                    .questionStatistics(questionAnswerStat)
+                                                   .pushType(PushType.ANSWER_MESSAGE)
                                                    .build();
-        FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage, PushType.ANSWER_MESSAGE);
+
+        log.debug("answerMessage {}", answerMessage);
+
+        FcmContainer<AnswerMessage> fcmContainer = new FcmContainer<>(to, answerMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
+        //방송 상태 validation
+        Broadcast broadcast = broadcastService.getBroadcastById(openAnswerReq.getBroadcastId());
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_ANSWER);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_ANSWER, openAnswerReq.getBroadcastId());
+
 
         return fcmResponse;
     }
@@ -100,36 +131,52 @@ public class FcmService {
     public FcmResponse sendWinners(OpenWinnersReq openWinnersReq) {
         checkPermissionBroadcast(openWinnersReq.getBroadcastId(), openWinnersReq.getUserId());
         Broadcast broadcast = broadcastService.getBroadcastById(openWinnersReq.getBroadcastId());
-        String to = TO_PREFIX + openWinnersReq.getBroadcastId();
+        String to = generateTopics(openWinnersReq.getBroadcastId(), HashIdType.BROADCAST_ID);
 
         int lastStep = broadcast.getQuestionCount();
         Set<Long> userIds = broadcastService.getPlayUserIds(openWinnersReq.getBroadcastId(), lastStep);
         Map<Long, User> userList = userService.getUserByIds(userIds);
         List<String> userNameList = userList.values().stream().map(User::getName).collect(Collectors.toList());
+
+        //TODO : 상금이 PRize인 경우 우승 자 수 만큼 나눈 뒤에 소수 자리 정하기
+
         WinnersMessage winnersMessage = WinnersMessage.builder()
                                                          .giftDescription(broadcast.getGiftDescription())
                                                          .giftType(broadcast.getGiftType())
                                                          .prize(broadcast.getPrize())
                                                          .userName(userNameList)
                                                          .winnerMessage(broadcast.getWinnerMessage())
+                                                         .pushType(PushType.WINNERS_MESSAGE)
                                                          .build();
 
-        FcmContainer<WinnersMessage> fcmContainer = new FcmContainer<>(to, winnersMessage, PushType.WINNERS_MESSAGE);
+        log.debug("winnersMessage : {}", winnersMessage);
+        FcmContainer<WinnersMessage> fcmContainer = new FcmContainer<>(to, winnersMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
+        //방송 상태 validation
+        BroadcastStatus.validateNextBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_WINNER);
+        //방송 상태 변경
+        broadcastService.updateBroadcastStatus(BroadcastStatus.OPEN_WINNER, openWinnersReq.getBroadcastId());
+
 
         return fcmResponse;
     }
 
     public FcmResponse sendEndBroadcast(EndBroadcastReq endBroadcastReq) {
         checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
-        String to = TO_PREFIX + endBroadcastReq.getBroadcastId();
+        String to = generateTopics(endBroadcastReq.getBroadcastId(), HashIdType.BROADCAST_ID);
 
-        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder().build();
+        // TODO: 방송 종료시에 무조건 위너 상태여야 하는지?
+        EndBroadcastMessage endBroadcastMessage = EndBroadcastMessage.builder()
+                                                                     .pushType(PushType.END_MESSAGE)
+                                                                     .build();
 
-        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage, PushType.END_BROADCAST);
+        log.debug("endBroadcastMessage {}", endBroadcastMessage);
+        FcmContainer<EndBroadcastMessage> fcmContainer = new FcmContainer<>(to, endBroadcastMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+
 
         return fcmResponse;
     }
@@ -138,8 +185,12 @@ public class FcmService {
         //TODO: 인터셉터에서 권한 체크가 필요할듯
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
         if (broadcast.getUserId() != userId) {
-            throw new IllegalArgumentException("해당 유저는 권한이 없습니다.!!");
+            throw new IllegalArgumentException("해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
         }
+    }
+
+    private String generateTopics(Long id, HashIdType hashIdType) {
+        return String.format("%s%s", TO_PREFIX, HashIdUtils.encryptId(hashIdType, id));
     }
 
 }
