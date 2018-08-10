@@ -35,6 +35,7 @@
         <activity android:name=".ui.login.LoginActivity" />
         <activity
             android:name=".ui.quizing.QuizingActivity"
+            android:theme="@style/QuizingTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity

@@ -7,18 +7,20 @@
     <color name="white">#ffffff</color>
 
     <!-- for subscribe-->
-    <color name="rcpbColorDefault">#e7e7e7</color>
-    <color name="rcpbColorSelect">#b3b3b3</color>
-    <color name="rcpbColorBorder">#808080</color>
-    <color name="rcpbColorO">#7DEAA9</color>
-    <color name="rcpbColorX">#ffa8a7</color>
+    <color name="rcpbColorDefault">#e6e8ea</color>
+    <color name="rcpbColorSelect">#1a273d</color>
+    <color name="rcpbColorBorder">#e7e8eb</color>
+    <color name="rcpbColorO">#97cdd7</color>
+    <color name="rcpbColorX">#ffa0a0</color>
 
     <color name="defaultBackground">#f8f7f6</color>
 
     <color name="deepBlue">#0e8199</color>
+    <color name="soDeepBlue">#065a6f</color>
     <color name="shallowDark">#1a273d</color>
     <color name="black">#000000</color>
 
+    <color name="speciYellow">#fafd47</color>
 
 
 

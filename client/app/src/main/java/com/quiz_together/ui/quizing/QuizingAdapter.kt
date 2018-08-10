@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.quiz_together.R
 
@@ -34,11 +35,14 @@ class QuizingAdapter(val context:Context) : BaseAdapter() {
         var retView = inflator.inflate(R.layout.item_quizing_user, null)
         val tvName1 = retView.findViewById<TextView>(R.id.tvName1)
         val tvName2 = retView.findViewById<TextView>(R.id.tvName2)
+        val ivProfile2 = retView.findViewById<ImageView>(R.id.ivProfile2)
 
         Log.i(TAG,"position : ${position}")
 
         tvName1.text = this.users.get(position).first
         tvName2.text = this.users.get(position).second
+
+        if(this.users.get(position).second.isNullOrEmpty()) ivProfile2.visibility = View.INVISIBLE
 
         return retView
     }
