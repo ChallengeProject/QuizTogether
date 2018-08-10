@@ -2,12 +2,16 @@ package com.quiz_together.data.remote
 
 import android.util.Log
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqBrdIdAndUsrId
 import com.quiz_together.data.model.ReqLogin
+import com.quiz_together.data.model.ReqOpenAnsAndQus
 import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.ReqUpdateBroadcast
 import com.quiz_together.data.remote.service.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -270,6 +274,92 @@ class AppApiHelper : ApiHelper {
                     cb.onDataNotAvailable()
                 })
 
+    }
+
+    override fun updateBroadcastStatus(broadcastId: String, userId: String, broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.updateBroadcastStatus(ReqUpdateBroadcast(broadcastId,userId,broadcastStatus))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun leaveBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.leaveBroadcast(ReqBrdIdAndUsrId(broadcastId,userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun openWinners(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiServices.openWinners(ReqBrdIdAndUsrId(broadcastId,userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+    }
+
+    override fun openQuestion(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+
+        Log.i(TAG,"openQuestion")
+        Log.i(TAG,broadcastId)
+        Log.i(TAG,userId)
+        Log.i(TAG,step.toString())
+
+        apiServices.openQuestion(ReqOpenAnsAndQus(broadcastId,userId,step))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+    }
+
+    override fun openAnswer(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+
+        Log.i(TAG,"openAnswer")
+        Log.i(TAG,broadcastId)
+        Log.i(TAG,userId)
+        Log.i(TAG,step.toString())
+
+        apiServices.openAnswer(ReqOpenAnsAndQus(broadcastId,userId,step))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
     }
 
 

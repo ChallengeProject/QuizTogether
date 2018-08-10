@@ -20,6 +20,6 @@
         android:id="@+id/menu_create"
         android:title="menu_create"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_dummy"  />
+        android:icon="@drawable/icc_add"  />
 
 </menu>

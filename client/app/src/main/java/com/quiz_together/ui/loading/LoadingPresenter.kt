@@ -1,6 +1,7 @@
 package com.quiz_together.ui.base
 
 import android.os.Handler
+import android.util.Log
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.UserView
 import com.quiz_together.data.remote.ApiHelper
@@ -11,6 +12,8 @@ class LoadingPresenter(
         private val repository: Repository,
         private val view: LoadingContract.View
 ) : LoadingContract.Presenter {
+
+    val TAG = "LoadingPresenter"
 
     init {
         view.presenter = this
@@ -31,6 +34,8 @@ class LoadingPresenter(
 
         repository.getUserId()?.let {
 
+            Log.i(TAG,it)
+
             repository.login(it, object :ApiHelper.UserViewCallback {
 
                 override fun onLoginLoaded(respLogin: UserView) {
@@ -44,9 +49,7 @@ class LoadingPresenter(
                         showMainUi()
                     }
                 }
-
                 override fun onDataNotAvailable() {
-
                     view.run {
                         if(!isActive) return@onDataNotAvailable
                         setLoadingIndicator(false)

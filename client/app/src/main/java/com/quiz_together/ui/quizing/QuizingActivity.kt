@@ -27,17 +27,27 @@ class QuizingActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_quizing)
 
-        //TODO using dummy [broadcastId] now
-        val broadcastId = "thisisdummy-asdfasdf"
-        val isAdmin = false
+        val broadcastId = intent.getStringExtra(BROADCAST_ID)
+        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
+        val lastQuestionNum = intent.getIntExtra(LAST_QUESTION_NUM,-1)
 
-//        val broadcastId = intent.getStringExtra(BROADCAST_ID)
-//        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
+
+        //TODO using dummy [broadcastId] now
+//        val broadcastId = "thisisdummy-asdfasdf"
+//        val broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
+//         val broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
+//         val isAdmin = false
+//         val lastQuestionNum = 12
+
+//       broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
+//       isAdmin = true
+
+
 
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
-        QuizingFragment.newInstance(isAdmin).also {
+        QuizingFragment.newInstance(isAdmin,lastQuestionNum).also {
 
             replaceFragmentInActivity(it, R.id.fl_content)
         }
@@ -77,6 +87,7 @@ class QuizingActivity : AppCompatActivity() {
 
     companion object {
         const val BROADCAST_ID = "BROADCAST_ID"
+        const val LAST_QUESTION_NUM = "LAST_QUESTION_NUM"
         const val IS_ADMIN = "IS_ADMIN"
     }
 

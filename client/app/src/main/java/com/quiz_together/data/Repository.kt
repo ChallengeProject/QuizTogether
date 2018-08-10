@@ -3,6 +3,7 @@ package com.quiz_together.data
 import com.quiz_together.data.local.AppPreferenceHelper
 import com.quiz_together.data.local.PreferenceHelper
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.ReqStartBroadcast
@@ -12,9 +13,28 @@ import com.quiz_together.data.remote.AppApiHelper
 
 object Repository : PreferenceHelper, ApiHelper {
 
-
     private val preferenceHelper = AppPreferenceHelper()
     private val apiHelper = AppApiHelper()
+
+    // shared prefrenece
+
+    override fun isFirstLaunch(): Boolean {
+        return preferenceHelper.isFirstLaunch()
+    }
+
+    override fun setIsFirst(isFirst: Boolean) {
+        preferenceHelper.setIsFirst(isFirst)
+    }
+
+    override fun setUserId(userId: String) {
+        preferenceHelper.setUserId(userId)
+    }
+
+    override fun getUserId(): String? = preferenceHelper.getUserId()
+
+
+    // rest api
+
 
     override fun signup(name: String, pushToken: String, cb: ApiHelper.UserViewCallback) {
         apiHelper.signup(name,pushToken,cb)
@@ -77,26 +97,28 @@ object Repository : PreferenceHelper, ApiHelper {
     }
 
     override fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback) {
-        apiHelper.sendChatMsg(broadcastId,userId ,msg,cb)
+        apiHelper.sendAdminChatMsg(broadcastId,userId ,msg,cb)
     }
 
-
-    // shared prefrenece
-
-    override fun isFirstLaunch(): Boolean {
-        return preferenceHelper.isFirstLaunch()
+    override fun updateBroadcastStatus(broadcastId: String, userId: String, broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.updateBroadcastStatus(broadcastId,userId,broadcastStatus,cb)
     }
 
-    override fun setIsFirst(isFirst: Boolean) {
-        preferenceHelper.setIsFirst(isFirst)
+    override fun leaveBroadcast(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.leaveBroadcast(broadcastId,userId,cb)
     }
 
-    override fun setUserId(userId: String) {
-        preferenceHelper.setUserId(userId)
+    override fun openWinners(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.openWinners(broadcastId,userId,cb)
     }
 
-    override fun getUserId(): String? = preferenceHelper.getUserId()
+    override fun openQuestion(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.openQuestion(broadcastId,userId,step,cb)
+    }
 
+    override fun openAnswer(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.openAnswer(broadcastId,userId,step,cb)
+    }
 
 
 }

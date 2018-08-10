@@ -2,6 +2,7 @@ package com.quiz_together.data.remote
 
 import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.BroadcastJoinInfo
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
@@ -69,8 +70,14 @@ interface ApiHelper {
     fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
+    fun updateBroadcastStatus(broadcastId: String,userId: String,broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback)
+    fun leaveBroadcast(broadcastId: String,userId: String, cb: ApiHelper.GetSuccessCallback)
+
+    //firebase
+    fun openWinners(broadcastId:String, userId:String,cb: ApiHelper.GetSuccessCallback)
+    fun openQuestion(broadcastId:String, userId:String,step:Int, cb: ApiHelper.GetSuccessCallback)
+    fun openAnswer(broadcastId:String, userId:String,step:Int, cb: ApiHelper.GetSuccessCallback)
     fun sendChatMsg(broadcastId:String, userId:String,msg:String, cb: ApiHelper.GetSuccessCallback)
     fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback)
-
 
 }

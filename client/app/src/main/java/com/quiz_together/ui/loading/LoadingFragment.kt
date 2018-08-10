@@ -18,12 +18,6 @@ import kotlinx.android.synthetic.main.frag_base.*
 
 class LoadingFragment : Fragment(), LoadingContract.View {
 
-
-
-
-
-
-
     val TAG = "LoadingFragment"
 
     override lateinit var presenter: LoadingContract.Presenter
@@ -49,15 +43,6 @@ class LoadingFragment : Fragment(), LoadingContract.View {
     override fun setLoadingIndicator(active: Boolean) {
         activity?.getWindow()?.setTouchable(active)
         pb.setVisibilityFromBoolean(active)
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
-            Log.i(TAG,"findViewById<FloatingActionButton>")
-        }
 
     }
 

@@ -5,6 +5,12 @@ import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.json.JSONObject
+import android.R.attr.keySet
+import com.google.gson.JsonParser
+import com.google.gson.JsonObject
+
+
 
 class FirebaseHelper : FirebaseMessagingService() {
 
@@ -21,18 +27,29 @@ class FirebaseHelper : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         if (remoteMessage.data.size > 0) {
-            Log.i(TAG, "Message data payload: " + remoteMessage.getData())
-        }
 
-        remoteMessage.notification.let {
-            Log.i(TAG, "Message Notification Body 1: ${it?.body.toString()}");
+            val gsObj = JsonObject()
+            val jsonParser = JsonParser()
+            val map = remoteMessage.data
+            var str: String
+
+            for (key in map.keys) {
+                str = map[key]!!
+                try {
+                    gsObj.add(key, jsonParser.parse(str))
+                } catch (e: Exception) {
+                    gsObj.addProperty(key, str)
+                }
+            }
+
+            Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.toString())
+
+
+
             val intent = Intent(FMC_ACTION)
-            intent.putExtra(FMC_IN_QUIZING, it?.body.toString())
-
+            intent.putExtra(FMC_IN_QUIZING, gsObj.toString())
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         }
-
-
     }
 
     companion object {

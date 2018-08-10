@@ -4,6 +4,7 @@ import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
 import com.quiz_together.data.model.AdminMsg
 import com.quiz_together.data.model.AnswerMsg
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.QuestionMsg
@@ -35,6 +36,14 @@ interface QuizingContract {
         fun sendMsg(msg:String)
 
         fun unsubscribeFirebase(isSendLeaveBroadcast :Boolean )
+
+        fun updateBroadcastStatus(broadcastStatus: BroadcastStatus)
+
+        fun openAnswer(step:Int)
+        fun openQuestion(step:Int)
+        fun openWinners()
+        fun endBroadcast()
+
 
     }
 

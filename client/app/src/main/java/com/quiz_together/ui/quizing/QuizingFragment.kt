@@ -10,6 +10,7 @@ import android.widget.GridView
 import com.quiz_together.R
 import com.quiz_together.data.model.AdminMsg
 import com.quiz_together.data.model.AnswerMsg
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.GiftType
@@ -17,6 +18,7 @@ import com.quiz_together.data.model.QuestionMsg
 import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
+import com.quiz_together.util.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -38,8 +40,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     lateinit var rcpbController: SelectorController
 
     var curQuizStep = 0
-    var isAlive :Boolean= false;
+    var isAlive :Boolean= false
     lateinit var quizStatus :QuizStatus
+    var quizBefStatus = QuizStatus.ANSWERING
     lateinit var userMsgs : Array<String>
     var pickNum:Int = CAN_PICK // -1 is can select, but cant touch when value is more than 0
 
@@ -51,13 +54,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var disposer2:Disposable? = null
 
     var isAdmin = false
+    var lastQuestionNum = -1
 
     override var isActive: Boolean = false
         get() = isAdded
-
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -110,6 +110,31 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         // send msg button
         btSendMsg.setOnClickListener{
             presenter.sendMsg(etMsg.text.toString())
+        }
+
+        rlNextStep.setOnClickListener { v ->
+
+
+            if(!isAdmin) return@setOnClickListener
+
+            rlNextStep.isClickable = false
+
+            if(quizBefStatus == QuizStatus.ANSWERING ) {
+
+                if(lastQuestionNum == curQuizStep)
+                    presenter.openWinners()
+                else
+                    presenter.openQuestion(curQuizStep+1)
+
+                quizBefStatus = QuizStatus.QUIZING
+            } else if (quizBefStatus == QuizStatus.QUIZING) {
+                presenter.openAnswer(curQuizStep)
+                quizBefStatus = QuizStatus.ANSWERING
+            } else if (quizBefStatus == QuizStatus.ENDING) {
+                presenter.endBroadcast()
+                "종료".toast()
+            }
+
         }
 
 //        etMsg.setOnFocusChangeListener { v, hasFocus ->
@@ -233,23 +258,15 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         updateExpandChatWindow()
     }
 
-
-
     // firebase
     override fun showAdminMsg(adminMsg: AdminMsg) {
         Log.i(TAG,"showAdminMsg : ${adminMsg.toString()}")
-
         updateAdminMsg(adminMsg.message)
-
-
     }
 
     override fun showChatMsg(chatMsg: ChatMsg) {
         Log.i(TAG,"showChatMsg : ${chatMsg.toString()}")
-
         updateUserMsg("${chatMsg.userName} : ${chatMsg.message}")
-
-
     }
 
     override fun showQuestionView(questionMsg: QuestionMsg) {
@@ -299,17 +316,19 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 llResultShow = View.INVISIBLE,
                 isExpandChatWindow_ = false)
 
-        val pick1Cnt = answerMsg.questionStatistics.get(1)
-        val pick2Cnt = answerMsg.questionStatistics.get(2)
-        val pick3Cnt = answerMsg.questionStatistics.get(3)
+        val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
+        val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
+        val pick3Cnt = answerMsg.questionStatistics.get("3") ?: 0
 
-        val sumPick = (pick1Cnt+pick2Cnt+pick3Cnt).toDouble()
+        Log.i(TAG,"showAnswerView : ${pick1Cnt} ${pick2Cnt} ${pick3Cnt}")
+
+        val sumPick = (pick1Cnt + pick2Cnt + pick3Cnt).toDouble()
 
         rcpbController.apply {
 
-            setRCPB(1,SelectorController.SelectorColor.DEFAULT,(pick1Cnt/sumPick*100).toInt())
-            setRCPB(2,SelectorController.SelectorColor.DEFAULT,(pick2Cnt/sumPick*100).toInt())
-            setRCPB(3,SelectorController.SelectorColor.DEFAULT,(pick3Cnt/sumPick*100).toInt())
+            setRCPB(1,SelectorController.SelectorColor.DEFAULT,(20 + pick1Cnt / sumPick * 60).toInt())
+            setRCPB(2,SelectorController.SelectorColor.DEFAULT,(20 + pick2Cnt / sumPick * 60).toInt())
+            setRCPB(3,SelectorController.SelectorColor.DEFAULT,(20 + pick3Cnt / sumPick * 60).toInt())
 
             setRCPBOnlyColor(answerMsg.answerNo,SelectorController.SelectorColor.O)
             if(!isAdmin && answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
@@ -331,7 +350,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun showWinnerView(winnersMsg: WinnersMsg) {
         Log.i(TAG,"showWinnerView : ${winnersMsg.toString()}")
 
-        var msgTurn = 0;
+        var msgTurn = 0
 
         finalMsg.add("") // admin msg is finalMsg[0]
         finalMsg.add("${if(winnersMsg.giftType==GiftType.PRIZE) winnersMsg.prize else winnersMsg.giftDescription}" )
@@ -351,8 +370,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                     updateAdminMsg( finalMsg.get(msgTurn++))
                     if(msgTurn==3) msgTurn = 0
                 }
-
-
 
         viewUpdate(quizStatus_ = QuizStatus.ENDING,
                 questionNum = ICON_IS_IMG_SATUS,
@@ -378,6 +395,12 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         }
 
 
+        Log.i(TAG,"tmpStr ${tmpStr}")
+
+        if(winnersMsg.userName.size % 2 != 0){
+            Log.i(TAG,"users.size")
+            users.add(Pair(tmpStr!!,""))
+        }
 
         gvResult.numColumns = users.size
 
@@ -385,8 +408,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         gvAdapter.users = users
         gvResult.adapter = gvAdapter
         setDynamicWidth(gvResult)
-
-
     }
 
     override fun endQuiz(endMsg: EndMsg) {
@@ -408,15 +429,18 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     val turnRestView : () -> Any = {
         Log.i(TAG,"turnRestView")
 
+        if(isAdmin) {
+            presenter.updateBroadcastStatus(BroadcastStatus.WATING)
+            rlNextStep.isClickable = true
+        }
+
         viewUpdate(quizStatus_ = QuizStatus.RESTING,
                 questionNum = ICON_IS_IMG_SATUS,
                 cvToolbarShow = View.VISIBLE,
-                llNoticeShow = View.INVISIBLE,
+                llNoticeShow = View.VISIBLE,
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.INVISIBLE,
                 isExpandChatWindow_ = true)
-
-
     }
 
     fun startTimer(doWhen5Sec:(() -> Any)? , doWhen10Sec:(()->Any)?, doWhen15Sec:(()->Any)?){
@@ -439,11 +463,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     companion object {
-        private val IS_ADMIN = "IS_ADMIN"
-        fun newInstance(isAdmin_:Boolean) = QuizingFragment().apply {
+//        private val IS_ADMIN = "IS_ADMIN"
+        fun newInstance(isAdmin_:Boolean, lastQuestionNum_:Int) = QuizingFragment().apply {
             isAdmin = isAdmin_
-
-            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
+            lastQuestionNum = lastQuestionNum_
+//            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
         }
     }
 
@@ -461,6 +485,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     fun updateAdminMsg(msg:String){
+
+        tvAdminMsg.text = msg
+
         Observable.just(msg)
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter{ quizStatus == QuizStatus.RESTING ||
@@ -471,7 +498,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                     Log.i(TAG,"showAdminMsg - ${msg}")
 
                     llNotice.visibility = View.VISIBLE
-                    tvAdminMsg.text = msg
                 }
     }
 
@@ -503,7 +529,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     fun fortest(){
-//        SC.USER_ID = "u51746133bf56b26c7e0988465c5e8c31"
 
         for(i in 1..10) {
             updateUserMsg("$i$i$i$i$i$i$i")

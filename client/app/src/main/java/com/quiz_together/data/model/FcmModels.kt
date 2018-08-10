@@ -1,6 +1,6 @@
 package com.quiz_together.data.model
 
-data class AnswerMsg(val pushType: PushType, val questionProp: QuestionProp, val answerNo:Int, val step:Int, val questionStatistics:Array<Int>)
+data class AnswerMsg(val pushType: PushType, val questionProp: QuestionProp, val answerNo:Int, val step:Int, val questionStatistics:Map<String,Int>)
 
 data class QuestionMsg(val pushType: PushType,val questionProp: QuestionProp, val step:Int )
 
@@ -13,3 +13,5 @@ data class WinnersMsg(val pushType: PushType,val winnerMessage:String, val prize
 //data class NoticeMsg(val pushType: PushType,val aa:Int)
 
 data class EndMsg(val pushType: PushType)
+
+data class ReqOpenAnsAndQus(val broadcastId: String, val userId: String, val step:Int)

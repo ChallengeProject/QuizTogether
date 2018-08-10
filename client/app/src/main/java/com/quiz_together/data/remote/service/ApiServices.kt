@@ -5,11 +5,14 @@ import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.BroadcastJoinInfo
 import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqBrdIdAndUsrId
 import com.quiz_together.data.model.ReqLogin
+import com.quiz_together.data.model.ReqOpenAnsAndQus
 import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.ReqUpdateBroadcast
 import com.quiz_together.data.model.Resp
 import com.quiz_together.data.model.RespEmpty
 import com.quiz_together.data.model.User
@@ -64,6 +67,9 @@ interface ApiServices {
     @POST("${BuildConfig.REST_PREFIX}/broadcast/startBroadcast")
     fun startBroadcast(@Body data: ReqStartBroadcast) : Observable<Resp<RespEmpty>>
 
+    @POST("${BuildConfig.REST_PREFIX}/broadcast/leaveBroadcast")
+    fun leaveBroadcast(@Body data: ReqBrdIdAndUsrId) : Observable<Resp<RespEmpty>>
+
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastForUpdateById")
     fun getBroadcastForUpdateById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>
 
@@ -71,11 +77,25 @@ interface ApiServices {
     fun joinBroadcast(@Query("broadcastId") broadcastId:String,
                       @Query("userId") userId:String) : Observable<Resp<BroadcastJoinInfo>>
 
+    @POST("${BuildConfig.REST_PREFIX}/broadcast/updateBroadcastStatus")
+    fun updateBroadcastStatus(@Body data: ReqUpdateBroadcast) : Observable<Resp<RespEmpty>>
+
     @POST("${BuildConfig.REST_PREFIX}/firebase/sendChatMessage")
     fun sendChatMsg(@Body data: ReqSendChatMsg) : Observable<Resp<RespEmpty>>
 
     @POST("${BuildConfig.REST_PREFIX}/firebase/sendAdminChatMessage")
     fun sendAdminChatMsg(@Body data: ReqSendChatMsg) : Observable<Resp<RespEmpty>>
+
+    @POST("${BuildConfig.REST_PREFIX}/firebase/openWinners")
+    fun openWinners(@Body data: ReqBrdIdAndUsrId) : Observable<Resp<RespEmpty>>
+
+    @POST("${BuildConfig.REST_PREFIX}/firebase/openQuestion")
+    fun openQuestion(@Body data: ReqOpenAnsAndQus) : Observable<Resp<RespEmpty>>
+
+    @POST("${BuildConfig.REST_PREFIX}/firebase/openAnswer")
+    fun openAnswer(@Body data: ReqOpenAnsAndQus) : Observable<Resp<RespEmpty>>
+
+
 
     companion object Factory {
         fun create(): ApiServices {

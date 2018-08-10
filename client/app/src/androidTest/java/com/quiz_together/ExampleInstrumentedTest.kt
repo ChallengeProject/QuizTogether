@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.quiz_together.data.model.BroadcastStatus
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.PushType
 import com.quiz_together.data.model.QuestionMsg
@@ -198,10 +199,6 @@ class ExampleInstrumentedTest {
         val gsObj = gson.fromJson(jsObj2.toString(),EndMsg::class.java)
 
         println("gsObj >> ${gsObj.toString()}")
-
-
-
-
     }
 
 
@@ -246,8 +243,28 @@ class ExampleInstrumentedTest {
 
         println("mm >> ${mm.toString()}")
 
+    }
 
+
+    @Test
+    fun updateBroadcastStatusTest() {
+        testRunText("updateBroadcastStatus")
+
+        Repository.updateBroadcastStatus("b82d4e3b1873ef25f7264af5a2113f5a7","u51746133bf56b26c7e0988465c5e8c31",BroadcastStatus.OPEN_ANSWER,
+                object: ApiHelper.GetSuccessCallback{
+                    override fun onSuccessLoaded() {
+                        Log.i(TAG,"onSuccessLoaded")
+                    }
+
+                    override fun onDataNotAvailable() {
+                        Log.i(TAG,"onDataNotAvailable")
+                    }
+
+                }
+        )
 
     }
+
+
 
 }
