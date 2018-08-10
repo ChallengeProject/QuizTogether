@@ -20,17 +20,14 @@ class CreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
 
-        initToolbar();
+        initToolbar()
 
-        val fragment = supportFragmentManager
-                .findFragmentById(R.id.fl_content) as CreateFragment?
+        val fragment = supportFragmentManager.findFragmentById(R.id.fl_content) as CreateFragment?
                 ?: CreateFragment.newInstance().also {
-
                     replaceFragmentInActivity(it, R.id.fl_content)
                 }
 
         CreatePresenter(Repository, fragment)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

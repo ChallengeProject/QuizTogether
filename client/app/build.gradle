@@ -55,6 +55,9 @@ dependencies {
     // circle imageview ( https://github.com/hdodenhof/CircleImageView , star:10144)
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // insta style indicator
+    implementation 'com.shuhart.bubblepagerindicator:bubblepagerindicator:1.0.13'
+
     // for bottom dot in viewpager ( https://github.com/Chabbal/slidingdotsplash )
 //    implementation 'com.chabbal:slidingdotsplash:1.0.2'
 }
