@@ -1,7 +1,5 @@
 package me.quiz_together.root.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +18,8 @@ import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
-import me.quiz_together.root.model.response.broadcast.CurrentBroadcastView;
 import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
+import me.quiz_together.root.model.response.broadcast.PagingBroadcastListView;
 import me.quiz_together.root.model.response.broadcast.StartBroadcastView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.broadcast.BroadcastViewService;
@@ -33,14 +31,19 @@ public class BroadcastController implements ApiController {
     @Autowired
     private BroadcastViewService broadcastViewService;
 
-    @ApiImplicitParam(name = "next", value = "broadcast hash Id", paramType = "query",
-            dataType = "string")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "next", value = "broadcast hash Id", paramType = "query", required = false,
+                    dataType = "string"),
+            @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query", required = false, dataType = "string")
+    })
     @GetMapping("/broadcast/getPagingBroadcastList")
-    public ResultContainer<List<CurrentBroadcastView>> getPagingBroadcastList(@RequestParam(defaultValue = "b0") @HashBroadcastId Long next, @RequestParam(defaultValue = "50") int limit) {
+    public ResultContainer<PagingBroadcastListView> getPagingBroadcastList(@RequestParam(defaultValue = "b0") @HashBroadcastId Long next, @RequestParam(defaultValue = "50") int limit,
+                                                                           @RequestParam(required = false) @HashUserId Long userId) {
 
-        return new ResultContainer<>(broadcastViewService.getCurrentBroadcastViewList(next, limit));
+        return new ResultContainer<>(broadcastViewService.getPagingBroadcastList(next, limit, userId));
     }
 
+    @Deprecated
     @ApiImplicitParam(name = "broadcastId", value = "broadcast hash Id", paramType = "query", required = true,
             dataType = "string")
     @GetMapping("/broadcast/getBroadcastById")

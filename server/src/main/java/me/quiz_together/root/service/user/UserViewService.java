@@ -6,8 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import me.quiz_together.root.model.request.user.UserIdReq;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
+import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
-import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.user.User;
 
 @Service
@@ -15,13 +15,13 @@ public class UserViewService {
     @Autowired
     private UserService userService;
 
-    public UserView login(UserIdReq userIdReq) {
+    public UserInfoView login(UserIdReq userIdReq) {
         User user = userService.login(userIdReq);
 
-        return UserView.builder()
-                       .userId(user.getId())
-                       .name(user.getName())
-                       .build();
+        return UserInfoView.builder()
+                           .userId(user.getId())
+                           .name(user.getName())
+                           .build();
     }
 
     public UserProfileView getUserProfileView(long userId) {
@@ -35,13 +35,13 @@ public class UserViewService {
                 .build();
     }
 
-    public UserView insertUser(UserSignupRequest userSignupRequest) {
+    public UserInfoView insertUser(UserSignupRequest userSignupRequest) {
         User user = userService.insertUser(userSignupRequest);
 
-        return UserView.builder()
-                .userId(user.getId())
-                .name(user.getName())
-                .build();
+        return UserInfoView.builder()
+                           .userId(user.getId())
+                           .name(user.getName())
+                           .build();
     }
 
     public void deleteUserById(UserIdReq userIdReq) {

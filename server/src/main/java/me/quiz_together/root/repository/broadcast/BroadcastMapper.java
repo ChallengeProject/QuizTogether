@@ -13,7 +13,9 @@ public interface BroadcastMapper {
 
     Broadcast selectBroadcastById(@Param("broadcastId") long broadcastId);
 
-    List<Broadcast> selectPagingBroadcastList(@Param("next") long next, @Param("limit") int limit);
+    List<Broadcast> selectPagingBroadcastList(@Param("next") long next, @Param("limit") int limit, @Param("userId") Long userId);
+
+    List<Broadcast> selectMyBroadcastList(@Param("userId") Long userId);
 
     void insertBroadcast(Broadcast broadcast);
 

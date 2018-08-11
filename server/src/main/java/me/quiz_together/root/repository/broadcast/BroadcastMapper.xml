@@ -40,11 +40,26 @@
       <if test="next > 0">
         id &lt; #{next}
       </if>
+      <if test="userId > 0">
+        AND user_id != #{userId}
+      </if>
     </where>
     ORDER BY
-    id DESC
+    scheduled_time
     LIMIT
     #{limit}
+  </select>
+
+  <select id="selectMyBroadcastList" parameterType="map" resultType="Broadcast">
+    SELECT
+    /* broadcast.selectMyBroadcastList */
+    <include refid="BroadcastColumns" />
+    FROM
+    broadcast
+    WHERE
+        user_id = #{userId}
+    ORDER BY
+    scheduled_time
   </select>
 
   <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">

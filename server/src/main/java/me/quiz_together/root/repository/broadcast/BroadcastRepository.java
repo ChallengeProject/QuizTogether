@@ -17,8 +17,12 @@ public class BroadcastRepository {
         return broadcastMapper.selectBroadcastById(broadcastId);
     }
 
-    public List<Broadcast> selectPagingBroadcastList(long next, int limit) {
-        return broadcastMapper.selectPagingBroadcastList(next, limit);
+    public List<Broadcast> selectPagingBroadcastList(long next, int limit, Long userId) {
+        return broadcastMapper.selectPagingBroadcastList(next, limit, userId);
+    }
+
+    public List<Broadcast> selectMyBroadcastList(Long userId) {
+        return broadcastMapper.selectMyBroadcastList(userId);
     }
 
     public void insertBroadcast(Broadcast broadcast) {

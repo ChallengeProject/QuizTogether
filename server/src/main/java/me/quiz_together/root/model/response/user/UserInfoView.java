@@ -7,7 +7,7 @@ import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
 @Builder
-public class UserView {
+public class UserInfoView {
     @ApiModelProperty(dataType = "java.lang.String")
     @HashUserId
     private Long userId;
