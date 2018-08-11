@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
@@ -55,14 +56,6 @@ public class BroadcastViewService {
         pagingBroadcastListView.setCurrentBroadcastList(buildBroadcastViewList(broadcastList));
 
         return pagingBroadcastListView;
-    }
-
-    @Deprecated
-    public BroadcastView getBroadcastView(long broadcastId) {
-        Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
-
-        return buildBroadcastView(broadcast);
-
     }
 
     public BroadcastForUpdateView getBroadcastForUpdateById(long broadcastId) {
@@ -115,6 +108,12 @@ public class BroadcastViewService {
     }
 
     public void createBroadcast(BroadcastReq broadcastReq) {
+        // 예약 시간은 현재시간 보다 커야 한다.
+        if (broadcastReq.getScheduledTime() > System.currentTimeMillis()) {
+            //TODO : 에러 코드 정의
+            throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
+        }
+
         Broadcast broadcast = new Broadcast();
         broadcast.setUserId(broadcastReq.getUserId());
         broadcast.setTitle(broadcastReq.getTitle());
@@ -247,6 +246,9 @@ public class BroadcastViewService {
     }
 
     public void leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
+        if (Objects.isNull(userService.getUserById(leaveBroadcastReq.getUserId()))) {
+            throw new NotFoundUserException();
+        }
         broadcastService.deleteViewer(leaveBroadcastReq.getBroadcastId(), leaveBroadcastReq.getUserId());
     }
 
