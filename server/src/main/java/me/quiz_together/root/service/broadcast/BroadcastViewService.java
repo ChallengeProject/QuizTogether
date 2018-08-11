@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
@@ -247,6 +248,9 @@ public class BroadcastViewService {
     }
 
     public void leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
+        if (Objects.isNull(userService.getUserById(leaveBroadcastReq.getUserId()))) {
+            throw new NotFoundUserException();
+        }
         broadcastService.deleteViewer(leaveBroadcastReq.getBroadcastId(), leaveBroadcastReq.getUserId());
     }
 
