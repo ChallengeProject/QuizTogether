@@ -16,6 +16,7 @@ import me.quiz_together.root.repository.broadcast.BroadcastRepository;
 
 @Service
 public class BroadcastService {
+    private static final Integer MAX_BROADCAST = 1;
     @Autowired
     private BroadcastRepository broadcastRepository;
     @Autowired
@@ -25,8 +26,16 @@ public class BroadcastService {
         return broadcastRepository.selectBroadcastById(broadcastId);
     }
 
-    public List<Broadcast> getPagingBroadcastList(long next, int limit) {
-        return broadcastRepository.selectPagingBroadcastList(next, limit);
+    public List<Broadcast> getPagingBroadcastList(long next, int limit, Long userId) {
+        return broadcastRepository.selectPagingBroadcastList(next, limit, userId);
+    }
+
+    public List<Broadcast> getMyBroadcastList(Long userId) {
+        return broadcastRepository.selectMyBroadcastList(userId);
+    }
+
+    public boolean getPreparedBroadcastByUserId(Long userId) {
+        return broadcastRepository.selectPreparedBroadcastByUserId(userId) >= MAX_BROADCAST;
     }
 
     public void insertBroadcast(Broadcast broadcast) {

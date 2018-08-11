@@ -9,10 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.util.toStringTemplate
 import kotlinx.android.synthetic.main.item_home_broadcast.view.*
 
-class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadcast) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TAG = "BroadcastAdapter#$#"
 
@@ -27,13 +28,16 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
 
     override fun getItemCount() = list.size
 
-    fun addItem(data: Broadcast) = list.add(data)
+    fun addItem(data: Broadcast,roomOutputType: RoomOutputType) {
+        data.roomOutputType = roomOutputType
+        list.add(data)
+    }
 
     fun clearItem() = list.clear()
 
     fun notifyDataSetChang() = notifyDataSetChanged()
 
-    class ImageViewHolder(context: Context?, parent: ViewGroup?,val cbOnClickLl: (str: String) -> Unit)
+    class ImageViewHolder(context: Context?, parent: ViewGroup?,val cbOnClickLl: (broadcast: Broadcast) -> Unit)
         : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_home_broadcast, parent, false)) {
 
         val TAG = "ImageViewHolder#$#"
@@ -45,32 +49,15 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
         private fun View.onBind(item: Broadcast) {
 
             tvTitle.text = item.title
-            tvDate.text = item.scheduledTime?.toStringTemplate()?.substring(2)
-            tvName.text = item.userView?.name
+            tvDate.text = item.scheduledTime?.toStringTemplate()?.substring(2) + "시작"
+            tvName.text = item.userInfoView?.name
             tvPrize.text = item.prize.toString()
             tvContent.text = item.description
             ivProfile.setImageResource(R.drawable.icc_profile)
 
-            // TODO set type from date
-            var roomOutputType = RoomOutputType.DEFAULT
+            val calcedMin = item.remainingStartSeconds / 60;
 
-            if(BroadcastAdapter.aa == 0)
-            {
-                roomOutputType = RoomOutputType.DEFAULT
-                BroadcastAdapter.aa++
-            } else             if(BroadcastAdapter.aa == 1)
-            {
-                roomOutputType = RoomOutputType.FOLLOW
-                BroadcastAdapter.aa++
-            } else             if(BroadcastAdapter.aa == 2)
-            {
-                roomOutputType = RoomOutputType.RESERVATION
-                BroadcastAdapter.aa++
-            }
-
-            tvContent.text = "가나다라마바사\n아자차카타파하"
-
-            if(roomOutputType == RoomOutputType.DEFAULT) {
+            if(item.roomOutputType == RoomOutputType.DEFAULT) {
                 ivProfile.borderColor = getResources().getColor(R.color.white)
                 llBg.setBackgroundResource(R.drawable.back_white_border_for_layout)
                 tvShare.text = "팔로우"
@@ -83,7 +70,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
                 tvDate.setTextColor(Color.parseColor("#a2a8b0"))
 
             }
-            else if(roomOutputType == RoomOutputType.FOLLOW) {
+            else if(item.roomOutputType == RoomOutputType.FOLLOW) {
                 ivProfile.borderColor = getResources().getColor(R.color.deepBlue)
                 llBg.setBackgroundResource(R.drawable.back_deepblue_border_for_layout)
                 tvShare.text = "팔로잉"
@@ -94,8 +81,9 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
                 tvTitle.setTextColor(Color.parseColor("#fafd47"))
                 tvContent.setTextColor(resources.getColor(R.color.white))
                 tvDate.setTextColor(Color.parseColor("#fafd47"))
+                tvDate.text = "해당 방은 ${calcedMin}분 뒤에 진행되기로 예정되어있습니다."
 
-            } else if(roomOutputType == RoomOutputType.RESERVATION) {
+            } else if(item.roomOutputType == RoomOutputType.RESERVATION) {
                 ivProfile.borderColor = getResources().getColor(R.color.shallowDark)
                 llBg.setBackgroundResource(R.drawable.back_shallow_dark_border_for_layout)
                 tvShare.text = ""
@@ -106,29 +94,24 @@ class BroadcastAdapter(private val context: Context?, val cb: (str:String) -> Un
                 tvTitle.setTextColor(Color.parseColor("#fafd47"))
                 tvContent.setTextColor(resources.getColor(R.color.white))
                 tvDate.setTextColor(Color.parseColor("#fafd47"))
+                tvDate.text = "준비하신 퀴즈가 ${calcedMin}분 뒤에 진행되기로 예정되어있습니다."
             }
 
 
 
 
             rl.setOnClickListener({ _ ->
-                cbOnClickLl.invoke(item.title + item.scheduledTime.toString() + item.userId + item.prize.toString())
+                cbOnClickLl.invoke(item)
             })
 
 
             tvShare.setOnClickListener({ _ ->
-                cbOnClickLl.invoke(item.title + item.scheduledTime.toString() + item.userId + item.prize.toString())
+                cbOnClickLl.invoke(item)
             })
 
 
         }
 
-    }
-
-    enum class RoomOutputType (value:Int) {
-        DEFAULT(100),
-        FOLLOW(200),
-        RESERVATION(300),
     }
 
     companion object {

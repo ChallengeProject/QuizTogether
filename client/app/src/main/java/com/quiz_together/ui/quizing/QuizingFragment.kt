@@ -1,5 +1,7 @@
 package com.quiz_together.ui.quizing
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -24,7 +26,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
-
+import android.widget.Toast
+import android.content.res.Configuration.HARDKEYBOARDHIDDEN_YES
+import android.content.res.Configuration.HARDKEYBOARDHIDDEN_NO
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import com.google.android.gms.common.util.InputMethodUtils.showSoftInput
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
+import com.bumptech.glide.Glide
+import android.R.raw
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class QuizingFragment : Fragment(), QuizingContract.View {
 
@@ -32,7 +44,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     val CAN_PICK = -1
     val ICON_IS_IMG_SATUS = -1
 
-    val MSG_LINE_CNT_WHEN_REDUCE_WINDOW = 5
+    val MSG_LINE_CNT_WHEN_REDUCE_WINDOW = 4
+
+    val DEPRECIATE = -1
 
     override lateinit var presenter: QuizingContract.Presenter
 
@@ -46,12 +60,15 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     lateinit var userMsgs : Array<String>
     var pickNum:Int = CAN_PICK // -1 is can select, but cant touch when value is more than 0
 
-    var isExpandChatWindow = true
+    var isExpandChatWindow = false
 
     var finalMsg = arrayListOf<String>()
+    var isOpenKbd = false
 
     var disposer1:Disposable? = null
     var disposer2:Disposable? = null
+
+
 
     var isAdmin = false
     var lastQuestionNum = -1
@@ -86,10 +103,13 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         presenter.sendAnswer(curQuizStep,pickNum)
 
         if(pickNum > 0)
-            rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100)
+            rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100,true)
     }
 
+
     fun initListeners() {
+
+        ibBack.setOnClickListener { activity!!.onBackPressed() }
 
         rcpbQ1.setOnClickListener { _ ->
             if (pickNum != CAN_PICK)
@@ -109,13 +129,15 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         // send msg button
         btSendMsg.setOnClickListener{
-            presenter.sendMsg(etMsg.text.toString())
+            sendEdittextMessage()
         }
 
         rlNextStep.setOnClickListener { v ->
 
+            Log.i(TAG,"rlNextStep")
 
             if(!isAdmin) return@setOnClickListener
+            Log.i(TAG,"rlNextStep2")
 
             rlNextStep.isClickable = false
 
@@ -137,11 +159,65 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         }
 
-//        etMsg.setOnFocusChangeListener { v, hasFocus ->
-//            Log.i(TAG,"setOnFocusChangeListener")
-//            isExpandChatWindow = !hasFocus
-//            updateExpandChatWindow()
-//        }
+//        https://stackoverflow.com/questions/4312319/how-to-capture-the-virtual-keyboard-show-hide-event-in-android
+//        >> second answer
+
+        val activityRootView = activity!!.getWindow().getDecorView().findViewById<View>(android.R.id.content)
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener( {
+            val heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight()
+//            Log.i(TAG,activityRootView.getRootView().getHeight().toString()) // 2960
+//            Log.i(TAG,activityRootView.getHeight().toString()) // 2672 > 1619
+//            Log.i(TAG,heightDiff.toString()) // 1341 > 288
+            if (heightDiff > activityRootView.getRootView().getHeight() / 6) {
+
+                if (isOpenKbd === false) {
+                    ibChatOn.visibility = View.INVISIBLE
+
+                    if( quizStatus == QuizStatus.ENDING ) {
+                        llResult2.visibility = View.VISIBLE
+                        llResult1.visibility = View.INVISIBLE
+                        llNotice.visibility = View.INVISIBLE
+                        rlNextStep.visibility = View.INVISIBLE
+                    }
+
+                }
+                isOpenKbd = true
+            } else if (isOpenKbd === true) {
+                ibChatOn.visibility = View.VISIBLE
+                csMsgBox.visibility = View.GONE
+
+                if( quizStatus == QuizStatus.ENDING ) {
+                    llResult1.visibility = View.VISIBLE
+                    llResult2.visibility = View.INVISIBLE
+                    llNotice.visibility = View.VISIBLE
+                    rlNextStep.visibility = View.VISIBLE
+                }
+
+                isOpenKbd = false
+            }
+        })
+
+
+        etMsg.setOnKeyListener( { v, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                sendEdittextMessage()
+                true
+                }
+            else
+                false
+        })
+
+
+        ibChatOn.setOnClickListener { v ->
+            csMsgBox.visibility = View.VISIBLE
+
+            // give focus to edittext ( https://stackoverflow.com/questions/8080579/android-textfield-set-focus-soft-input-programmatically )
+            etMsg.post( {
+                etMsg.requestFocusFromTouch()
+                val lManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                lManager.showSoftInput(etMsg, 0)
+            })
+        }
 
     }
 
@@ -154,6 +230,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        // background from gif
+        Glide.with(activity!!.applicationContext)
+                .load(R.drawable.giphy)
+                .into(ivBackground)
 
         presenter.start()
 
@@ -164,49 +244,21 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         initListeners()
         initQuizCalledByOncreate()
 
-//        //TODO this is dummy data for check ui
-//        val users = mutableListOf<Pair<String,String>>()
-//        users.add(Pair("aaaaa","bbbb"))
-//        users.add(Pair("cccc","ddddd"))
-//        users.add(Pair("eeeee","ffffffff"))
-//        users.add(Pair("gggggggg","hhhhhh"))
-//        users.add(Pair("iiiiii","jjjjjj"))
-//        users.add(Pair("kkkkkkk","lllllll"))
-//        users.add(Pair("mmmmmmmm","nnnnnnnnn"))
-//        users.add(Pair("ooooooooo","ppppppppp"))
-//        users.add(Pair("qqqq","rrrrrr"))
-//        users.add(Pair("ssssss","tttttttt"))
-//        users.add(Pair("uuuuuu","vvvvvvv"))
-//        users.add(Pair("wwwwwww","xxxxxxx"))
-//        users.add(Pair("yyyyyyyy","zzzzzz"))
-//        users.add(Pair("11111111","22222222"))
-//        users.add(Pair("3333333","444444"))
-//
-//        gvResult.numColumns = users.size
-//
-//        gvAdapter = QuizingAdapter(this.context!!)
-//        gvAdapter.users = users
-//        gvResult.adapter = gvAdapter
-//        setDynamicWidth(gvResult)
     }
 
     fun setQuizNum(num :Int) {
 
         curQuizStep = num
 
-        tvQuizNum.text = "Q$num"
+        tvQuizNum.text = "$num"
         tvQuizNum.visibility = View.VISIBLE
-        ivIcon.visibility = View.INVISIBLE
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle))
+//        ivIcon.visibility = View.INVISIBLE
     }
 
-//    fun setUsersMsg(msg:String) {
-//        tvUserMsg.text = msg
-//    }
-
-    // TODO first, use dummy data
-    fun setIcon() {
-        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_dummy))
-        ivIcon.visibility = View.VISIBLE
+    fun setIcon(imgId :Int) {
+        ivIcon.setImageDrawable(context!!.getDrawable(imgId))
+//        ivIcon.visibility = View.VISIBLE
         tvQuizNum.visibility = View.INVISIBLE
     }
 
@@ -236,25 +288,42 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = View.INVISIBLE
         llQuestion.visibility = View.INVISIBLE
-        llResult.visibility = View.INVISIBLE
+        llResult1.visibility = View.INVISIBLE
+        llResult2.visibility = View.INVISIBLE
+
+        if(isAdmin) setIcon(R.drawable.icc_play)
 
     }
 
     override fun initQuizCalledByPresenter() {
-        fortest()
     }
 
     fun viewUpdate(quizStatus_: QuizStatus, questionNum:Int,cvToolbarShow:Int,
-                   llNoticeShow:Int,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_:Boolean) {
+                   llNoticeShow:Int,llQuestionShow:Int,llResultShow:Int,isExpandChatWindow_ :Boolean, imgId: Int) {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
-        if(questionNum == ICON_IS_IMG_SATUS) setIcon()
+        if(questionNum == ICON_IS_IMG_SATUS) setIcon(imgId)
         else setQuizNum(questionNum)
-        cvToolbar.visibility = cvToolbarShow
+        cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
-        llResult.visibility = llResultShow
 
+
+        // this part is llResult1 / llNotice <-> llResult2
+        if(quizStatus_ != QuizStatus.ENDING) {
+            llResult1.visibility = llResultShow
+            llResult2.visibility = llResultShow
+        } else {
+            if(isOpenKbd) {
+                llResult2.visibility = View.VISIBLE
+                llResult1.visibility = View.INVISIBLE
+                llNotice.visibility = View.INVISIBLE
+                rlNextStep.visibility = View.INVISIBLE
+            } else {
+                llResult2.visibility = View.INVISIBLE
+                llResult1.visibility = View.VISIBLE
+            }
+        }
         updateExpandChatWindow()
     }
 
@@ -274,11 +343,12 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         viewUpdate(quizStatus_ = QuizStatus.QUIZING,
                 questionNum = questionMsg.step,
-                cvToolbarShow = View.GONE,
+                cvToolbarShow = DEPRECIATE,
                 llNoticeShow = View.INVISIBLE,
                 llQuestionShow = View.VISIBLE,
                 llResultShow = View.INVISIBLE,
-                isExpandChatWindow_ = false)
+                isExpandChatWindow_ = false,
+                imgId = R.drawable.icc_white_circle)
 
         pickNum = CAN_PICK
 
@@ -299,8 +369,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             }
         }
 
-
-
         startTimer(null,pickEnd,turnRestView)
 
     }
@@ -308,13 +376,23 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun showAnswerView(answerMsg: AnswerMsg) {
         Log.i(TAG,"showAnswerView : ${answerMsg.toString()}")
 
+        if(!isAdmin && answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
+            isAlive = false
+        }
+
+        val imgRss = if(isAdmin) R.drawable.icc_play else if(isAlive) R.drawable.icc_life_on else R.drawable.icc_life_off
+
         viewUpdate(quizStatus_ = QuizStatus.ANSWERING,
-                questionNum = answerMsg.step,
-                cvToolbarShow = View.GONE,
+                questionNum = ICON_IS_IMG_SATUS,
+                cvToolbarShow = DEPRECIATE,
                 llNoticeShow = View.INVISIBLE,
                 llQuestionShow = View.VISIBLE,
                 llResultShow = View.INVISIBLE,
-                isExpandChatWindow_ = false)
+                isExpandChatWindow_ = false,
+                imgId = imgRss)
+
+        // exception !!
+        if(isAdmin) setQuizNum(answerMsg.step)
 
         val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
         val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
@@ -331,9 +409,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             setRCPB(3,SelectorController.SelectorColor.DEFAULT,(20 + pick3Cnt / sumPick * 60).toInt())
 
             setRCPBOnlyColor(answerMsg.answerNo,SelectorController.SelectorColor.O)
-            if(!isAdmin && answerMsg.answerNo != pickNum && pickNum != CAN_PICK) {
+            if(!isAdmin && !isAlive) {
                 setRCPBOnlyColor(pickNum,SelectorController.SelectorColor.X)
-                isAlive = false
             }
 
             tvQuestion.text = answerMsg.questionProp.title
@@ -367,31 +444,48 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         disposer2 = Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    updateAdminMsg( finalMsg.get(msgTurn++))
+                    if(!isOpenKbd)
+                        updateAdminMsg( finalMsg.get(msgTurn++))
                     if(msgTurn==3) msgTurn = 0
                 }
 
         viewUpdate(quizStatus_ = QuizStatus.ENDING,
                 questionNum = ICON_IS_IMG_SATUS,
-                cvToolbarShow = View.GONE,
+                cvToolbarShow = DEPRECIATE,
                 llNoticeShow = View.VISIBLE,
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.VISIBLE,
-                isExpandChatWindow_ = true)
+                isExpandChatWindow_ = false,
+                imgId = if(isAdmin) R.drawable.icc_play else R.drawable.icc_profile )
 
         val users = mutableListOf<Pair<String,String>>()
+
+        //        //TODO this is dummy data for check ui
+        users.add(Pair("aaaaa","bbbb"))
+        users.add(Pair("cccc","ddddd"))
+        users.add(Pair("eeeee","ffffffff"))
+        users.add(Pair("gggggggg","hhhhhh"))
+        users.add(Pair("iiiiii","jjjjjj"))
+        users.add(Pair("kkkkkkk","lllllll"))
+        users.add(Pair("mmmmmmmm","nnnnnnnnn"))
+        users.add(Pair("ooooooooo","ppppppppp"))
+        users.add(Pair("qqqq","rrrrrr"))
+        users.add(Pair("ssssss","tttttttt"))
+        users.add(Pair("uuuuuu","vvvvvvv"))
+        users.add(Pair("wwwwwww","xxxxxxx"))
+        users.add(Pair("yyyyyyyy","zzzzzz"))
+        users.add(Pair("11111111","22222222"))
+        users.add(Pair("3333333","444444"))
 
         var tmpStr :String? = null
 
         winnersMsg.userName.forEach{
-
             tmpStr?.run{
                 users.add(Pair(it,tmpStr!!))
                 tmpStr = null
             }?: run{
                 tmpStr = it
             }
-
         }
 
 
@@ -402,12 +496,19 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             users.add(Pair(tmpStr!!,""))
         }
 
-        gvResult.numColumns = users.size
+        if(users.size == 0) return;
+
+        gvResult1.numColumns = users.size
+        gvResult1.isEnabled = false
+        gvResult2.numColumns = users.size
+        gvResult2.isEnabled = false
 
         gvAdapter = QuizingAdapter(this.context!!)
         gvAdapter.users = users
-        gvResult.adapter = gvAdapter
-        setDynamicWidth(gvResult)
+        gvResult1.adapter = gvAdapter
+        gvResult2.adapter = gvAdapter
+        setDynamicWidth(gvResult1)
+        setDynamicWidth(gvResult2)
     }
 
     override fun endQuiz(endMsg: EndMsg) {
@@ -436,11 +537,13 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         viewUpdate(quizStatus_ = QuizStatus.RESTING,
                 questionNum = ICON_IS_IMG_SATUS,
-                cvToolbarShow = View.VISIBLE,
+                cvToolbarShow = DEPRECIATE,
                 llNoticeShow = View.VISIBLE,
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.INVISIBLE,
-                isExpandChatWindow_ = true)
+                isExpandChatWindow_ = false,
+                imgId = if(isAdmin) R.drawable.icc_play else R.drawable.icc_profile )
+
     }
 
     fun startTimer(doWhen5Sec:(() -> Any)? , doWhen10Sec:(()->Any)?, doWhen15Sec:(()->Any)?){
@@ -464,9 +567,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     companion object {
 //        private val IS_ADMIN = "IS_ADMIN"
-        fun newInstance(isAdmin_:Boolean, lastQuestionNum_:Int) = QuizingFragment().apply {
+        fun newInstance(isAdmin_:Boolean) = QuizingFragment().apply {
+    // TODO need to remove
             isAdmin = isAdmin_
-            lastQuestionNum = lastQuestionNum_
+//            lastQuestionNum = lastQuestionNum_
 //            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
         }
     }
@@ -519,6 +623,16 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         tvUserMsg.text = msgRst
     }
+
+    fun sendEdittextMessage(){
+        presenter.sendMsg(etMsg.text.toString())
+        etMsg.setText("")
+    }
+
+    override fun setQuestionCnt(cnt: Int) {
+        lastQuestionNum = cnt
+    }
+
 
     enum class QuizStatus(val value:Int) {
         BEFORE_START(100),

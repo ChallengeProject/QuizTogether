@@ -15,5 +15,11 @@
         <item name="colorAccent">#ffffff</item>
     </style>
 
+    <style name="QuizingTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/soDeepBlue</item>
+        <item name="colorPrimaryDark">@color/soDeepBlue</item>
+        <item name="colorAccent">#89bfcb</item>
+    </style>
 
 </resources>

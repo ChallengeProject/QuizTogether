@@ -1,5 +1,6 @@
 package com.quiz_together.ui.quizing
 
+import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.widget.TextView
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
@@ -25,7 +26,7 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
             progressBackgroundColor = ContextCompat.getColor(App.instance.applicationContext,R.color.rcpbColorBorder)
 
             progressColor = ContextCompat.getColor(App.instance.applicationContext,SelectorColor.DEFAULT.value) // deafault value
-            progress = 0F; // default value
+            progress = 0F // default value
         }
     }
 
@@ -33,11 +34,14 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
      * pos : 1~3
      * percent : 0 ~ 100
      */
-    fun setRCPB(pos:Int, color:SelectorColor = SelectorColor.DEFAULT, percent:Int = 0) {
+    fun setRCPB(pos:Int, color:SelectorColor = SelectorColor.DEFAULT, percent:Int = 0, withTextColor :Boolean = false) {
         RCPBBg[pos-1].apply {
             progressColor = ContextCompat.getColor(App.instance.applicationContext,color.value)
             progress = percent.toFloat()
         }
+
+        if(withTextColor) tvQustions[pos-1].setTextColor(ContextCompat.getColor(App.instance.applicationContext,R.color.speciYellow))
+
     }
 
     fun setRCPBOnlyColor(pos:Int, color:SelectorColor = SelectorColor.DEFAULT) {
@@ -46,11 +50,14 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
         }
     }
 
-
     fun setQuestions(str1:String,str2:String,str3:String) {
         tvQustions[0].text = str1
         tvQustions[1].text = str2
         tvQustions[2].text = str3
+
+        tvQustions[0].setTextColor(Color.parseColor("#000000"))
+        tvQustions[1].setTextColor(Color.parseColor("#000000"))
+        tvQustions[2].setTextColor(Color.parseColor("#000000"))
     }
 
     fun setNumbers(str1:String,str2:String,str3:String) {

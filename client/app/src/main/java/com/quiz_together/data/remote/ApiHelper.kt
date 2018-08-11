@@ -7,6 +7,7 @@ import com.quiz_together.data.model.Events
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ReqSendAnswer
 import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.User
 import com.quiz_together.data.model.UserView
 
@@ -38,6 +39,11 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
+    interface GetPagingBroadcastList{
+        fun onPagingBroadcastListLoaded(resGetPagingBroadcastList: ResGetPagingBroadcastList)
+        fun onDataNotAvailable()
+    }
+
     interface GetBroadcastCallback{
 
         fun onBroadcastLoaded(broadcasts: Broadcast)
@@ -62,7 +68,7 @@ interface ApiHelper {
 
     // broadcast
     fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
-    fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback)
+    fun getPagingBroadcastList(userId:String, cb: ApiHelper.GetPagingBroadcastList)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)

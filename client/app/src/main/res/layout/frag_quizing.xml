@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@drawable/bg_deep_blue_in_quizing">
 
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toBottomOf="@+id/cvToolbar" />
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/cvToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/soDeepBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,62 +28,142 @@
 
             <ImageButton
                 android:id="@+id/ibBack"
+                android:layout_width="16dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/icc_backbt" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="12dp"
-                android:background="#ffffff"
-                android:src="@drawable/ic_dummy" />
+                android:layout_marginLeft="19dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="12dp"
-                android:text="Qugether" />
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="10dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icc_logo_small" />
 
-            <RelativeLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="큐엑스"
+                    android:textColor="#ffffff"
+                    android:textSize="28sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layoutDirection="rtl">
+
 
                 <ImageButton
                     android:id="@+id/ibMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="16dp"
+                    android:layout_height="28dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="12dp"
-                    android:background="#ffffff"
-                    android:src="@drawable/ic_dummy" />
+                    android:layout_marginRight="14dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icc_more" />
 
-                <TextView
-                    android:id="@+id/tvMemberCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageButton
+                    android:id="@+id/ibLife"
+                    android:layout_width="23dp"
+                    android:layout_height="22dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="48dp"
-                    android:text="1000" />
+                    android:layout_marginRight="14dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icc_life" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="12dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icc_people_cnt" />
+
+                    <TextView
+                        android:id="@+id/tvMemberCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="14sp"
+                        android:text="1000"
+                        android:textColor="#97cdd7"
+                        android:textSize="10sp" />
 
 
-            </RelativeLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvUserMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:layout_marginBottom="@dimen/quizingBottomMargin"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:lineSpacingExtra="10sp"
         android:singleLine="false"
         android:text="1111\n22222\n333333\n444444\n5555555\n6666666\n7777\n88888\n99999999"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout" />
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/csMsgBox" />
+
+    <HorizontalScrollView
+        android:id="@+id/llResult2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="@+id/relativeLayout"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <GridView
+                android:id="@+id/gvResult2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+
+            </GridView>
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -86,6 +172,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cvToolbar">
 
 
+        <!--android:visibility="invisible"-->
         <LinearLayout
             android:id="@+id/llQuestion"
             android:layout_width="match_parent"
@@ -98,7 +185,6 @@
             android:background="@drawable/back_white_border_for_layout"
             android:orientation="vertical"
             android:padding="10dp"
-            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -107,10 +193,14 @@
                 android:id="@+id/tvQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="60dp"
-                android:text="밀정 김지운 감독 작품으로 감동원, 정우성 등이 출연해 화제를 모으고 있는 영화는"
-                android:textColor="#000000"
-                android:textSize="20dp" />
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="30dp"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="18sp"
+                android:text="밀정 김지운 감독 작품으로 감동원, 정우성 등이 출연해 화제를 모으고 있는 영화는 무엇일까용용용"
+                android:textColor="#1a273d"
+                android:textSize="20sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -132,7 +222,10 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvQuestion1"
@@ -142,7 +235,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -167,7 +264,10 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvQuestion2"
@@ -177,7 +277,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -201,7 +305,10 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvQuestion3"
@@ -211,7 +318,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -220,21 +331,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
-
+            <!--invisible-->
             <LinearLayout
                 android:id="@+id/llNotice"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="90dp"
-                android:background="@drawable/back_black_border_rounded"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:layout_marginTop="38dp"
+                android:background="@drawable/back_white_border_for_layout"
                 android:orientation="vertical"
                 android:padding="10dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -243,20 +356,24 @@
                     android:id="@+id/tvAdminMsg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="12sp"
                     android:text="진행자의 한마디\n 총 2줄까지입력가능"
-                    android:textAlignment="textEnd"
-                    android:textColor="#000000" />
+                    android:textColor="#1a273d"
+                    android:textSize="20sp" />
 
 
             </LinearLayout>
 
 
             <HorizontalScrollView
-                android:id="@+id/llResult"
+                android:id="@+id/llResult1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,9 +381,10 @@
                     android:orientation="horizontal">
 
                     <GridView
-                        android:id="@+id/gvResult"
+                        android:id="@+id/gvResult1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
 
 
                     </GridView>
@@ -282,10 +400,9 @@
             android:id="@+id/rlNextStep"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="5dp">
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="match_parent"
@@ -298,7 +415,7 @@
                 android:id="@+id/ivIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_dummy"
+                android:src="@drawable/icc_profile"
                 app:civ_border_color="#ffffff"
                 app:civ_border_width="5dp" />
 
@@ -307,17 +424,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Q1"
-                android:textColor="#000000" />
+                android:lineSpacingExtra="3sp"
+                android:text=""
+                android:textColor="#0e8199"
+                android:textSize="16sp" />
         </RelativeLayout>
     </RelativeLayout>
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/csMsgBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:layout_height="42dp"
+        android:background="#3e97aa"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -326,27 +446,42 @@
         <Button
             android:id="@+id/btSendMsg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Button"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:text="보내기"
+            android:textColor="@color/speciYellow"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
             android:id="@+id/etMsg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:ems="10"
+            android:hint="메세지를 입력하세요"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:lineSpacingExtra="10sp"
+            android:paddingLeft="16dp"
+            android:textColor="#89bfcb"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btSendMsg"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/ibChatOn"
+        android:layout_width="28dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="@dimen/quizingBottomMargin"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/icc_chat" />
 
 
 </android.support.constraint.ConstraintLayout>

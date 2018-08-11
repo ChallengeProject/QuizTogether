@@ -13,6 +13,7 @@ import com.quiz_together.data.model.ReqSendChatMsg
 import com.quiz_together.data.model.ReqSignup
 import com.quiz_together.data.model.ReqStartBroadcast
 import com.quiz_together.data.model.ReqUpdateBroadcast
+import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.Resp
 import com.quiz_together.data.model.RespEmpty
 import com.quiz_together.data.model.User
@@ -50,7 +51,7 @@ interface ApiServices {
     fun createBroadcast(@Body data: Broadcast) : Observable<Resp<RespEmpty>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getPagingBroadcastList")
-    fun getPagingBroadcastList() : Observable<Resp<List<Broadcast>>>
+    fun getPagingBroadcastList(@Query("userId") userId:String) : Observable<Resp<ResGetPagingBroadcastList>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
     fun getBroadcastById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>

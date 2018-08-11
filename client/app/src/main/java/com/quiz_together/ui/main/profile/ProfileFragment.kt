@@ -3,9 +3,11 @@ package com.quiz_together.ui.main.profile
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.quiz_together.App
 import com.quiz_together.R
 import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
@@ -34,22 +36,15 @@ class ProfileFragment : Fragment(), ProfileContract.View {
     private fun initView() {
         profilePresenter = ProfilePresenter(this@ProfileFragment, pb)
 
+            rcpbExp.apply {
+            secondaryProgress = 100F
+            max = 100F
+            progressBackgroundColor = ContextCompat.getColor(App.instance.applicationContext,R.color.rcpbColorBorder)
 
-        tmpEtBroadcastId.setText("b6c49ed11e370dc6b7d55f3dfa7f1cf2d")
-        tmpEtUserId.setText("ue43a7a1a934ed910fe157639ad484e71")
-
-        tmpBtTest.setOnClickListener { v ->
-
-            val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
-            intent.putExtra(QuizingActivity.BROADCAST_ID,tmpEtBroadcastId.text.toString())
-            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM,tmpEtLastQuestionNum.text.toString().toInt())
-            intent.putExtra(QuizingActivity.IS_ADMIN, tmpCbIsadmin.isChecked)
-            SC.USER_ID = tmpEtUserId.text.toString()
-            // greate
-
-            startActivity(intent)
-
+            progressColor = ContextCompat.getColor(App.instance.applicationContext,R.color.deepBlue)
+            progress = 60F; // default value
         }
+
 
 
 

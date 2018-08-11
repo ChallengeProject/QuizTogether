@@ -40,11 +40,37 @@
       <if test="next > 0">
         id &lt; #{next}
       </if>
+      <if test="userId > 0">
+        AND user_id != #{userId}
+      </if>
     </where>
     ORDER BY
-    id DESC
+    scheduled_time
     LIMIT
     #{limit}
+  </select>
+
+  <select id="selectMyBroadcastList" parameterType="map" resultType="Broadcast">
+    SELECT
+    /* broadcast.selectMyBroadcastList */
+    <include refid="BroadcastColumns" />
+    FROM
+    broadcast
+    WHERE
+        user_id = #{userId}
+    ORDER BY
+    scheduled_time
+  </select>
+
+  <select id="selectPreparedBroadcastByUserId" parameterType="map" resultType="int">
+    SELECT
+    /* broadcast.selectPreparedBroadcastByUserId */
+    count(*)
+    FROM
+    broadcast
+    WHERE
+    user_id = #{userId}
+    AND broadcast_status IN ('CREATED', 'WATING', 'OPEN_QUESTION', 'OPEN_ANSWER', 'OPEN_WINNER')
   </select>
 
   <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">

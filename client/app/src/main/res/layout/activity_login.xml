@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".ui.login.LoginActivity">
 
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"

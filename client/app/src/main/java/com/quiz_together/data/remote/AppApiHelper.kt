@@ -129,16 +129,20 @@ class AppApiHelper : ApiHelper {
                 })
     }
 
-    override fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
-        apiServices.getPagingBroadcastList()
+    override fun getPagingBroadcastList(userId:String,cb: ApiHelper.GetPagingBroadcastList) {
+        apiServices.getPagingBroadcastList(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onBroadcastsLoaded(it.data)
+                        cb.onPagingBroadcastListLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
                 }, { err ->
+
+                    Log.i(TAG,err.message);
+                    Log.i(TAG,err.toString());
+                    err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
     }
@@ -357,7 +361,11 @@ class AppApiHelper : ApiHelper {
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
-                }, { _ ->
+                }, { err ->
+
+                    Log.i(TAG,err.message)
+                    Log.i(TAG,err.toString())
+                    err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
     }
