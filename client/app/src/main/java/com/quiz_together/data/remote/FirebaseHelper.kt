@@ -1,5 +1,7 @@
 package com.quiz_together.data.remote
 
+import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -14,7 +16,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.quiz_together.R
-import com.quiz_together.data.model.PushType
 import com.quiz_together.ui.main.MainActivity
 
 
@@ -50,7 +51,8 @@ class FirebaseHelper : FirebaseMessagingService() {
 
             Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.toString())
 
-            if (gsObj.get("pushType").asString == PushType.NOTICE_MESSAGE.name) {
+            Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.get("pushType").asString)
+            if (gsObj.get("pushType").asString == "NOTICE_MESSAGE") {//PushType.NOTICE_MESSAGE.name) {
 
                 sendNotification("QX : 실시간 퀴즈쇼", gsObj.get("title").asString,
                         gsObj.get("broadcastId").asString, gsObj.get("userId").asString)
@@ -64,28 +66,61 @@ class FirebaseHelper : FirebaseMessagingService() {
     }
 
     fun sendNotification(title: String, msg: String, broadcastId: String, userId: String) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(MainActivity.BROADCAST_ID, broadcastId)
-        intent.putExtra(MainActivity.USER_ID, userId)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT)
+//
+//        Log.i(TAG,"$title  $msg $broadcastId $userId")
+//
+//        val intent = Intent(this, MainActivity::class.java)
+//        intent.putExtra(MainActivity.BROADCAST_ID, broadcastId)
+//        intent.putExtra(MainActivity.USER_ID, userId)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+//                PendingIntent.FLAG_ONE_SHOT)
+//
+//        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+//        val notificationBuilder = NotificationCompat.Builder(this)
+//                .setLargeIcon(BitmapFactory.decodeResource(resources, android.R.drawable.ic_dialog_info))
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setContentTitle(title)
+//                .setContentText(msg)
+//                .setAutoCancel(true)
+//                .setSound(defaultSoundUri)
+//                .setContentIntent(pendingIntent)
+//
+//        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        notificationManager.notify(100000 /* ID of notification */, notificationBuilder.build())
 
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, android.R.drawable.ic_dialog_info))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(msg)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+        var channelId = "channel"
+        var channelName = "Channel Name"
+
+        var notifManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val mChannel = NotificationChannel(channelId, channelName, importance)
+            notifManager.createNotificationChannel(mChannel)
+        }
+
+        val builder = NotificationCompat.Builder(applicationContext, channelId)
+        val notificationIntent = Intent(applicationContext, MainActivity::class.java)
+        notificationIntent.putExtra(MainActivity.BROADCAST_ID, broadcastId)
+        notificationIntent.putExtra(MainActivity.USER_ID, userId)
+        notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val requestID = System.currentTimeMillis().toInt()
+        val pendingIntent = PendingIntent.getActivity(applicationContext, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        builder.setContentTitle(title) // required
+                .setContentText(msg)  // required
+                .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                .setAutoCancel(true) // 알림 터치시 반응
+                .setSound(RingtoneManager
+                        .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setSmallIcon(android.R.drawable.btn_star)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icc_add))
+                .setBadgeIconType(R.drawable.icc_add)
                 .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        notifManager.notify(0, builder.build())
     }
-
-
 
 
     companion object {

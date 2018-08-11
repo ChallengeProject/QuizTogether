@@ -2,9 +2,7 @@ package com.quiz_together.ui.base
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,6 @@ import com.quiz_together.ui.login.LoginActivity
 import com.quiz_together.ui.main.MainActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
-import com.quiz_together.util.toast
 import kotlinx.android.synthetic.main.frag_base.*
 
 class LoadingFragment : Fragment(), LoadingContract.View {
@@ -62,7 +59,7 @@ class LoadingFragment : Fragment(), LoadingContract.View {
     }
 
     override fun showErrorTxt() {
-        "Network or Server Err, Plase restart application".toast()
+//        "Network or Server Err, Plase restart application".toast()
     }
 
     companion object {

@@ -18,7 +18,7 @@ data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Lo
 
 data class QuestionProp(val title:String, val options:List<String>)
 
-data class Question(val answerNo: Int, val step: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
+data class Question(val answerNo: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
 
 data class UserView(val userId: String,val name:String)
 
@@ -43,6 +43,8 @@ data class Broadcast(
 )
 
 data class ResGetPagingBroadcastList(val myBroadcastList: List<Broadcast>, val currentBroadcastList: List<Broadcast>)
+
+data class ResStartBroadcast(val broadcastView: Broadcast)
 
 data class BroadcastJoinInfo(val broadcastView: Broadcast, val userInfoView: UserView, val question: String, val step: Int, val answerNo: Int, val playUserStatus: PlayUserStatus, val viewerCount: Int)
 

@@ -20,6 +20,11 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
+    interface GetSuccessBroadcastIdCallback {
+        fun onSuccessLoaded(broadcastId: String)
+        fun onDataNotAvailable()
+    }
+
     interface GetUserCallback{
         fun onUserLoaded(user: User)
         fun onDataNotAvailable()
@@ -41,6 +46,12 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
+    interface GetBroadcastViewCallback {
+
+        fun onBroadcastViewLoaded(broadcastView: ResStartBroadcast)
+        fun onDataNotAvailable()
+    }
+
     interface GetJoinBroadcastInfoCallback{
 
         fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo)
@@ -58,14 +69,14 @@ interface ApiHelper {
     fun getUserProfile(userId: String , cb: ApiHelper.GetUserCallback)
 
     // broadcast
-    fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
+    fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessBroadcastIdCallback)
 
     fun getPagingBroadcastList(userId: String, cb: ApiHelper.GetPagingBroadcastList)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)
     fun endBroadcast(reqEndBroadcast: ReqEndBroadcast, cb: ApiHelper.GetSuccessCallback)
-    fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback)
+    fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetBroadcastViewCallback)
     fun getBroadcastForUpdateById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
     fun updateBroadcastStatus(broadcastId: String,userId: String,broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback)

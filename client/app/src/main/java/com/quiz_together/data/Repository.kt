@@ -48,7 +48,7 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.getUserProfile(userId,cb)
     }
 
-    override fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback) {
+    override fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessBroadcastIdCallback) {
         apiHelper.createBroadcast(broadcast,cb)
     }
 
@@ -72,7 +72,7 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.endBroadcast(reqEndBroadcast,cb)
     }
 
-    override fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback) {
+    override fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetBroadcastViewCallback) {
         apiHelper.startBroadcast(reqStartBroadcast,cb)
     }
 

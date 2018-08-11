@@ -29,17 +29,42 @@ class QuizingPresenter(
 //        TODO need to remove, now using test
 //        return
 
-        repository.joinBroadcast(broadcastId, SC.USER_ID,object : ApiHelper.GetJoinBroadcastInfoCallback{
-            override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
-                registFirbaseSubscribe()
-                view.setQuestionCnt(broadcastJoinInfo.broadcastView.questionCount)
-            }
+        if (!isAdmin) {
+            repository.joinBroadcast(broadcastId, SC.USER_ID, object : ApiHelper.GetJoinBroadcastInfoCallback {
+                override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
+                    registFirbaseSubscribe()
 
-            override fun onDataNotAvailable() {
-                Log.i(TAG, "joinBroadcast - onDataNotAvailable")
-            }
+                    Log.i(TAG, "broadcastJoinInfo.broadcastView.questionCount.toString()")
+                    Log.i(TAG, broadcastJoinInfo.broadcastView.questionCount.toString())
 
-        })
+                    view.setQuestionCnt(broadcastJoinInfo.broadcastView.questionCount)
+                }
+
+                override fun onDataNotAvailable() {
+                    Log.i(TAG, "joinBroadcast - onDataNotAvailable")
+                    view.endQuizFromErr()
+                }
+
+            })
+
+        } else {
+            repository.startBroadcast(ReqStartBroadcast(broadcastId, SC.USER_ID, "", ""), object : ApiHelper.GetBroadcastViewCallback {
+                override fun onBroadcastViewLoaded(resStartBroadcast: ResStartBroadcast) {
+                    view.setQuestionCnt(resStartBroadcast.broadcastView.questionCount)
+
+                    registFirbaseSubscribe()
+
+                }
+
+
+                override fun onDataNotAvailable() {
+                    Log.i(TAG, "startBroadcast - onDataNotAvailable")
+                    view.endQuizFromErr()
+                }
+
+            })
+
+        }
     }
 
     fun registFirbaseSubscribe(){

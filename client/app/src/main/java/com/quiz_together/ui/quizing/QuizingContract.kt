@@ -23,6 +23,8 @@ interface QuizingContract {
         fun showWinnerView(winnersMsg: WinnersMsg)
         fun endQuiz(endMsg: EndMsg)
 
+        fun endQuizFromErr()
+
     }
 
     interface Presenter : BasePresenter {

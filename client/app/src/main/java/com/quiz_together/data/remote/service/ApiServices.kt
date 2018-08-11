@@ -32,7 +32,7 @@ interface ApiServices {
 
     // broadcast
     @POST("${BuildConfig.REST_PREFIX}/broadcast/createBroadcast")
-    fun createBroadcast(@Body data: Broadcast) : Observable<Resp<RespEmpty>>
+    fun createBroadcast(@Body data: Broadcast): Observable<Resp<String>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getPagingBroadcastList")
     fun getPagingBroadcastList(@Query("userId") userId: String): Observable<Resp<ResGetPagingBroadcastList>>
@@ -50,7 +50,7 @@ interface ApiServices {
     fun endBroadcast(@Body data: ReqEndBroadcast) : Observable<Resp<RespEmpty>>
 
     @POST("${BuildConfig.REST_PREFIX}/broadcast/startBroadcast")
-    fun startBroadcast(@Body data: ReqStartBroadcast) : Observable<Resp<RespEmpty>>
+    fun startBroadcast(@Body data: ReqStartBroadcast): Observable<Resp<ResStartBroadcast>>
 
     @POST("${BuildConfig.REST_PREFIX}/broadcast/leaveBroadcast")
     fun leaveBroadcast(@Body data: ReqBrdIdAndUsrId) : Observable<Resp<RespEmpty>>

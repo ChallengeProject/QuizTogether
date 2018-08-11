@@ -63,7 +63,7 @@
         <TextView
             android:layout_marginTop="17dp"
             android:textStyle="bold"
-            android:textSize="23sp"
+            android:textSize="23dp"
             android:textColor="#0e8199"
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"

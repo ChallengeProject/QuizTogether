@@ -22,10 +22,10 @@
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="#1a273d"
             android:letterSpacing="-0.02"
-            android:lineSpacingExtra="12sp"
+            android:lineSpacingExtra="12dp"
             android:gravity="center_horizontal" />
 
 
@@ -49,11 +49,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:lineSpacingExtra="12sp"
+                android:lineSpacingExtra="12dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/icc_life"
                 android:textColor="#a5a7b3"
-                android:textSize="12sp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,10 +62,10 @@
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="12sp"
+                android:lineSpacingExtra="12dp"
                 android:text="60%"
                 android:textColor="#fafd47"
-                android:textSize="12sp" />
+                android:textSize="12dp" />
 
         </RelativeLayout>
 
@@ -97,20 +97,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     android:text="팔로잉" />
 
                 <TextView
                     android:layout_marginLeft="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     android:text="37" />
 
             </LinearLayout>
@@ -124,20 +124,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     tools:text="팔로워" />
 
                 <TextView
                     android:layout_marginLeft="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     tools:text="1.4k" />
 
             </LinearLayout>
@@ -162,17 +162,17 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="10sp"
+                android:lineSpacingExtra="10dp"
                 android:text="코인" />
 
             <EditText
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:hint="금액을 입력하세요"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:layout_width="wrap_content"
                 android:background="@android:color/transparent"
                 android:layout_height="wrap_content" />
@@ -191,10 +191,10 @@
                     android:background="@drawable/bg_for_coin"
                     android:layout_width="46dp"
                     android:layout_height="27dp"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#d0d3d7"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     android:text="인출" />
 
                 <TextView
@@ -203,10 +203,10 @@
                     android:layout_width="46dp"
                     android:layout_height="27dp"
                     android:layout_marginRight="9dp"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#d0d3d7"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     android:text="충전" />
 
             </LinearLayout>
@@ -231,10 +231,10 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#a2a8b0"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="10sp"
+                android:lineSpacingExtra="10dp"
                 android:text="휴대폰을 인증하면 하트가 뿜뿜~"
                 />
 
@@ -271,10 +271,10 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#a2a8b0"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="10sp"
+                android:lineSpacingExtra="10dp"
                 android:text="이메일을 인증하면 하트가 뿜뿜~" />
 
             <LinearLayout
@@ -308,10 +308,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="10sp"
+                android:lineSpacingExtra="10dp"
                 android:text="내 추천 코드" />
 
             <LinearLayout
@@ -332,10 +332,10 @@
                     android:layout_marginRight="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="10sp"
+                    android:lineSpacingExtra="10dp"
                     android:text="1EON3US" />
 
             </LinearLayout>
@@ -360,10 +360,10 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="10sp"
+                android:lineSpacingExtra="10dp"
                 android:text="추천인 코드입력" />
 
             <LinearLayout

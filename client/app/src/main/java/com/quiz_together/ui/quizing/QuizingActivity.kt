@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Window
-import android.widget.Toast
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.remote.FirebaseHelper
@@ -85,7 +84,7 @@ class QuizingActivity : AppCompatActivity() {
 
             val fcmMsg = intent.getStringExtra(FirebaseHelper.FMC_IN_QUIZING)
             Log.i(TAG, "onReceive : $fcmMsg")
-            Toast.makeText(applicationContext, fcmMsg, Toast.LENGTH_LONG).show()
+//            Toast.makeText(applicationContext, fcmMsg, Toast.LENGTH_LONG).show()
 
             quizingPresenter.onFcmListener(fcmMsg)
 

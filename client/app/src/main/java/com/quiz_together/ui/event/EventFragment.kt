@@ -1,29 +1,16 @@
 package com.quiz_together.ui.event
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
-import kotlinx.android.synthetic.main.frag_event.*
-import com.quiz_together.App
+import android.view.*
 import com.quiz_together.R
-import com.quiz_together.R.id.pb
-import com.quiz_together.R.id.rvEvents
 import com.quiz_together.data.model.Event
-import com.quiz_together.data.model.Events
 import com.quiz_together.ui.setting.SettingActivity
 import com.quiz_together.util.setTouchable
+import kotlinx.android.synthetic.main.frag_event.*
 
 class EventFragment : Fragment(), EventContract.View {
 
@@ -36,7 +23,7 @@ class EventFragment : Fragment(), EventContract.View {
 
     private val eventAdapter: EventAdapter by lazy {
         EventAdapter(activity?.applicationContext, {
-            Toast.makeText(App.instance, "get recycler view data -> ${it}" ,Toast.LENGTH_LONG).show()
+            // Toast.makeText(App.instance, "get recycler view data -> ${it}" ,Toast.LENGTH_LONG).show()
         })
     }
 

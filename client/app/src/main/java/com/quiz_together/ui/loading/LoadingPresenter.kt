@@ -1,6 +1,5 @@
 package com.quiz_together.ui.base
 
-import android.os.Handler
 import android.util.Log
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.UserView
@@ -22,9 +21,9 @@ class LoadingPresenter(
     override fun start() {
         view.setLoadingIndicator(true)
 
-        Handler().postDelayed({
+//        Handler().postDelayed({
             checkHasId()
-        }, 2000)
+//        }, 1)
 
     }
 

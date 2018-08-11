@@ -1,6 +1,7 @@
 package com.quiz_together.data.remote
 
 import android.util.Log
+import com.google.gson.Gson
 import com.quiz_together.data.model.*
 import com.quiz_together.data.remote.service.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -105,16 +106,21 @@ class AppApiHelper : ApiHelper {
     }
 
     // broadcast
-    override fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback) {
+    override fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessBroadcastIdCallback) {
+        Log.i(TAG, broadcast.toString())
+        Log.i(TAG, broadcast.questionList.toString())
+        Log.e(TAG, Gson().toJson(broadcast))
+
         apiServices.createBroadcast(broadcast)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
-                        cb.onSuccessLoaded()
+                        cb.onSuccessLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
-                }, { _ ->
+                }, { err ->
+                    err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
     }
@@ -130,8 +136,8 @@ class AppApiHelper : ApiHelper {
                         cb.onDataNotAvailable()
                 }, { err ->
 
-                    Log.i(TAG, err.message);
-                    Log.i(TAG, err.toString());
+                    Log.i(TAG, err.message)
+                    Log.i(TAG, err.toString())
                     err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
@@ -193,13 +199,18 @@ class AppApiHelper : ApiHelper {
                 })
     }
 
-    override fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetSuccessCallback) {
+    override fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetBroadcastViewCallback) {
         apiServices.startBroadcast(reqStartBroadcast)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
+
+                    Log.e(TAG, "startBroadcast rst")
+                    Log.e(TAG, Gson().toJson(it.data))
+                    Log.e(TAG, it.toString())
+
                     if(it.code == 200)
-                        cb.onSuccessLoaded()
+                        cb.onBroadcastViewLoaded(it.data)
                     else
                         cb.onDataNotAvailable()
                 }, { _ ->

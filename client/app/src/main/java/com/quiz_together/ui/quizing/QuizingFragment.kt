@@ -125,6 +125,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
             if (quizBefStatus == QuizStatus.ANSWERING) {
 
+
+                Log.i(TAG, "lastQuestionNum")
+                Log.i(TAG, lastQuestionNum.toString())
                 if (lastQuestionNum == curQuizStep)
                     presenter.openWinners()
                 else
@@ -213,7 +216,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         // background from gif
         Glide.with(activity!!.applicationContext)
-                .load(R.drawable.giphy)
+                .load(R.drawable.quiz_background)
                 .into(ivBackground)
 
         presenter.start()
@@ -442,21 +445,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         val users = mutableListOf<Pair<String, String>>()
 
         //        //TODO this is dummy data for check ui
-        users.add(Pair("aaaaa", "bbbb"))
-        users.add(Pair("cccc", "ddddd"))
-        users.add(Pair("eeeee", "ffffffff"))
-        users.add(Pair("gggggggg", "hhhhhh"))
-        users.add(Pair("iiiiii", "jjjjjj"))
-        users.add(Pair("kkkkkkk", "lllllll"))
-        users.add(Pair("mmmmmmmm", "nnnnnnnnn"))
-        users.add(Pair("ooooooooo", "ppppppppp"))
-        users.add(Pair("qqqq", "rrrrrr"))
-        users.add(Pair("ssssss", "tttttttt"))
-        users.add(Pair("uuuuuu", "vvvvvvv"))
-        users.add(Pair("wwwwwww", "xxxxxxx"))
-        users.add(Pair("yyyyyyyy", "zzzzzz"))
-        users.add(Pair("11111111", "22222222"))
-        users.add(Pair("3333333", "444444"))
+        users.add(Pair("강우진", "김지원"))
+        users.add(Pair("서상은", "안세연"))
+        users.add(Pair("정동환", "김남양"))
+        users.add(Pair("서양주", ""))
 
         var tmpStr: String? = null
 
@@ -618,6 +610,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         lastQuestionNum = cnt
     }
 
+    override fun endQuizFromErr() {
+        "방개설 실패".toast()
+        activity!!.finish()
+    }
 
     enum class QuizStatus(val value: Int) {
         BEFORE_START(100),

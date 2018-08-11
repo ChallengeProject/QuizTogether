@@ -10,7 +10,7 @@ class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     init {
         while (fragmentList.size < FRAG_NO) {
-            val fragment = QuizInputFragment.newInstance(if (fragmentList.size == 0) 1 else fragmentList.size)
+            val fragment = QuizInputFragment.newInstance()
             fragmentList.add(fragment)
         }
     }

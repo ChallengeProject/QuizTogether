@@ -2,6 +2,7 @@ package com.quiz_together.ui.create
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -16,6 +17,7 @@ import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.GiftType
 import com.quiz_together.data.remote.ApiHelper
+import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import kotlinx.android.synthetic.main.frag_create.*
@@ -88,6 +90,8 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
             R.id.reservation -> {
                 showDatePicker()
                 isClickedReservation = true
+                Toast.makeText(context, "방 예약 완료", Toast.LENGTH_LONG).show()
+                activity?.finish()
             }
 
             R.id.cancel -> {
@@ -96,27 +100,17 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
 
             R.id.open -> {
                 // dialog
-                Repository.createBroadcast(extractBroadcast(), object : ApiHelper.GetSuccessCallback {
-                    override fun onDataNotAvailable() {
-
-                    }
-
-                    override fun onSuccessLoaded() {
-                        Toast.makeText(context, "방 개설", Toast.LENGTH_LONG).show()
-                        // 퀴즈쇼 화면으로 이동
-                    }
-                })
-
+                requestCreateBroadcast()
+                // d
             }
 
             R.id.save -> {
                 if (isReserved) {
                     // update Broadcast
-                    // 홈으로 이동 여부
                 } else {
                     saveQuiz()
-                    // 홈으로 이동 여부
                 }
+                activity?.finish()
             }
 
             R.id.btGoods, R.id.btMoney -> {
@@ -131,6 +125,29 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
 
             R.id.tvDatePicker -> showDatePicker()
         }
+    }
+
+    private fun requestCreateBroadcast() {
+        val broadcast = extractBroadcast()
+        Repository.createBroadcast(broadcast, object : ApiHelper.GetSuccessBroadcastIdCallback {
+            override fun onSuccessLoaded(broadcastId: String) {
+                Toast.makeText(context, "방 개설", Toast.LENGTH_LONG).show()
+                if (!isClickedReservation) { // 방 개설 시
+                    val intent = Intent(context, QuizingActivity::class.java)
+                    intent.putExtra(QuizingActivity.BROADCAST_ID, broadcastId)
+                    //TODO need to remove
+//            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
+                    intent.putExtra(QuizingActivity.IS_ADMIN, true)
+
+                    startActivity(intent)
+                }
+                activity?.finish()
+            }
+
+            override fun onDataNotAvailable() {
+                Toast.makeText(context, "방 개설 실패", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun setGiftTypeVisibility(visibility: Int) {
@@ -218,15 +235,7 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
                 openingDate = year.toString() + month.toString() + dayOfMonth.toString()
 
                 if (isClickedReservation) {
-                    Repository.createBroadcast(extractBroadcast(), object : ApiHelper.GetSuccessCallback {
-                        override fun onDataNotAvailable() {
-
-                        }
-
-                        override fun onSuccessLoaded() {
-                            activity?.finish()
-                        }
-                    })
+                    requestCreateBroadcast()
                 }
             }
 

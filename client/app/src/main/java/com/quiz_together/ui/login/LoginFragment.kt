@@ -10,7 +10,6 @@ import com.quiz_together.R
 import com.quiz_together.ui.loading.LoadingActivity
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
-import com.quiz_together.util.toast
 import kotlinx.android.synthetic.main.frag_login.*
 
 class LoginFragment : Fragment(), LoginContract.View {
@@ -65,12 +64,12 @@ class LoginFragment : Fragment(), LoginContract.View {
             presenter.signupTask(etId.text.toString())
         } else {
             //TODO 다이얼로그로
-            "duplicated id".toast()
+//            "duplicated id".toast()
         }
     }
 
     override fun showFailLoginTxt() {
-        "error".toast()
+        //   "error".toast()
     }
 
     companion object {
