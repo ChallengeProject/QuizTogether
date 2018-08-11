@@ -109,7 +109,7 @@ public class BroadcastViewService {
 
     public void createBroadcast(BroadcastReq broadcastReq) {
         // 예약 시간은 현재시간 보다 커야 한다.
-        if (broadcastReq.getScheduledTime() > System.currentTimeMillis()) {
+        if (broadcastReq.getScheduledTime() >= System.currentTimeMillis()) {
             //TODO : 에러 코드 정의
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
