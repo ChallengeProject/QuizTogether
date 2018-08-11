@@ -62,6 +62,17 @@
     scheduled_time
   </select>
 
+  <select id="selectOwnBroadcastByUserId" parameterType="map">
+    SELECT
+    /* broadcast.selectPreparedBroadcastByUserId */
+    count(*)
+    FROM
+    broadcast
+    WHERE
+    user_id = #{userId}
+    AND broadcast_status IN ('CREATED', 'WATING', 'OPEN_QUESTION', 'OPEN_ANSWER', 'OPEN_WINNER')
+  </select>
+
   <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">
        INSERT INTO /* broadcast.insertBroadcast */
         broadcast(
