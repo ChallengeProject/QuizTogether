@@ -288,6 +288,7 @@ public class BroadcastViewService {
                                    .giftDescription(broadcast.getGiftDescription())
                                    .giftType(broadcast.getGiftType())
                                    .broadcastStatus(broadcast.getBroadcastStatus())
+                                   .description(broadcast.getDescription())
                                    .userView(UserView.builder()
                                                      .userId(user.getId())
                                                      .name(user.getName())

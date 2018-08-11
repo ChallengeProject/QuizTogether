@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://seose11.iptime.org:13306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false
-    username: root
-    password: 1111
+    username: nyj
+    password: nyj
     hikari:
       auto-commit: true
       pool-name: quiz_together
