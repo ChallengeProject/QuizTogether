@@ -120,6 +120,10 @@ public class BroadcastViewService {
             //TODO : 에러 코드 정의
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
+        // TODO : questionList size가 0보다 커야 함
+        if (Objects.isNull(broadcastReq.getQuestionList()) || broadcastReq.getQuestionList().size() == 0) {
+            throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
+        }
         // scheduledTime이 null이면 즉시 시작
         Broadcast broadcast = convertBroadcast(broadcastReq);
 
@@ -275,18 +279,8 @@ public class BroadcastViewService {
     }
 
     private BroadcastView buildBroadcastView(Broadcast broadcast) {
-        return BroadcastView.builder()
-                            .broadcastId(broadcast.getId())
-                            .broadcastStatus(broadcast.getBroadcastStatus())
-                            .description(broadcast.getDescription())
-                            .giftDescription(broadcast.getGiftDescription())
-                            .giftType(broadcast.getGiftType())
-                            .prize(broadcast.getPrize())
-                            .questionCount(broadcast.getQuestionCount())
-                            .scheduledTime(broadcast.getScheduledTime())
-                            .title(broadcast.getTitle())
-                            .winnerMessage(broadcast.getWinnerMessage())
-                            .build();
+        User user = userService.getUserById(broadcast.getUserId());
+        return buildBroadcastView(broadcast, user);
     }
 
     private List<BroadcastView> buildBroadcastViewList(List<Broadcast> broadcastList) {
