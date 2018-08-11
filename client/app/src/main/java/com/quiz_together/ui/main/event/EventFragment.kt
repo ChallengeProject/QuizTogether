@@ -61,7 +61,7 @@ class EventFragment : Fragment(), EventContract.View {
 
             val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
             intent.putExtra(QuizingActivity.BROADCAST_ID,tmpEtBroadcastId.text.toString())
-            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM,tmpEtLastQuestionNum.text.toString().toInt())
+//            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM,tmpEtLastQuestionNum.text.toString().toInt())
             intent.putExtra(QuizingActivity.IS_ADMIN, tmpCbIsadmin.isChecked)
             SC.USER_ID = tmpEtUserId.text.toString()
             // greate

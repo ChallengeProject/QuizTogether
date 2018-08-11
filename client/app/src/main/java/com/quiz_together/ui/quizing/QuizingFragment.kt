@@ -68,6 +68,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var disposer1:Disposable? = null
     var disposer2:Disposable? = null
 
+
+
     var isAdmin = false
     var lastQuestionNum = -1
 
@@ -229,9 +231,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         super.onActivityCreated(savedInstanceState)
 
         // background from gif
-//        Glide.with(activity!!.applicationContext)
-//                .load(R.drawable.giphy)
-//                .into(ivBackground)
+        Glide.with(activity!!.applicationContext)
+                .load(R.drawable.giphy)
+                .into(ivBackground)
 
         presenter.start()
 
@@ -565,9 +567,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     companion object {
 //        private val IS_ADMIN = "IS_ADMIN"
-        fun newInstance(isAdmin_:Boolean, lastQuestionNum_:Int) = QuizingFragment().apply {
+        fun newInstance(isAdmin_:Boolean) = QuizingFragment().apply {
+    // TODO need to remove
             isAdmin = isAdmin_
-            lastQuestionNum = lastQuestionNum_
+//            lastQuestionNum = lastQuestionNum_
 //            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
         }
     }
@@ -625,6 +628,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         presenter.sendMsg(etMsg.text.toString())
         etMsg.setText("")
     }
+
+    override fun setQuestionCnt(cnt: Int) {
+        lastQuestionNum = cnt
+    }
+
 
     enum class QuizStatus(val value:Int) {
         BEFORE_START(100),

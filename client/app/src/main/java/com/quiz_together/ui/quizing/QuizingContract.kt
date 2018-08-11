@@ -20,6 +20,8 @@ interface QuizingContract {
 
         fun initQuizCalledByPresenter()
 
+        fun setQuestionCnt(cnt:Int)
+
         fun showAdminMsg(adminMsg: AdminMsg)
         fun showChatMsg(chatMsg: ChatMsg)
         fun showQuestionView(questionMsg: QuestionMsg)
