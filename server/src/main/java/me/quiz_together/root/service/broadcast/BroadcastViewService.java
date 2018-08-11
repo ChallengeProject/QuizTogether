@@ -279,19 +279,8 @@ public class BroadcastViewService {
     }
 
     private BroadcastView buildBroadcastView(Broadcast broadcast) {
-        return BroadcastView.builder()
-                            .broadcastId(broadcast.getId())
-                            .broadcastStatus(broadcast.getBroadcastStatus())
-                            .description(broadcast.getDescription())
-                            .giftDescription(broadcast.getGiftDescription())
-                            .giftType(broadcast.getGiftType())
-                            .prize(broadcast.getPrize())
-                            .questionCount(broadcast.getQuestionCount())
-                            .scheduledTime(broadcast.getScheduledTime())
-                            .title(broadcast.getTitle())
-                            .winnerMessage(broadcast.getWinnerMessage())
-                            .questionCount(broadcast.getQuestionCount())
-                            .build();
+        User user = userService.getUserById(broadcast.getUserId());
+        return buildBroadcastView(broadcast, user);
     }
 
     private List<BroadcastView> buildBroadcastViewList(List<Broadcast> broadcastList) {
