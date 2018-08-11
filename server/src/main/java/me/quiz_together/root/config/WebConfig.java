@@ -14,8 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import me.quiz_together.root.support.hashid.HashIdFormatAnnotationFormatterFactory;
 import me.quiz_together.root.support.interceptor.CorsInterceptor;
-import me.quiz_together.root.support.interceptor.HttpReqFilterInterceptor;
-import me.quiz_together.root.support.interceptor.HttpReqLoggingInterceptor;
 import me.quiz_together.root.support.json.MappingJacksonHttpMessageConverter;
 
 @EnableWebMvc
@@ -24,19 +22,12 @@ import me.quiz_together.root.support.json.MappingJacksonHttpMessageConverter;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private HttpReqLoggingInterceptor httpReqLoggingInterceptor;
-    @Autowired
-    private HttpReqFilterInterceptor httpReqFilterInterceptor;
-
-    @Autowired
     private CorsInterceptor corsInterceptor;
 
     /* Interceptor */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(httpReqLoggingInterceptor);
         registry.addInterceptor(corsInterceptor);
-        registry.addInterceptor(httpReqFilterInterceptor);
     }
 
     @Override

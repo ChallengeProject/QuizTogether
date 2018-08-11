@@ -58,14 +58,6 @@ public class BroadcastViewService {
         return pagingBroadcastListView;
     }
 
-    @Deprecated
-    public BroadcastView getBroadcastView(long broadcastId) {
-        Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
-
-        return buildBroadcastView(broadcast);
-
-    }
-
     public BroadcastForUpdateView getBroadcastForUpdateById(long broadcastId) {
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
 
@@ -116,6 +108,12 @@ public class BroadcastViewService {
     }
 
     public void createBroadcast(BroadcastReq broadcastReq) {
+        // 예약 시간은 현재시간 보다 커야 한다.
+        if (broadcastReq.getScheduledTime() > System.currentTimeMillis()) {
+            //TODO : 에러 코드 정의
+            throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
+        }
+
         Broadcast broadcast = new Broadcast();
         broadcast.setUserId(broadcastReq.getUserId());
         broadcast.setTitle(broadcastReq.getTitle());
