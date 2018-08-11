@@ -30,7 +30,7 @@ public enum BroadcastStatus implements ValueEnum {
                 }
                 break;
             case WATING:
-                if (nextBroadcastStatus == OPEN_ANSWER || nextBroadcastStatus == OPEN_QUESTION) {
+                if (nextBroadcastStatus == OPEN_ANSWER || nextBroadcastStatus == OPEN_QUESTION || nextBroadcastStatus == OPEN_WINNER) {
                     return;
                 }
                 break;
@@ -40,7 +40,7 @@ public enum BroadcastStatus implements ValueEnum {
                 }
                 break;
             case OPEN_ANSWER:
-                if (nextBroadcastStatus == WATING || nextBroadcastStatus == OPEN_WINNER) {
+                if (nextBroadcastStatus == WATING) {
                     return;
                 }
                 break;
