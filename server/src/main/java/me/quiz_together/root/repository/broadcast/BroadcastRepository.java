@@ -42,6 +42,6 @@ public class BroadcastRepository {
     }
 
     public int deleteBroadcastById(long broadcastId) {
-        return broadcastMapper.deleteBroadcastById(broadcastId, BroadcastStatus.COMPLETED);
+        return broadcastMapper.deleteBroadcastById(broadcastId);
     }
 }
