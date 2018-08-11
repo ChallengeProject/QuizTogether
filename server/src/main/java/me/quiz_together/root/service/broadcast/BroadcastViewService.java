@@ -85,7 +85,7 @@ public class BroadcastViewService {
                                      .build();
     }
 
-    public int updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
+    public String updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
         //TODO: 권한 체크 필요
 
         Broadcast broadcast = new Broadcast();
@@ -100,21 +100,13 @@ public class BroadcastViewService {
         broadcast.setWinnerMessage(broadcastUpdateReq.getWinnerMessage());
 
         int result = broadcastService.updateBroadcast(broadcast);
+        if (result == 0) {
+            throw new RuntimeException("broadcast update fail");
+        }
+        List<Question> questionList = convertQuestionList(broadcastUpdateReq.getQuestionList());
+        questionService.updateQuestionListByQuestionId(questionList);
 
-//        convertQuestionList(broadcastUpdateReq.getQuestionList(), broadcast);
-
-        questionService.updateQuestionListByQuestionId(
-                broadcastUpdateReq.getQuestionList().stream().map(questionView -> {
-                    Question question = new Question();
-                    question.setId(questionView.getQuestionId());
-                    question.setAnswerNo(questionView.getAnswerNo());
-                    question.setCategory(questionView.getCategory());
-                    question.setQuestionProp(questionView.getQuestionProp());
-                    question.setStep(questionView.getStep());
-
-                    return question;
-                }).collect(Collectors.toList()));
-        return result;
+        return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
     public String createBroadcast(BroadcastReq broadcastReq) {
@@ -356,6 +348,22 @@ public class BroadcastViewService {
             question.setStep(i+1);
             question.setBroadcastId(broadcast.getId());
             question.setUserId(broadcast.getUserId());
+
+            questionList.add(question);
+        }
+
+        return questionList;
+    }
+
+    private List<Question> convertQuestionList(List<QuestionView> questionReqList) {
+        List<Question> questionList = Lists.newArrayList();
+        for (int i = 0 ; i < questionReqList.size(); ++i) {
+            Question question = new Question();
+            question.setId(questionReqList.get(i).getQuestionId());
+            question.setAnswerNo(questionReqList.get(i).getAnswerNo());
+            question.setCategory(questionReqList.get(i).getCategory());
+            question.setQuestionProp(questionReqList.get(i).getQuestionProp());
+            question.setStep(i+1);
 
             questionList.add(question);
         }
