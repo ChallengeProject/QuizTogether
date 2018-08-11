@@ -38,11 +38,6 @@ import com.bumptech.glide.Glide
 import android.R.raw
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-
-
-
-
-
 class QuizingFragment : Fragment(), QuizingContract.View {
 
     val TAG = "QuizingFragment#$#"
@@ -137,7 +132,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         rlNextStep.setOnClickListener { v ->
 
+            Log.i(TAG,"rlNextStep")
+
             if(!isAdmin) return@setOnClickListener
+            Log.i(TAG,"rlNextStep2")
 
             rlNextStep.isClickable = false
 

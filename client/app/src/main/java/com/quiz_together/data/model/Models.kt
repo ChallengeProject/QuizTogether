@@ -27,6 +27,7 @@ data class Broadcast(
         val title:String,
         val description:String,
         val scheduledTime:Long?,
+        val remainingStartSeconds : Long,
         val giftType: GiftType,
         val prize:Long,
         val giftDescription:String,
@@ -34,12 +35,17 @@ data class Broadcast(
         val userId:String,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage:String,
-        val userView:UserView?,
+        val userInfoView:UserView?,
         val questionList:List<QustionList>,
-        val questionCount:Int
+        val questionCount:Int,
+
+        var roomOutputType:RoomOutputType?
+
 )
 
-data class BroadcastJoinInfo(val broadcastView:Broadcast, val question:String, val setp:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
+data class ResGetPagingBroadcastList(val myBroadcastList : List<Broadcast>,val currentBroadcastList : List<Broadcast>)
+
+data class BroadcastJoinInfo(val broadcastView:Broadcast, val userInfoView : UserView, val question:String, val setp:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 

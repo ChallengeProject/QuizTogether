@@ -42,7 +42,7 @@ class ProfileFragment : Fragment(), ProfileContract.View {
             progressBackgroundColor = ContextCompat.getColor(App.instance.applicationContext,R.color.rcpbColorBorder)
 
             progressColor = ContextCompat.getColor(App.instance.applicationContext,R.color.deepBlue)
-            progress = 70F; // default value
+            progress = 60F; // default value
         }
 
 

@@ -41,3 +41,9 @@ enum class PushType(val value:Int) {
     NOTICE_MESSAGE(600),
     END_MESSAGE(700)
 }
+
+enum class RoomOutputType (value:Int) {
+    DEFAULT(100),
+    FOLLOW(200),
+    RESERVATION(300),
+}

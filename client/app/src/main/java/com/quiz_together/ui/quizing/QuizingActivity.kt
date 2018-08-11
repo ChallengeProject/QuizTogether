@@ -31,6 +31,10 @@ class QuizingActivity : AppCompatActivity() {
         val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
         val lastQuestionNum = intent.getIntExtra(LAST_QUESTION_NUM,-1)
 
+        Log.i(TAG,broadcastId.toString())
+        Log.i(TAG,isAdmin.toString())
+        Log.i(TAG,lastQuestionNum.toString())
+
 
         //TODO using dummy [broadcastId] now
 //        val broadcastId = "thisisdummy-asdfasdf"

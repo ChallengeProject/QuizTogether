@@ -16,7 +16,11 @@ import com.quiz_together.App
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.ResGetPagingBroadcastList
+import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.ui.create.CreateActivity
+import com.quiz_together.ui.quizing.QuizingActivity
+import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
 import kotlinx.android.synthetic.main.fragm_home.*
 
@@ -30,7 +34,13 @@ class HomeFragment : Fragment(), HomeContract.View {
 
     private val broadcastAdapter: BroadcastAdapter by lazy {
         BroadcastAdapter(activity?.applicationContext, {
-            Toast.makeText(App.instance, "get recycler view data -> ${it}" ,Toast.LENGTH_LONG).show()
+
+            val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID,it.broadcastId)
+            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
+            intent.putExtra(QuizingActivity.IS_ADMIN, if(it.roomOutputType == RoomOutputType.RESERVATION) true else false)
+            startActivity(intent)
+
         })
     }
 
@@ -95,14 +105,16 @@ class HomeFragment : Fragment(), HomeContract.View {
         ssrl.isRefreshing = active
     }
 
-    override fun showBroadcasts(broadcasts: List<Broadcast>) {
+    override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList) {
         broadcastAdapter.run {
 
             clearItem()
-            broadcasts.forEach { addItem(it) }
+            resGetPagingBroadcastList.myBroadcastList?.forEach { addItem(it, RoomOutputType.RESERVATION) }
+            resGetPagingBroadcastList.currentBroadcastList?.forEach { addItem(it, RoomOutputType.DEFAULT) }
             notifyDataSetChang()
         }
     }
+
 
 
 }

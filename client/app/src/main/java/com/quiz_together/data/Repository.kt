@@ -56,8 +56,8 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.createBroadcast(broadcast,cb)
     }
 
-    override fun getPagingBroadcastList(cb: ApiHelper.GetBroadcastsCallback) {
-        apiHelper.getPagingBroadcastList(cb)
+    override fun getPagingBroadcastList(userId:String,cb: ApiHelper.GetPagingBroadcastList) {
+        apiHelper.getPagingBroadcastList(userId,cb)
     }
 
     override fun getBroadcastById(broadcastId: String, cb: ApiHelper.GetBroadcastCallback) {

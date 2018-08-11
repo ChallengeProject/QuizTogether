@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_marginRight="13dp"
         android:layout_marginLeft="13dp"
-        android:padding="10dp"
+        android:padding="13dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
@@ -64,7 +64,7 @@
                 android:gravity="center"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="12sp"
-                android:text="70%"
+                android:text="60%"
                 android:textColor="#fafd47"
                 android:textSize="12sp" />
 
@@ -81,7 +81,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
-            android:background="#a2a8b0"
+            android:background="#e8e8ec"
             android:layout_height="1dp" />
 
         <LinearLayout
@@ -99,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="#a2a8b0"
+                    android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
                     android:text="팔로잉"
@@ -128,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="#a2a8b0"
+                    android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
                     tools:text="팔로워"
@@ -152,72 +152,258 @@
 
         <View
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="11dp"
             android:layout_width="match_parent"
-            android:background="#a2a8b0"
+            android:background="#e8e8ec"
             android:layout_height="1dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#a2a8b0"
-            android:letterSpacing="-0.02"
-            android:lineSpacingExtra="10sp"
-            android:text="휴대폰을 인증하면 하트가 뿜뿜~"
-            />
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#1a273d"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="10sp"
+                android:text="코인"
+                />
+
+            <EditText
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:hint="금액을 입력하세요"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:gravity="center"
+                    android:background="@drawable/bg_for_coin"
+                    android:layout_width="46dp"
+                    android:layout_height="27dp"
+                    android:textSize="14sp"
+                    android:textColor="#d0d3d7"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="10sp"
+                    android:text="인출"
+                    />
+
+                <TextView
+                    android:gravity="center"
+                    android:background="@drawable/bg_for_coin"
+                    android:layout_width="46dp"
+                    android:layout_height="27dp"
+                    android:layout_marginRight="9dp"
+                    android:textSize="14sp"
+                    android:textColor="#d0d3d7"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="10sp"
+                    android:text="충전"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+        <View
+            android:layout_marginTop="11dp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:background="#e8e8ec"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#a2a8b0"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="10sp"
+                android:text="휴대폰을 인증하면 하트가 뿜뿜~"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/icc_fwdbt"
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_width="match_parent"
+            android:background="#e8e8ec"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#a2a8b0"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="10sp"
+                android:text="이메일을 인증하면 하트가 뿜뿜~"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/icc_fwdbt"
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:background="#e8e8ec"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#1a273d"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="10sp"
+                android:text="내 추천 코드"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/icc_for_coin_cpy"
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent"
+                    />
+
+                <TextView
+                    android:layout_marginRight="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#1a273d"
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="10sp"
+                    android:text="1EON3US"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
 
         <View
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="12dp"
             android:layout_width="match_parent"
-            android:background="#a2a8b0"
+            android:background="#e8e8ec"
             android:layout_height="1dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#a2a8b0"
-            android:letterSpacing="-0.02"
-            android:lineSpacingExtra="10sp"
-            android:text="이메일을 인증하면 하트가 뿜뿜~"
-            />
-
-        <View
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:background="#a2a8b0"
-            android:layout_height="1dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#1a273d"
-            android:letterSpacing="-0.02"
-            android:lineSpacingExtra="10sp"
-            android:text="내 추천 코드"
-            />
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#1a273d"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="10sp"
+                android:text="추천인 코드입력"
+                />
 
-        <View
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_width="match_parent"
-            android:background="#a2a8b0"
-            android:layout_height="1dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#1a273d"
-            android:letterSpacing="-0.02"
-            android:lineSpacingExtra="10sp"
-            android:text="추천인 코드입력"
-            android:layout_marginBottom="10dp"
-            />
+                <ImageView
+                    android:src="@drawable/icc_fwdbt"
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
 
 
     </LinearLayout>
