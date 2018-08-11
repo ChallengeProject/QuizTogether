@@ -17,6 +17,8 @@ public interface BroadcastMapper {
 
     List<Broadcast> selectMyBroadcastList(@Param("userId") Long userId);
 
+    int selectPreparedBroadcastByUserId(@Param("userId") Long userId);
+
     void insertBroadcast(Broadcast broadcast);
 
     int updateBroadcast(Broadcast broadcast);

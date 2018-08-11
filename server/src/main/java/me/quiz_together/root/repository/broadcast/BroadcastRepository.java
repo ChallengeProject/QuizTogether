@@ -25,6 +25,10 @@ public class BroadcastRepository {
         return broadcastMapper.selectMyBroadcastList(userId);
     }
 
+    public int selectPreparedBroadcastByUserId(Long userId) {
+        return broadcastMapper.selectPreparedBroadcastByUserId(userId);
+    }
+
     public void insertBroadcast(Broadcast broadcast) {
         broadcastMapper.insertBroadcast(broadcast);
     }

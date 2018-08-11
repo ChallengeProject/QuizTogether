@@ -114,6 +114,12 @@ public class BroadcastViewService {
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
 
+        if (broadcastService.getPreparedBroadcastByUserId(broadcastReq.getUserId())) {
+            //TODO: 에러 코드 정의
+            throw new RuntimeException("최대 생성 갯수 제한 초과!!");
+        }
+
+
         Broadcast broadcast = new Broadcast();
         broadcast.setUserId(broadcastReq.getUserId());
         broadcast.setTitle(broadcastReq.getTitle());
