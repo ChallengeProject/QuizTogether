@@ -108,29 +108,17 @@ public class BroadcastViewService {
     }
 
     public void createBroadcast(BroadcastReq broadcastReq) {
-        // 예약 시간은 현재시간 보다 커야 한다.
-        if (broadcastReq.getScheduledTime() >= System.currentTimeMillis()) {
-            //TODO : 에러 코드 정의
-            throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
-        }
-
         if (broadcastService.getPreparedBroadcastByUserId(broadcastReq.getUserId())) {
             //TODO: 에러 코드 정의
             throw new RuntimeException("최대 생성 갯수 제한 초과!!");
         }
-
-
-        Broadcast broadcast = new Broadcast();
-        broadcast.setUserId(broadcastReq.getUserId());
-        broadcast.setTitle(broadcastReq.getTitle());
-        broadcast.setDescription(broadcastReq.getDescription());
-        broadcast.setBroadcastStatus(BroadcastStatus.CREATED);
-        broadcast.setPrize(broadcastReq.getPrize());
-        broadcast.setGiftDescription(broadcastReq.getGiftDescription());
-        broadcast.setGiftType(broadcastReq.getGiftType());
-        broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
-        broadcast.setQuestionCount(broadcastReq.getQuestionList().size());
-        broadcast.setScheduledTime(broadcastReq.getScheduledTime());
+        // 예약 시간은 현재시간 보다 커야 한다.
+        if (!isImmediateStartBroadcast(broadcastReq.getScheduledTime()) && broadcastReq.getScheduledTime() >= System.currentTimeMillis()) {
+            //TODO : 에러 코드 정의
+            throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
+        }
+        // scheduledTime이 null이면 즉시 시작
+        Broadcast broadcast = convertBroadcast(broadcastReq);
 
         broadcastService.insertBroadcast(broadcast);
 
@@ -145,6 +133,8 @@ public class BroadcastViewService {
                     question.setUserId(broadcastReq.getUserId());
                     return question;
                 }).collect(Collectors.toList()));
+
+        fcmService.sendCreateBroadcastNotice(broadcast);
     }
 
     public void sendAnswer(SendAnswerReq sendAnswerReq) {
@@ -319,6 +309,22 @@ public class BroadcastViewService {
                             .build();
     }
 
+    private Broadcast convertBroadcast(BroadcastReq broadcastReq) {
+        Broadcast broadcast = new Broadcast();
+        broadcast.setUserId(broadcastReq.getUserId());
+        broadcast.setTitle(broadcastReq.getTitle());
+        broadcast.setDescription(broadcastReq.getDescription());
+        broadcast.setBroadcastStatus(isImmediateStartBroadcast(broadcastReq.getScheduledTime()) ? BroadcastStatus.WATING : BroadcastStatus.CREATED);
+        broadcast.setPrize(broadcastReq.getPrize());
+        broadcast.setGiftDescription(broadcastReq.getGiftDescription());
+        broadcast.setGiftType(broadcastReq.getGiftType());
+        broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
+        broadcast.setQuestionCount(broadcastReq.getQuestionList().size());
+        broadcast.setScheduledTime(isImmediateStartBroadcast(broadcastReq.getScheduledTime()) ? System.currentTimeMillis() : broadcastReq.getScheduledTime());
+
+        return broadcast;
+    }
+
     private void checkPermissionBroadcast(long broadcastId, long userId) {
         //TODO: 인터셉터에서 권한 체크가 필요할듯
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
@@ -326,5 +332,12 @@ public class BroadcastViewService {
             throw new IllegalArgumentException(
                     "해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
         }
+    }
+
+    private boolean isImmediateStartBroadcast(Long scheduledTime) {
+        if (Objects.isNull(scheduledTime)) {
+            return true;
+        }
+        return false;
     }
 }

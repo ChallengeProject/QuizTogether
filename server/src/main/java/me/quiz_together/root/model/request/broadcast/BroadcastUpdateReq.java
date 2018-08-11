@@ -20,7 +20,6 @@ public class BroadcastUpdateReq {
     private String title;
     @NotNull
     private String description;
-    @NotNull
     private Long scheduledTime;
     @NotNull
     private GiftType giftType;
