@@ -45,7 +45,7 @@ data class Broadcast(
 
 data class ResGetPagingBroadcastList(val myBroadcastList : List<Broadcast>,val currentBroadcastList : List<Broadcast>)
 
-data class BroadcastJoinInfo(val broadcastView:Broadcast, val userInfoView : UserView, val question:String, val setp:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
+data class BroadcastJoinInfo(val broadcastView:Broadcast, val userInfoView : UserView, val question:String, val step:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 

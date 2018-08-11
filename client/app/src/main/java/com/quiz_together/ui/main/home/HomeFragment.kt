@@ -37,7 +37,8 @@ class HomeFragment : Fragment(), HomeContract.View {
 
             val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
             intent.putExtra(QuizingActivity.BROADCAST_ID,it.broadcastId)
-            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
+            //TODO need to remove
+//            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
             intent.putExtra(QuizingActivity.IS_ADMIN, if(it.roomOutputType == RoomOutputType.RESERVATION) true else false)
             startActivity(intent)
 

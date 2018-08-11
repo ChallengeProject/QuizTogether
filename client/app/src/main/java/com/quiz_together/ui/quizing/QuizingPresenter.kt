@@ -36,16 +36,17 @@ class QuizingPresenter(
 
         registFirbaseSubscribe()
 
-        //TODO need to remove, now using test
-        return
+//        TODO need to remove, now using test
+//        return
 
         repository.joinBroadcast(broadcastId, SC.USER_ID,object : ApiHelper.GetJoinBroadcastInfoCallback{
             override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
                 registFirbaseSubscribe()
+                view.setQuestionCnt( broadcastJoinInfo.broadcastView.questionCount)
             }
 
             override fun onDataNotAvailable() {
-
+                Log.i(TAG,"joinBroadcast - onDataNotAvailable")
             }
 
         })

@@ -9,6 +9,19 @@ import org.json.JSONObject
 import android.R.attr.keySet
 import com.google.gson.JsonParser
 import com.google.gson.JsonObject
+import com.quiz_together.data.model.PushType
+import com.quiz_together.util.SC
+import android.content.Context.NOTIFICATION_SERVICE
+import android.app.NotificationManager
+import com.quiz_together.R.mipmap.ic_launcher
+import android.graphics.BitmapFactory
+import android.media.RingtoneManager
+import android.app.PendingIntent
+import android.content.Context
+import android.support.v4.app.NotificationCompat
+import com.quiz_together.R
+import com.quiz_together.ui.main.MainActivity
+
 
 
 
@@ -44,7 +57,12 @@ class FirebaseHelper : FirebaseMessagingService() {
 
             Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.toString())
 
+            if(gsObj.get("pushType").asString == PushType.NOTICE_MESSAGE.name) {
 
+                sendNotification("QX : 실시간 퀴즈쇼" , gsObj.get("title").asString,
+                        gsObj.get("broadcastId").asString, gsObj.get("userId").asString)
+                return
+            }
 
             val intent = Intent(FMC_ACTION)
             intent.putExtra(FMC_IN_QUIZING, gsObj.toString())
@@ -52,9 +70,36 @@ class FirebaseHelper : FirebaseMessagingService() {
         }
     }
 
+    fun sendNotification(title:String, msg:String, broadcastId:String,userId:String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(MainActivity.BROADCAST_ID, broadcastId)
+        intent.putExtra(MainActivity.USER_ID, userId)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT)
+
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(this)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, android.R.drawable.ic_dialog_info))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(msg)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+    }
+
+
+
+
     companion object {
         const val FMC_IN_QUIZING = "FMC_IN_QUIZING"
         const val FMC_ACTION = "FMC_ACTION"
+        const val FIREBASE_KEY_FOR_EVERYONE = "quiztogether"
+
     }
 
 

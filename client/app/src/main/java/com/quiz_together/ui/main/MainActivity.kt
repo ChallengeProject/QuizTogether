@@ -20,8 +20,7 @@ import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.EditText
-
-
+import com.quiz_together.data.model.RoomOutputType
 
 
 class MainActivity : AppCompatActivity() {
@@ -82,7 +81,24 @@ class MainActivity : AppCompatActivity() {
         bnv.disableShiftMode()
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        // get broadcast from firebase for start broadcast
+        var broadcastId = intent.getStringExtra(BROADCAST_ID)
+        var userId = intent.getStringExtra(BROADCAST_ID)
+
+
+        broadcastId?.run{
+//            var isAdmin = (userId == SC.USER_ID)
+            val intent = Intent(applicationContext , QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID,this)
+            //TODO need to remove
+//            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
+            intent.putExtra(QuizingActivity.IS_ADMIN, userId == SC.USER_ID)
+            startActivity(intent)}
 
     }
 
@@ -97,6 +113,12 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "한번 더 뒤로가기 누르면 앱이 종료됩니다", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+
+    companion object {
+        const val BROADCAST_ID = "BROADCAST_ID"
+        const val USER_ID = "USER_ID"
     }
 
 }
