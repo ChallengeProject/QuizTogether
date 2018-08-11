@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_deep_blue"
     android:layout_height="match_parent"
-    >
+    android:background="@drawable/bg_deep_blue">
 
     <ImageView
-        android:scaleType="fitXY"
         android:id="@+id/ivBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        />
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toBottomOf="@+id/cvToolbar" />
 
     <LinearLayout
-        android:background="@color/soDeepBlue"
         android:id="@+id/cvToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/soDeepBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,46 +27,45 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:scaleType="fitXY"
                 android:id="@+id/ibBack"
                 android:layout_width="16dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="14dp"
                 android:background="@android:color/transparent"
+                android:scaleType="fitXY"
                 android:src="@drawable/icc_backbt" />
 
             <LinearLayout
-                android:layout_marginLeft="19dp"
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="19dp"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:scaleType="fitXY"
                     android:layout_width="22dp"
                     android:layout_height="10dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/icc_logo_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="28sp"
+                    android:text="큐엑스"
                     android:textColor="#ffffff"
-                    android:text="큐엑스" />
+                    android:textSize="28sp" />
             </LinearLayout>
 
 
             <LinearLayout
-                android:layoutDirection="rtl"
-                android:layout_alignParentRight="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layoutDirection="rtl">
 
 
                 <ImageButton
-                    android:scaleType="fitXY"
                     android:id="@+id/ibMore"
                     android:layout_width="16dp"
                     android:layout_height="28dp"
@@ -78,10 +74,10 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="14dp"
                     android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/icc_more" />
 
                 <ImageButton
-                    android:scaleType="fitXY"
                     android:id="@+id/ibLife"
                     android:layout_width="23dp"
                     android:layout_height="22dp"
@@ -90,33 +86,33 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="14dp"
                     android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/icc_life" />
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:layout_marginRight="20dp"
                     android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:scaleType="fitXY"
                         android:layout_width="13dp"
                         android:layout_height="12dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/icc_people_cnt" />
 
                     <TextView
                         android:id="@+id/tvMemberCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textColor="#97cdd7"
                         android:lineSpacingExtra="14sp"
-                        android:text="1000" />
+                        android:text="1000"
+                        android:textColor="#97cdd7"
+                        android:textSize="10sp" />
 
 
                 </LinearLayout>
-
 
 
             </LinearLayout>
@@ -126,20 +122,48 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginRight="26dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginBottom="@dimen/quizingBottomMargin"
         android:id="@+id/tvUserMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#ffffff"
+        android:layout_marginBottom="@dimen/quizingBottomMargin"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
         android:lineSpacingExtra="10sp"
         android:singleLine="false"
         android:text="1111\n22222\n333333\n444444\n5555555\n6666666\n7777\n88888\n99999999"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/csMsgBox" />
 
+    <HorizontalScrollView
+        android:id="@+id/llResult2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="@+id/relativeLayout"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <GridView
+                android:id="@+id/gvResult2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+
+            </GridView>
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -166,18 +190,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:layout_marginTop="30dp"
                 android:id="@+id/tvQuestion"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="#1a273d"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="30dp"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="18sp"
                 android:text="밀정 김지운 감독 작품으로 감동원, 정우성 등이 출연해 화제를 모으고 있는 영화는 무엇일까용용용"
-                />
+                android:textColor="#1a273d"
+                android:textSize="20sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -192,9 +215,6 @@
                     app:rcSecondaryProgressColor="#ffffff" />
 
                 <TextView
-                    android:textSize="12sp"
-                    android:textColor="#a5a7b3"
-                    android:lineSpacingExtra="12sp"
                     android:id="@+id/tvCnt1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -202,13 +222,12 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#1a273d"
-                    android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="8sp"
                     android:id="@+id/tvQuestion1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -216,7 +235,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -234,9 +257,6 @@
                     app:rcSecondaryProgressColor="#ffffff" />
 
                 <TextView
-                    android:textSize="12sp"
-                    android:textColor="#a5a7b3"
-                    android:lineSpacingExtra="12sp"
                     android:id="@+id/tvCnt2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -244,13 +264,12 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#1a273d"
-                    android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="8sp"
                     android:id="@+id/tvQuestion2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -258,7 +277,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -275,9 +298,6 @@
                     app:rcSecondaryProgressColor="#ffffff" />
 
                 <TextView
-                    android:textSize="12sp"
-                    android:textColor="#a5a7b3"
-                    android:lineSpacingExtra="12sp"
                     android:id="@+id/tvCnt3"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -285,13 +305,12 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="@dimen/questionGageTextRMargin"
                     android:gravity="center"
-                    android:text="aaaaaaa" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="aaaaaaa"
+                    android:textColor="#a5a7b3"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#1a273d"
-                    android:letterSpacing="-0.02"
-                    android:lineSpacingExtra="8sp"
                     android:id="@+id/tvQuestion3"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -299,7 +318,11 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="@dimen/questionGageTextLMargin"
                     android:gravity="center"
-                    android:text="bbbbbb" />
+                    android:letterSpacing="-0.02"
+                    android:lineSpacingExtra="8sp"
+                    android:text="bbbbbb"
+                    android:textColor="#1a273d"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -308,49 +331,49 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <!--invisible-->
             <LinearLayout
-                android:visibility="invisible"
-
                 android:id="@+id/llNotice"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
+                android:layout_marginTop="38dp"
                 android:background="@drawable/back_white_border_for_layout"
                 android:orientation="vertical"
                 android:padding="10dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:id="@+id/tvAdminMsg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="진행자의 한마디\n 총 2줄까지입력가능"
-                    android:textSize="20sp"
-                    android:textColor="#1a273d"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="12sp"
-                    android:gravity="center_horizontal" />
+                    android:text="진행자의 한마디\n 총 2줄까지입력가능"
+                    android:textColor="#1a273d"
+                    android:textSize="20sp" />
 
 
             </LinearLayout>
 
 
             <HorizontalScrollView
-                android:layout_marginTop="38dp"
-                android:scrollbars="none"
-                android:id="@+id/llResult"
+                android:id="@+id/llResult1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -358,10 +381,10 @@
                     android:orientation="horizontal">
 
                     <GridView
-                        android:scrollbars="none"
-                        android:id="@+id/gvResult"
+                        android:id="@+id/gvResult1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
 
 
                     </GridView>
@@ -401,20 +424,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="16sp"
-                android:textColor="#0e8199"
                 android:lineSpacingExtra="3sp"
-                android:text="" />
+                android:text=""
+                android:textColor="#0e8199"
+                android:textSize="16sp" />
         </RelativeLayout>
     </RelativeLayout>
 
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/csMsgBox"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:background="#3e97aa"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -424,25 +447,25 @@
             android:id="@+id/btSendMsg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/speciYellow"
             android:background="@android:color/transparent"
             android:text="보내기"
+            android:textColor="@color/speciYellow"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
-            android:hint="메세지를 입력하세요"
-            android:textSize="14sp"
-            android:textColor="#89bfcb"
-            android:lineSpacingExtra="10sp"
-            android:paddingLeft="16dp"
             android:id="@+id/etMsg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:ems="10"
+            android:hint="메세지를 입력하세요"
             android:inputType="textPersonName"
+            android:lineSpacingExtra="10sp"
+            android:paddingLeft="16dp"
+            android:textColor="#89bfcb"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btSendMsg"
             app:layout_constraintStart_toStartOf="parent" />
@@ -452,10 +475,10 @@
         android:id="@+id/ibChatOn"
         android:layout_width="28dp"
         android:layout_height="22dp"
-        android:scaleType="fitXY"
         android:layout_marginBottom="@dimen/quizingBottomMargin"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/icc_chat" />

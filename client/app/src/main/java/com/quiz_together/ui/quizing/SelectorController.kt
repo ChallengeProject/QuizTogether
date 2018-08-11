@@ -26,7 +26,7 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
             progressBackgroundColor = ContextCompat.getColor(App.instance.applicationContext,R.color.rcpbColorBorder)
 
             progressColor = ContextCompat.getColor(App.instance.applicationContext,SelectorColor.DEFAULT.value) // deafault value
-            progress = 0F; // default value
+            progress = 0F // default value
         }
     }
 

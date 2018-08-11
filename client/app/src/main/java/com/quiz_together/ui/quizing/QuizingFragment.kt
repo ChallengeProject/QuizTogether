@@ -172,11 +172,26 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
                 if (isOpenKbd === false) {
                     ibChatOn.visibility = View.INVISIBLE
+
+                    if( quizStatus == QuizStatus.ENDING ) {
+                        llResult2.visibility = View.VISIBLE
+                        llResult1.visibility = View.INVISIBLE
+                        llNotice.visibility = View.INVISIBLE
+                        rlNextStep.visibility = View.INVISIBLE
+                    }
+
                 }
                 isOpenKbd = true
             } else if (isOpenKbd === true) {
                 ibChatOn.visibility = View.VISIBLE
                 csMsgBox.visibility = View.GONE
+
+                if( quizStatus == QuizStatus.ENDING ) {
+                    llResult1.visibility = View.VISIBLE
+                    llResult2.visibility = View.INVISIBLE
+                    llNotice.visibility = View.VISIBLE
+                    rlNextStep.visibility = View.VISIBLE
+                }
 
                 isOpenKbd = false
             }
@@ -273,7 +288,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = View.INVISIBLE
         llQuestion.visibility = View.INVISIBLE
-        llResult.visibility = View.INVISIBLE
+        llResult1.visibility = View.INVISIBLE
+        llResult2.visibility = View.INVISIBLE
 
         if(isAdmin) setIcon(R.drawable.icc_play)
 
@@ -291,8 +307,23 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
-        llResult.visibility = llResultShow
 
+
+        // this part is llResult1 / llNotice <-> llResult2
+        if(quizStatus_ != QuizStatus.ENDING) {
+            llResult1.visibility = llResultShow
+            llResult2.visibility = llResultShow
+        } else {
+            if(isOpenKbd) {
+                llResult2.visibility = View.VISIBLE
+                llResult1.visibility = View.INVISIBLE
+                llNotice.visibility = View.INVISIBLE
+                rlNextStep.visibility = View.INVISIBLE
+            } else {
+                llResult2.visibility = View.INVISIBLE
+                llResult1.visibility = View.VISIBLE
+            }
+        }
         updateExpandChatWindow()
     }
 
@@ -413,7 +444,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         disposer2 = Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    updateAdminMsg( finalMsg.get(msgTurn++))
+                    if(!isOpenKbd)
+                        updateAdminMsg( finalMsg.get(msgTurn++))
                     if(msgTurn==3) msgTurn = 0
                 }
 
@@ -466,13 +498,17 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         if(users.size == 0) return;
 
-        gvResult.numColumns = users.size
-        gvResult.isEnabled = false
+        gvResult1.numColumns = users.size
+        gvResult1.isEnabled = false
+        gvResult2.numColumns = users.size
+        gvResult2.isEnabled = false
 
         gvAdapter = QuizingAdapter(this.context!!)
         gvAdapter.users = users
-        gvResult.adapter = gvAdapter
-        setDynamicWidth(gvResult)
+        gvResult1.adapter = gvAdapter
+        gvResult2.adapter = gvAdapter
+        setDynamicWidth(gvResult1)
+        setDynamicWidth(gvResult2)
     }
 
     override fun endQuiz(endMsg: EndMsg) {

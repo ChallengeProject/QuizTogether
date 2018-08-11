@@ -14,6 +14,45 @@
         >
 
 
+        <EditText
+            android:id="@+id/tmpEtUserId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="userId" />
+
+        <EditText
+            android:id="@+id/tmpEtBroadcastId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="BroadcastId" />
+
+        <EditText
+            android:id="@+id/tmpEtLastQuestionNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="3"
+            android:hint="LastQuestionNum" />
+
+
+        <CheckBox
+            android:id="@+id/tmpCbIsadmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="is admin" />
+
+        <Button
+            android:id="@+id/tmpBtTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test start" />
+
+
 
         <LinearLayout
             android:layout_marginTop="5dp"
