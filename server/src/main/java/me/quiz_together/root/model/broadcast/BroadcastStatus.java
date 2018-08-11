@@ -6,7 +6,7 @@ import me.quiz_together.root.support.enumeration.ValueEnum;
 
 @AllArgsConstructor
 public enum BroadcastStatus implements ValueEnum {
-    CREATED(100, false),
+    CREATED(100, true),
     WATING(200, true),
     OPEN_QUESTION(300, true),
     OPEN_ANSWER(400, true),
