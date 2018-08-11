@@ -3,6 +3,7 @@ package com.quiz_together.ui.main.home
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.ResGetPagingBroadcastList
 
 
 interface HomeContract {
@@ -13,7 +14,7 @@ interface HomeContract {
 
         val isActive: Boolean
 
-        fun showBroadcasts(broadcasts: List<Broadcast>)
+        fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList)
 
     }
 

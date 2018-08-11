@@ -1,11 +1,16 @@
 package com.quiz_together.ui.main.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.quiz_together.App
 import com.quiz_together.R
+import com.quiz_together.ui.quizing.QuizingActivity
+import com.quiz_together.util.SC
 import kotlinx.android.synthetic.main.fragm_profile.*
 
 class ProfileFragment : Fragment(), ProfileContract.View {
@@ -28,10 +33,21 @@ class ProfileFragment : Fragment(), ProfileContract.View {
 
     }
 
-
-
     private fun initView() {
         profilePresenter = ProfilePresenter(this@ProfileFragment, pb)
+
+            rcpbExp.apply {
+            secondaryProgress = 100F
+            max = 100F
+            progressBackgroundColor = ContextCompat.getColor(App.instance.applicationContext,R.color.rcpbColorBorder)
+
+            progressColor = ContextCompat.getColor(App.instance.applicationContext,R.color.deepBlue)
+            progress = 60F; // default value
+        }
+
+
+
+
 
     }
 

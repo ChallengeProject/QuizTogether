@@ -11,6 +11,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
+import com.quiz_together.ui.quizing.QuizingActivity
+import com.quiz_together.util.SC
 import kotlinx.android.synthetic.main.fragm_event.*
 
 class EventFragment : Fragment(), EventContract.View {
@@ -51,6 +53,22 @@ class EventFragment : Fragment(), EventContract.View {
 
     private fun initView() {
         eventPresenter = EventPresenter(this@EventFragment, pb)
+
+        tmpEtBroadcastId.setText("b6c49ed11e370dc6b7d55f3dfa7f1cf2d")
+        tmpEtUserId.setText("ue43a7a1a934ed910fe157639ad484e71")
+
+        tmpBtTest.setOnClickListener { v ->
+
+            val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID,tmpEtBroadcastId.text.toString())
+            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM,tmpEtLastQuestionNum.text.toString().toInt())
+            intent.putExtra(QuizingActivity.IS_ADMIN, tmpCbIsadmin.isChecked)
+            SC.USER_ID = tmpEtUserId.text.toString()
+            // greate
+
+            startActivity(intent)
+
+        }
 
     }
 
