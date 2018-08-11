@@ -17,6 +17,7 @@ import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
+import me.quiz_together.root.model.request.broadcast.DeleteBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
@@ -129,7 +130,6 @@ public class BroadcastViewService {
         List<Question> questionList = convertQuestionList(broadcastReq.getQuestionList(), broadcast);
         questionService.insertQuestionList(questionList);
 
-        fcmService.sendCreateBroadcastNotice(broadcast);
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
@@ -170,14 +170,20 @@ public class BroadcastViewService {
     }
 
     public StartBroadcastView startBroadcast(StartBroadcastReq startBroadcastReq) {
-        // stream 등록
-        // chat 생성
-        // 팬들?에게 push 발송
+        // TODO:stream 등록
+        // TODO:chat 생성
         // 해당 방송자인지 권한 체크
         checkPermissionBroadcast(startBroadcastReq.getBroadcastId(), startBroadcastReq.getUserId());
         // 방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.WATING, startBroadcastReq.getBroadcastId());
-        return new StartBroadcastView();
+
+        // TODO:팬들에게 push 발송
+        Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastReq.getBroadcastId());
+        fcmService.sendStartBroadcastNotice(broadcast);
+
+        return StartBroadcastView.builder()
+                                 .broadcastView(buildBroadcastView(broadcast))
+                                 .build();
     }
 
     public void endBroadcast(EndBroadcastReq endBroadcastReq) {
@@ -254,6 +260,11 @@ public class BroadcastViewService {
                                                updateBroadcastStatusReq.getBroadcastId());
     }
 
+    public void deleteBroadcast(DeleteBroadcastReq deleteBroadcastReq) {
+        checkPermissionBroadcast(deleteBroadcastReq.getBroadcastId(), deleteBroadcastReq.getUserId());
+        broadcastService.deleteBroadcastById(deleteBroadcastReq.getBroadcastId());
+    }
+
     public QuestionView buildQuestionView(Question question) {
         return QuestionView.builder()
                            .answerNo(question.getAnswerNo())
@@ -299,6 +310,7 @@ public class BroadcastViewService {
                             .giftType(broadcast.getGiftType())
                             .broadcastStatus(broadcast.getBroadcastStatus())
                             .description(broadcast.getDescription())
+                            .questionCount(broadcast.getQuestionCount())
                             .userInfoView(UserInfoView.builder()
                                                       .userId(user.getId())
                                                       .name(user.getName())

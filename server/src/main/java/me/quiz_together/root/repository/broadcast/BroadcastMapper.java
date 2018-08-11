@@ -25,6 +25,6 @@ public interface BroadcastMapper {
 
     int updateBroadcastStatus(@Param("broadcastStatus") BroadcastStatus broadcastStatus, @Param("broadcastId") long broadcastId);
 
-    int deleteBroadcastById(@Param("broadcastId") long broadcastId, @Param("broadcastStatus") BroadcastStatus broadcastStatus);
+    int deleteBroadcastById(@Param("broadcastId") long broadcastId);
 
 }

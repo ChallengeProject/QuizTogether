@@ -185,7 +185,7 @@ public class FcmService {
         return fcmResponse;
     }
 
-    public FcmResponse sendCreateBroadcastNotice(Broadcast broadcast) {
+    public FcmResponse sendStartBroadcastNotice(Broadcast broadcast) {
         String to = generateTopics(broadcast.getId(), HashIdType.BROADCAST_ID);
 
         NoticeMessage noticeMessage = NoticeMessage.builder()

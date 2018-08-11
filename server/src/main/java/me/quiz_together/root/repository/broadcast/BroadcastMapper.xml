@@ -37,8 +37,9 @@
     FROM
     broadcast
     <where>
+      broadcast_status != 'COMPLETED'
       <if test="next > 0">
-        id &lt; #{next}
+        AND id &lt; #{next}
       </if>
       <if test="userId > 0">
         AND user_id != #{userId}
@@ -128,16 +129,12 @@
         id = #{id}
   </update>
 
-  <update id="deleteBroadcastById" parameterType="map">
-    UPDATE /* broadcast.deleteBroadcastById */
+  <delete id="deleteBroadcastById" parameterType="map">
+    DELETE FROM/* broadcast.deleteBroadcastById */
       broadcast
-    SET
-      broadcast_status = #{broadcastStatus}
-      ,	updated_time = NOW()
-      , deleted_time = NOW()
     WHERE
         id = #{broadcastId}
-  </update>
+  </delete>
 
   <update id="updateBroadcastStatus" parameterType="map">
     UPDATE /* broadcast.updateBroadcastStatus */
