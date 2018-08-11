@@ -62,7 +62,7 @@
     scheduled_time
   </select>
 
-  <select id="selectPreparedBroadcastByUserId" parameterType="map">
+  <select id="selectPreparedBroadcastByUserId" parameterType="map" resultType="int">
     SELECT
     /* broadcast.selectPreparedBroadcastByUserId */
     count(*)
