@@ -16,7 +16,7 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
     private var mCurrentIdx = 0
 
     lateinit var mItemClickListener: ItemClickLisnter
-    lateinit var mFragmentList: ArrayList<CreateFragment.InputQuizFragment>
+    lateinit var mFragmentList: ArrayList<QuizInputFragment>
 
     interface ItemClickLisnter {
         fun onItemClicked(idx: Int)

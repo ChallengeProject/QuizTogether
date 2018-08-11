@@ -68,7 +68,7 @@
             android:textSize="14dp" />
 
         <CheckBox
-            android:id="@+id/cb1"
+            android:id="@+id/cbAnswer1"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="15dp"
@@ -98,7 +98,7 @@
             android:textSize="14dp" />
 
         <CheckBox
-            android:id="@+id/cb2"
+            android:id="@+id/cbAnswer2"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="15dp"
@@ -128,7 +128,7 @@
             android:textSize="14dp" />
 
         <CheckBox
-            android:id="@+id/cb3"
+            android:id="@+id/cbAnswer3"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="15dp"

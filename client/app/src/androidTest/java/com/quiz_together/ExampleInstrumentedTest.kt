@@ -3,26 +3,14 @@ package com.quiz_together
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import android.util.Log
+import com.google.gson.Gson
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.QuestionProp
-import com.quiz_together.data.model.QustionList
-import com.quiz_together.data.model.CategoryType
-import com.quiz_together.data.model.GiftType
-import com.quiz_together.data.model.UserView
+import com.quiz_together.data.model.*
 import com.quiz_together.data.remote.ApiHelper
 import org.json.JSONObject
-
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.EndMsg
-import com.quiz_together.data.model.PushType
-import com.quiz_together.data.model.QuestionMsg
 
 
 /**
@@ -141,7 +129,7 @@ class ExampleInstrumentedTest {
         val dummyInt = dummyText.toInt()
         val dummyLong = dummyText.toLong()
 
-        val ql = mutableListOf<QustionList>()
+        val ql = mutableListOf<Question>()
 
         val options = arrayListOf<String>()
         options.add(dummyString)
@@ -149,8 +137,8 @@ class ExampleInstrumentedTest {
         options.add(dummyString)
 
 
-        ql.add(QustionList(1,null, QuestionProp(dummyString,options),CategoryType.NORMAL))
-        ql.add(QustionList(2,null, QuestionProp(dummyString,options),CategoryType.NORMAL))
+        ql.add(Question(1, null, QuestionProp(dummyString, options), CategoryType.NORMAL))
+        ql.add(Question(2, null, QuestionProp(dummyString, options), CategoryType.NORMAL))
 
         Repository.createBroadcast(Broadcast(
                 null,

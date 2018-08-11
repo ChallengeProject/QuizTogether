@@ -12,7 +12,9 @@ class CreateActivity : AppCompatActivity() {
     private fun initToolbar() {
         setupActionBar(R.id.toolbar) {
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back)
             setDisplayShowHomeEnabled(true)
+            setDisplayShowTitleEnabled(false)
         }
     }
 

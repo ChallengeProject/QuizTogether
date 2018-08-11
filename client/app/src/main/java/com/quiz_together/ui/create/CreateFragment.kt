@@ -1,34 +1,45 @@
 package com.quiz_together.ui.create
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TimePicker
+import android.widget.Toast
 import com.quiz_together.R
+import com.quiz_together.data.Repository
+import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.GiftType
+import com.quiz_together.data.model.Question
+import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import kotlinx.android.synthetic.main.frag_create.*
-import kotlinx.android.synthetic.main.frag_edit_quiz.*
 
-class CreateFragment : Fragment(), CreateContract.View {
+
+class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
 
     val TAG = "CreateFragment"
-
-    companion object {
-        fun newInstance() = CreateFragment()
-    }
-
-    private val COLUMN_NO = 6
-
     override lateinit var presenter: CreateContract.Presenter
-
     override var isActive: Boolean = false
         get() = isAdded
+
+    private val COLUMN_NO = 6
+    private var openingDate: String? = null
+    private var isReserved = false
+    private var isClickedReservation = false
+
+    companion object {
+        @JvmStatic
+        val RESERVED = "RESERVED"
+
+        fun newInstance() = CreateFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,7 +48,30 @@ class CreateFragment : Fragment(), CreateContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        isReserved = arguments?.getBoolean(RESERVED) ?: false
+        if (isReserved) {
+            tvDatePicker.visibility = View.VISIBLE
+            cancel.visibility = View.VISIBLE
+            reservation.visibility = View.GONE
+            open.setBackgroundResource(R.drawable.open_reserved_quiz)
+        }
+
         initQuizInfoArea()
+
+        tvDatePicker.setOnClickListener(this)
+        reservation.setOnClickListener(this)
+        cancel.setOnClickListener(this)
+        open.setOnClickListener(this)
+        save.setOnClickListener(this)
+        btMoney.setOnClickListener(this)
+        btGoods.setOnClickListener(this)
+        etGiftDescription.setOnClickListener(this)
+        etPrize.setOnClickListener(this)
+
+        if (Repository.hasSavedQuiz()) {
+            loadQuiz()
+        }
     }
 
     override fun onResume() {
@@ -46,9 +80,171 @@ class CreateFragment : Fragment(), CreateContract.View {
     }
 
     override fun setLoadingIndicator(active: Boolean) {
-        activity?.getWindow()?.setTouchable(active)
+        activity?.window?.setTouchable(active)
         pb.setVisibilityFromBoolean(active)
     }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.reservation -> {
+                showDatePicker()
+                isClickedReservation = true
+            }
+
+            R.id.cancel -> {
+                activity?.finish()
+            }
+
+            R.id.open -> {
+                // dialog
+                Repository.createBroadcast(extractBroadcast(), object : ApiHelper.GetSuccessCallback {
+                    override fun onDataNotAvailable() {
+
+                    }
+
+                    override fun onSuccessLoaded() {
+                        Toast.makeText(context, "방 개설", Toast.LENGTH_LONG).show()
+                        // 퀴즈쇼 화면으로 이동
+                    }
+                })
+
+            }
+
+            R.id.save -> {
+                if (isReserved) {
+                    // update Broadcast
+                    // 홈으로 이동 여부
+                } else {
+                    saveQuiz()
+                    // 홈으로 이동 여부
+                }
+            }
+
+            R.id.btGoods, R.id.btMoney -> {
+                setGiftType(if (v.id == R.id.btGoods) GiftType.GIFT else GiftType.PRIZE)
+            }
+
+            R.id.etPrize, R.id.etGiftDescription -> {
+                etGiftDescription.visibility = View.GONE
+                etPrize.visibility = View.GONE
+                setGiftTypeVisibility(View.VISIBLE)
+            }
+
+            R.id.tvDatePicker -> showDatePicker()
+        }
+    }
+
+    private fun setGiftTypeVisibility(visibility: Int) {
+        btGoods.visibility = visibility
+        btMoney.visibility = visibility
+        etGiftDescription.setText("")
+        etPrize.setText("")
+
+        if (visibility == View.VISIBLE) {
+            btGoods.isSelected = false
+            btMoney.isSelected = false
+        }
+    }
+
+    private fun setGiftType(type: GiftType) {
+        if (type == GiftType.GIFT) {
+            etGiftDescription.visibility = View.VISIBLE
+        } else {
+            etPrize.visibility = View.VISIBLE
+        }
+        setGiftTypeVisibility(View.GONE)
+    }
+
+    private fun getGiftType(): GiftType {
+        return if (btGoods.isSelected) GiftType.GIFT else GiftType.PRIZE
+    }
+
+    private fun extractBroadcast(): Broadcast {
+        val title = etTtile.text.toString()
+        val description = etDescription.text.toString()
+        val scheduledTime = openingDate?.toLong()
+        val giftType = getGiftType()
+        val prize = if (etPrize.text.toString() == "") null else etPrize.text.toString().toLong()
+        val giftDescription = etGiftDescription.text.toString()
+        val winnersMsg = etWinnerMessage.text.toString()
+
+        val questionList = ArrayList<Question>()
+        for (fragment in (quizViewPager.adapter as QuizPagerAdapter).fragmentList) {
+            if (fragment.isCompleted()) {
+                questionList.add(fragment.extractQuestion())
+            }
+        }
+        val questionCount = questionList.count()
+
+        return Broadcast(null, title, description, scheduledTime, giftType,
+                prize, giftDescription, Repository.getUserId(), null, winnersMsg, null,
+                questionList, questionCount)
+    }
+
+    private fun saveQuiz() {
+        Repository.saveQuiz(extractBroadcast())
+    }
+
+    private fun loadQuiz() {
+        val savedBroadcast = Repository.getSavedQuiz() ?: return
+
+        etTtile.setText(savedBroadcast.title)
+        etDescription.setText(savedBroadcast.description)
+        openingDate = savedBroadcast.scheduledTime.toString()
+        setGiftType(savedBroadcast.giftType)
+        etPrize.setText(savedBroadcast.prize.toString())
+        etGiftDescription.setText(savedBroadcast.giftDescription)
+        etWinnerMessage.setText(savedBroadcast.winnerMessage)
+
+        val questionList = savedBroadcast.questionList
+        (quizViewPager.adapter as QuizPagerAdapter).fragmentList.forEachIndexed { index, inputQuizFragment ->
+            inputQuizFragment.setQuestion(questionList[index])
+        }
+    }
+
+    private fun showDatePicker() {
+        val datePicker = DatePickerDialogFragment()
+        datePicker.setOnTimeSetListener(mOnDateSetListener)
+        datePicker.show(activity?.fragmentManager, "datePicker")
+    }
+
+    private fun showTimerPicker() {
+        val timePicker = TimePickerDialogFragment()
+        timePicker.setOnTimeSetListener(mOnTimeSetListener)
+        timePicker.show(activity?.fragmentManager, "timePicker")
+    }
+
+    private val mOnDateSetListener =
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                showTimerPicker()
+
+                val formattedYear = year % 100
+                tvDatePicker.text = "$formattedYear. $month. $dayOfMonth"
+
+                openingDate = year.toString() + month.toString() + dayOfMonth.toString()
+
+                if (isClickedReservation) {
+                    Repository.createBroadcast(extractBroadcast(), object : ApiHelper.GetSuccessCallback {
+                        override fun onDataNotAvailable() {
+
+                        }
+
+                        override fun onSuccessLoaded() {
+                            activity?.finish()
+                        }
+                    })
+                }
+            }
+
+    private val mOnTimeSetListener =
+            TimePickerDialog.OnTimeSetListener { view: TimePicker?, hourOfDay: Int, minute: Int ->
+
+                val meridiem = if (hourOfDay < 11) "오전" else "오후"
+                val formattedHour = if (hourOfDay < 11) hourOfDay else hourOfDay - 11
+
+                tvDatePicker.text = "${tvDatePicker.text} $meridiem $formattedHour 시 $minute 분 시작"
+                openingDate += hourOfDay.toString() + minute.toString()
+            }
 
     private fun initQuizInfoArea() {
         val numberRecyclerViewAdapter = NumberRecyclerViewAdapter(activity?.applicationContext!!)
@@ -70,79 +266,5 @@ class CreateFragment : Fragment(), CreateContract.View {
         })
 
         numberRecyclerViewAdapter.mFragmentList = (quizViewPager.adapter as QuizPagerAdapter).fragmentList
-    }
-
-    inner class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        val fragmentList = ArrayList<InputQuizFragment>()
-        private val FRAG_NO = 12
-
-        init {
-            while (fragmentList.size < FRAG_NO) {
-                val fragment = InputQuizFragment.newInstance()
-                fragmentList.add(fragment)
-            }
-        }
-
-        override fun getItem(position: Int): InputQuizFragment {
-            return fragmentList[position]
-        }
-
-        override fun getCount(): Int {
-            return FRAG_NO
-        }
-
-        fun extractQuestions() {
-
-        }
-    }
-
-    class InputQuizFragment : Fragment(), View.OnClickListener {
-        companion object {
-
-            @JvmStatic
-            fun newInstance(): InputQuizFragment {
-                return InputQuizFragment()
-            }
-        }
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.frag_edit_quiz, container, false)
-        }
-
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            cb1.setOnClickListener(this)
-            cb2.setOnClickListener(this)
-            cb3.setOnClickListener(this)
-        }
-
-        fun isCompleted(): Boolean {
-            return (cb1.isChecked || cb2.isChecked || cb3.isChecked) && option1.text.isNotEmpty() &&
-                    option2.text.isNotEmpty() && option3.text.isNotEmpty() && etQuizTitle.text.isNotEmpty()
-        }
-
-        fun extractQuestion() {
-
-        }
-
-        override fun onClick(v: View?) {
-            when (v) {
-                cb1 -> {
-                    cb1.isChecked = true
-                    cb2.isChecked = false
-                    cb3.isChecked = false
-                }
-                cb2 -> {
-                    cb2.isChecked = true
-                    cb1.isChecked = false
-                    cb3.isChecked = false
-                }
-                cb3 -> {
-                    cb3.isChecked = true
-                    cb2.isChecked = false
-                    cb1.isChecked = false
-                }
-            }
-        }
     }
 }

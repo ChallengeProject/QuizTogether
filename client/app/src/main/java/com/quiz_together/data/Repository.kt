@@ -2,11 +2,7 @@ package com.quiz_together.data
 
 import com.quiz_together.data.local.AppPreferenceHelper
 import com.quiz_together.data.local.PreferenceHelper
-import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.ReqEndBroadcast
-import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.*
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.data.remote.AppApiHelper
 
@@ -120,5 +116,9 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.openAnswer(broadcastId,userId,step,cb)
     }
 
+
+    override fun hasSavedQuiz(): Boolean = preferenceHelper.hasSavedQuiz()
+    override fun saveQuiz(incompletedBroadcast: Broadcast) = preferenceHelper.saveQuiz(incompletedBroadcast)
+    override fun getSavedQuiz(): Broadcast? = preferenceHelper.getSavedQuiz()
 
 }

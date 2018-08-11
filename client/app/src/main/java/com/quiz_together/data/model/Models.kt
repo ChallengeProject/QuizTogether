@@ -18,7 +18,7 @@ data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Lo
 
 data class QuestionProp(val title:String, val options:List<String>)
 
-data class QustionList(val answerNo:Int, val questionId : String?,val questionProp: QuestionProp, val category:CategoryType)
+data class Question(val answerNo: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
 
 data class UserView(val userId: String,val name:String)
 
@@ -28,14 +28,14 @@ data class Broadcast(
         val description:String,
         val scheduledTime:Long?,
         val giftType: GiftType,
-        val prize:Long,
-        val giftDescription:String,
+        val prize: Long?,
+        val giftDescription: String?,
 
-        val userId:String,
+        val userId: String?,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage:String,
         val userView:UserView?,
-        val questionList:List<QustionList>,
+        val questionList: List<Question>,
         val questionCount:Int
 )
 
