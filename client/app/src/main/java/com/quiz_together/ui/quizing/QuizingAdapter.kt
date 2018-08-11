@@ -42,7 +42,7 @@ class QuizingAdapter(val context:Context) : BaseAdapter() {
         tvName1.text = this.users.get(position).first
         tvName2.text = this.users.get(position).second
 
-        if(this.users.get(position).second.isNullOrEmpty()) ivProfile2.visibility = View.INVISIBLE
+        if (this.users.get(position).second.isNullOrEmpty()) ivProfile2.visibility = View.INVISIBLE
 
         return retView
     }

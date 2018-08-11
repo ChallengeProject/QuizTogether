@@ -1,23 +1,7 @@
 package com.quiz_together.data.remote.service
 
 import com.quiz_together.BuildConfig
-import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.BroadcastJoinInfo
-import com.quiz_together.data.model.Events
-import com.quiz_together.data.model.ReqEndBroadcast
-import com.quiz_together.data.model.ReqBrdIdAndUsrId
-import com.quiz_together.data.model.ReqLogin
-import com.quiz_together.data.model.ReqOpenAnsAndQus
-import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqSendChatMsg
-import com.quiz_together.data.model.ReqSignup
-import com.quiz_together.data.model.ReqStartBroadcast
-import com.quiz_together.data.model.ReqUpdateBroadcast
-import com.quiz_together.data.model.ResGetPagingBroadcastList
-import com.quiz_together.data.model.Resp
-import com.quiz_together.data.model.RespEmpty
-import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserView
+import com.quiz_together.data.model.*
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -51,7 +35,7 @@ interface ApiServices {
     fun createBroadcast(@Body data: Broadcast) : Observable<Resp<RespEmpty>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getPagingBroadcastList")
-    fun getPagingBroadcastList(@Query("userId") userId:String) : Observable<Resp<ResGetPagingBroadcastList>>
+    fun getPagingBroadcastList(@Query("userId") userId: String): Observable<Resp<ResGetPagingBroadcastList>>
 
     @GET("${BuildConfig.REST_PREFIX}/broadcast/getBroadcastList")
     fun getBroadcastById(@Query("broadcastId") broadcastId:String) : Observable<Resp<Broadcast>>

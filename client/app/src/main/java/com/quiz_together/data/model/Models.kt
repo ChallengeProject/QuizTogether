@@ -18,7 +18,7 @@ data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Lo
 
 data class QuestionProp(val title:String, val options:List<String>)
 
-data class Question(val answerNo: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
+data class Question(val answerNo: Int, val step: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
 
 data class UserView(val userId: String,val name:String)
 
@@ -27,7 +27,7 @@ data class Broadcast(
         val title:String,
         val description:String,
         val scheduledTime:Long?,
-        val remainingStartSeconds : Long,
+        val remainingStartSeconds: Long?,
         val giftType: GiftType,
         val prize: Long?,
         val giftDescription: String?,
@@ -35,16 +35,16 @@ data class Broadcast(
         val userId: String?,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage:String,
-        val userInfoView:UserView?,
-        val questionList:List<Question>,
-        val questionCount:Int,
+        val userInfoView: UserView?,
+        val questionList: List<Question>,
+        val questionCount: Int,
 
-        var roomOutputType:RoomOutputType?
+        var roomOutputType: RoomOutputType?
 )
 
-data class ResGetPagingBroadcastList(val myBroadcastList : List<Broadcast>,val currentBroadcastList : List<Broadcast>)
+data class ResGetPagingBroadcastList(val myBroadcastList: List<Broadcast>, val currentBroadcastList: List<Broadcast>)
 
-data class BroadcastJoinInfo(val broadcastView:Broadcast, val userInfoView : UserView, val question:String, val step:Int,val answerNo:Int, val playUserStatus: PlayUserStatus, val viewerCount:Int)
+data class BroadcastJoinInfo(val broadcastView: Broadcast, val userInfoView: UserView, val question: String, val step: Int, val answerNo: Int, val playUserStatus: PlayUserStatus, val viewerCount: Int)
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 

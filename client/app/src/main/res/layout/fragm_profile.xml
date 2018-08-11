@@ -26,8 +26,7 @@
             android:textColor="#1a273d"
             android:letterSpacing="-0.02"
             android:lineSpacingExtra="12sp"
-            android:gravity="center_horizontal"
-            />
+            android:gravity="center_horizontal" />
 
 
         <RelativeLayout
@@ -71,11 +70,11 @@
         </RelativeLayout>
 
         <!--<com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar-->
-            <!--android:id="@+id/rcpbExp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/questionGageHeight"-->
-            <!--app:rcBackgroundPadding="1dp"-->
-            <!--app:rcSecondaryProgressColor="#ffffff" />-->
+        <!--android:id="@+id/rcpbExp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/questionGageHeight"-->
+        <!--app:rcBackgroundPadding="1dp"-->
+        <!--app:rcSecondaryProgressColor="#ffffff" />-->
 
         <View
             android:layout_marginTop="15dp"
@@ -102,8 +101,7 @@
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    android:text="팔로잉"
-                    />
+                    android:text="팔로잉" />
 
                 <TextView
                     android:layout_marginLeft="18dp"
@@ -113,8 +111,7 @@
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    android:text="37"
-                    />
+                    android:text="37" />
 
             </LinearLayout>
 
@@ -131,8 +128,7 @@
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    tools:text="팔로워"
-                    />
+                    tools:text="팔로워" />
 
                 <TextView
                     android:layout_marginLeft="18dp"
@@ -142,8 +138,7 @@
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    tools:text="1.4k"
-                    />
+                    tools:text="1.4k" />
 
             </LinearLayout>
 
@@ -171,8 +166,7 @@
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="10sp"
-                android:text="코인"
-                />
+                android:text="코인" />
 
             <EditText
                 android:layout_gravity="center"
@@ -201,8 +195,7 @@
                     android:textColor="#d0d3d7"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    android:text="인출"
-                    />
+                    android:text="인출" />
 
                 <TextView
                     android:gravity="center"
@@ -214,15 +207,12 @@
                     android:textColor="#d0d3d7"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    android:text="충전"
-                    />
+                    android:text="충전" />
 
             </LinearLayout>
 
 
         </LinearLayout>
-
-
 
 
         <View
@@ -258,8 +248,7 @@
                 <ImageView
                     android:src="@drawable/icc_fwdbt"
                     android:layout_width="16dp"
-                    android:layout_height="24dp"
-                    />
+                    android:layout_height="24dp" />
 
             </LinearLayout>
 
@@ -286,8 +275,7 @@
                 android:textColor="#a2a8b0"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="10sp"
-                android:text="이메일을 인증하면 하트가 뿜뿜~"
-                />
+                android:text="이메일을 인증하면 하트가 뿜뿜~" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -299,8 +287,7 @@
                 <ImageView
                     android:src="@drawable/icc_fwdbt"
                     android:layout_width="16dp"
-                    android:layout_height="24dp"
-                    />
+                    android:layout_height="24dp" />
 
             </LinearLayout>
 
@@ -325,8 +312,7 @@
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="10sp"
-                android:text="내 추천 코드"
-                />
+                android:text="내 추천 코드" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -340,8 +326,7 @@
                     android:layout_gravity="center"
                     android:src="@drawable/icc_for_coin_cpy"
                     android:layout_width="15dp"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:layout_marginRight="3dp"
@@ -351,15 +336,11 @@
                     android:textColor="#1a273d"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="10sp"
-                    android:text="1EON3US"
-                    />
+                    android:text="1EON3US" />
 
             </LinearLayout>
 
         </LinearLayout>
-
-
-
 
 
         <View
@@ -383,8 +364,7 @@
                 android:textColor="#1a273d"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="10sp"
-                android:text="추천인 코드입력"
-                />
+                android:text="추천인 코드입력" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -396,14 +376,11 @@
                 <ImageView
                     android:src="@drawable/icc_fwdbt"
                     android:layout_width="16dp"
-                    android:layout_height="24dp"
-                    />
+                    android:layout_height="24dp" />
 
             </LinearLayout>
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>
@@ -422,7 +399,7 @@
             android:layout_height="52dp"
             android:src="@drawable/icc_profile"
             app:civ_border_width="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#ffffff" />
 
     </RelativeLayout>
 

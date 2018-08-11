@@ -10,7 +10,7 @@ class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     init {
         while (fragmentList.size < FRAG_NO) {
-            val fragment = QuizInputFragment.newInstance()
+            val fragment = QuizInputFragment.newInstance(if (fragmentList.size == 0) 1 else fragmentList.size)
             fragmentList.add(fragment)
         }
     }
@@ -23,13 +23,13 @@ class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return FRAG_NO
     }
 
-    fun extractQuestions(): ArrayList<Question>? {
+    fun extractQuestions(): ArrayList<Question> {
         val questionList = ArrayList<Question>()
 
-        for (i in 1..FRAG_NO) {
-            if (fragmentList[i].isCompleted()) {
-                questionList.add(fragmentList[i].extractQuestion())
-            } else return null
+        for (fragment in fragmentList) {
+            if (fragment.isCompleted()) {
+                questionList.add(fragment.extractQuestion())
+            }
         }
 
         return questionList

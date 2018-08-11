@@ -34,13 +34,13 @@ class SelectorController( val RCPBBg : Array<RoundCornerProgressBar> , tvQustion
      * pos : 1~3
      * percent : 0 ~ 100
      */
-    fun setRCPB(pos:Int, color:SelectorColor = SelectorColor.DEFAULT, percent:Int = 0, withTextColor :Boolean = false) {
+    fun setRCPB(pos: Int, color: SelectorColor = SelectorColor.DEFAULT, percent: Int = 0, withTextColor: Boolean = false) {
         RCPBBg[pos-1].apply {
             progressColor = ContextCompat.getColor(App.instance.applicationContext,color.value)
             progress = percent.toFloat()
         }
 
-        if(withTextColor) tvQustions[pos-1].setTextColor(ContextCompat.getColor(App.instance.applicationContext,R.color.speciYellow))
+        if (withTextColor) tvQustions[pos - 1].setTextColor(ContextCompat.getColor(App.instance.applicationContext, R.color.speciYellow))
 
     }
 

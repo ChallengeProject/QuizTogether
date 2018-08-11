@@ -1,17 +1,7 @@
 package com.quiz_together.data.remote
 
 import android.util.Log
-import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.ReqEndBroadcast
-import com.quiz_together.data.model.ReqBrdIdAndUsrId
-import com.quiz_together.data.model.ReqLogin
-import com.quiz_together.data.model.ReqOpenAnsAndQus
-import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqSendChatMsg
-import com.quiz_together.data.model.ReqSignup
-import com.quiz_together.data.model.ReqStartBroadcast
-import com.quiz_together.data.model.ReqUpdateBroadcast
+import com.quiz_together.data.model.*
 import com.quiz_together.data.remote.service.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -129,7 +119,7 @@ class AppApiHelper : ApiHelper {
                 })
     }
 
-    override fun getPagingBroadcastList(userId:String,cb: ApiHelper.GetPagingBroadcastList) {
+    override fun getPagingBroadcastList(userId: String, cb: ApiHelper.GetPagingBroadcastList) {
         apiServices.getPagingBroadcastList(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -140,8 +130,8 @@ class AppApiHelper : ApiHelper {
                         cb.onDataNotAvailable()
                 }, { err ->
 
-                    Log.i(TAG,err.message);
-                    Log.i(TAG,err.toString());
+                    Log.i(TAG, err.message);
+                    Log.i(TAG, err.toString());
                     err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
@@ -363,8 +353,8 @@ class AppApiHelper : ApiHelper {
                         cb.onDataNotAvailable()
                 }, { err ->
 
-                    Log.i(TAG,err.message)
-                    Log.i(TAG,err.toString())
+                    Log.i(TAG, err.message)
+                    Log.i(TAG, err.toString())
                     err.printStackTrace()
                     cb.onDataNotAvailable()
                 })

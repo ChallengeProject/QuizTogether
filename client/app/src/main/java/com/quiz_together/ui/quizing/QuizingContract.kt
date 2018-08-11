@@ -2,13 +2,7 @@ package com.quiz_together.ui.quizing
 
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
-import com.quiz_together.data.model.AdminMsg
-import com.quiz_together.data.model.AnswerMsg
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.ChatMsg
-import com.quiz_together.data.model.EndMsg
-import com.quiz_together.data.model.QuestionMsg
-import com.quiz_together.data.model.WinnersMsg
+import com.quiz_together.data.model.*
 
 
 interface QuizingContract {
@@ -20,7 +14,7 @@ interface QuizingContract {
 
         fun initQuizCalledByPresenter()
 
-        fun setQuestionCnt(cnt:Int)
+        fun setQuestionCnt(cnt: Int)
 
         fun showAdminMsg(adminMsg: AdminMsg)
         fun showChatMsg(chatMsg: ChatMsg)

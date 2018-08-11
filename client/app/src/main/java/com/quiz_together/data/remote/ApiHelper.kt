@@ -1,15 +1,6 @@
 package com.quiz_together.data.remote
 
-import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.BroadcastJoinInfo
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.Events
-import com.quiz_together.data.model.ReqEndBroadcast
-import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.ReqStartBroadcast
-import com.quiz_together.data.model.ResGetPagingBroadcastList
-import com.quiz_together.data.model.User
-import com.quiz_together.data.model.UserView
+import com.quiz_together.data.model.*
 
 
 interface ApiHelper {
@@ -39,7 +30,7 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
-    interface GetPagingBroadcastList{
+    interface GetPagingBroadcastList {
         fun onPagingBroadcastListLoaded(resGetPagingBroadcastList: ResGetPagingBroadcastList)
         fun onDataNotAvailable()
     }
@@ -68,7 +59,8 @@ interface ApiHelper {
 
     // broadcast
     fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
-    fun getPagingBroadcastList(userId:String, cb: ApiHelper.GetPagingBroadcastList)
+
+    fun getPagingBroadcastList(userId: String, cb: ApiHelper.GetPagingBroadcastList)
     fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback)
     fun updateBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessCallback)
     fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback)

@@ -15,7 +15,6 @@ import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.GiftType
-import com.quiz_together.data.model.Question
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
@@ -168,17 +167,12 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         val giftDescription = etGiftDescription.text.toString()
         val winnersMsg = etWinnerMessage.text.toString()
 
-        val questionList = ArrayList<Question>()
-        for (fragment in (quizViewPager.adapter as QuizPagerAdapter).fragmentList) {
-            if (fragment.isCompleted()) {
-                questionList.add(fragment.extractQuestion())
-            }
-        }
+        val questionList = (quizViewPager.adapter as QuizPagerAdapter).extractQuestions()
         val questionCount = questionList.count()
 
-        return Broadcast(null, title, description, scheduledTime, giftType,
+        return Broadcast(null, title, description, scheduledTime, null, giftType,
                 prize, giftDescription, Repository.getUserId(), null, winnersMsg, null,
-                questionList, questionCount)
+                questionList, questionCount, null)
     }
 
     private fun saveQuiz() {

@@ -4,23 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import com.quiz_together.App
+import android.view.*
 import com.quiz_together.R
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.quizing.QuizingActivity
-import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
 import kotlinx.android.synthetic.main.fragm_home.*
 
@@ -35,11 +25,11 @@ class HomeFragment : Fragment(), HomeContract.View {
     private val broadcastAdapter: BroadcastAdapter by lazy {
         BroadcastAdapter(activity?.applicationContext, {
 
-            val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
-            intent.putExtra(QuizingActivity.BROADCAST_ID,it.broadcastId)
+            val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID, it.broadcastId)
             //TODO need to remove
 //            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
-            intent.putExtra(QuizingActivity.IS_ADMIN, if(it.roomOutputType == RoomOutputType.RESERVATION) true else false)
+            intent.putExtra(QuizingActivity.IS_ADMIN, if (it.roomOutputType == RoomOutputType.RESERVATION) true else false)
             startActivity(intent)
 
         })
@@ -115,7 +105,6 @@ class HomeFragment : Fragment(), HomeContract.View {
             notifyDataSetChang()
         }
     }
-
 
 
 }

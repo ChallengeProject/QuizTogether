@@ -1,8 +1,6 @@
 package com.quiz_together.ui.main.home
 
 import com.quiz_together.BasePresenter
-import com.quiz_together.BaseView
-import com.quiz_together.data.model.Broadcast
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 
 

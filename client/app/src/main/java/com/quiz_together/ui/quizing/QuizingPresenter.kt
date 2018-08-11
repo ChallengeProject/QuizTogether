@@ -4,17 +4,7 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.AdminMsg
-import com.quiz_together.data.model.AnswerMsg
-import com.quiz_together.data.model.BroadcastJoinInfo
-import com.quiz_together.data.model.BroadcastStatus
-import com.quiz_together.data.model.ChatMsg
-import com.quiz_together.data.model.EndMsg
-import com.quiz_together.data.model.PushType
-import com.quiz_together.data.model.QuestionMsg
-import com.quiz_together.data.model.ReqEndBroadcast
-import com.quiz_together.data.model.ReqSendAnswer
-import com.quiz_together.data.model.WinnersMsg
+import com.quiz_together.data.model.*
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
@@ -42,11 +32,11 @@ class QuizingPresenter(
         repository.joinBroadcast(broadcastId, SC.USER_ID,object : ApiHelper.GetJoinBroadcastInfoCallback{
             override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
                 registFirbaseSubscribe()
-                view.setQuestionCnt( broadcastJoinInfo.broadcastView.questionCount)
+                view.setQuestionCnt(broadcastJoinInfo.broadcastView.questionCount)
             }
 
             override fun onDataNotAvailable() {
-                Log.i(TAG,"joinBroadcast - onDataNotAvailable")
+                Log.i(TAG, "joinBroadcast - onDataNotAvailable")
             }
 
         })

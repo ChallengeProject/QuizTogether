@@ -3,7 +3,6 @@ package com.quiz_together.ui.main.home
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.util.toStringTemplate
 import kotlinx.android.synthetic.main.item_home_broadcast.view.*
 
-class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadcast) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadcast) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TAG = "BroadcastAdapter#$#"
 
@@ -28,7 +27,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadc
 
     override fun getItemCount() = list.size
 
-    fun addItem(data: Broadcast,roomOutputType: RoomOutputType) {
+    fun addItem(data: Broadcast, roomOutputType: RoomOutputType) {
         data.roomOutputType = roomOutputType
         list.add(data)
     }
@@ -37,7 +36,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadc
 
     fun notifyDataSetChang() = notifyDataSetChanged()
 
-    class ImageViewHolder(context: Context?, parent: ViewGroup?,val cbOnClickLl: (broadcast: Broadcast) -> Unit)
+    class ImageViewHolder(context: Context?, parent: ViewGroup?, val cbOnClickLl: (broadcast: Broadcast) -> Unit)
         : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_home_broadcast, parent, false)) {
 
         val TAG = "ImageViewHolder#$#"
@@ -55,9 +54,9 @@ class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadc
             tvContent.text = item.description
             ivProfile.setImageResource(R.drawable.icc_profile)
 
-            val calcedMin = item.remainingStartSeconds / 60;
+            val calcedMin = item.remainingStartSeconds!! / 60
 
-            if(item.roomOutputType == RoomOutputType.DEFAULT) {
+            if (item.roomOutputType == RoomOutputType.DEFAULT) {
                 ivProfile.borderColor = getResources().getColor(R.color.white)
                 llBg.setBackgroundResource(R.drawable.back_white_border_for_layout)
                 tvShare.text = "팔로우"
@@ -69,8 +68,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadc
                 tvContent.setTextColor(Color.parseColor("#6b6b6b"))
                 tvDate.setTextColor(Color.parseColor("#a2a8b0"))
 
-            }
-            else if(item.roomOutputType == RoomOutputType.FOLLOW) {
+            } else if (item.roomOutputType == RoomOutputType.FOLLOW) {
                 ivProfile.borderColor = getResources().getColor(R.color.deepBlue)
                 llBg.setBackgroundResource(R.drawable.back_deepblue_border_for_layout)
                 tvShare.text = "팔로잉"
@@ -83,7 +81,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (broadcast: Broadc
                 tvDate.setTextColor(Color.parseColor("#fafd47"))
                 tvDate.text = "해당 방은 ${calcedMin}분 뒤에 진행되기로 예정되어있습니다."
 
-            } else if(item.roomOutputType == RoomOutputType.RESERVATION) {
+            } else if (item.roomOutputType == RoomOutputType.RESERVATION) {
                 ivProfile.borderColor = getResources().getColor(R.color.shallowDark)
                 llBg.setBackgroundResource(R.drawable.back_shallow_dark_border_for_layout)
                 tvShare.text = ""

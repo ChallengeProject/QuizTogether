@@ -4,12 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.quiz_together.R
 import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
@@ -59,8 +54,8 @@ class EventFragment : Fragment(), EventContract.View {
 
         tmpBtTest.setOnClickListener { v ->
 
-            val intent = Intent(activity?.applicationContext , QuizingActivity::class.java)
-            intent.putExtra(QuizingActivity.BROADCAST_ID,tmpEtBroadcastId.text.toString())
+            val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID, tmpEtBroadcastId.text.toString())
 //            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM,tmpEtLastQuestionNum.text.toString().toInt())
             intent.putExtra(QuizingActivity.IS_ADMIN, tmpCbIsadmin.isChecked)
             SC.USER_ID = tmpEtUserId.text.toString()

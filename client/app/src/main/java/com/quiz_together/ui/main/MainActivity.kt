@@ -16,11 +16,6 @@ import com.quiz_together.util.disableShiftMode
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
-import android.util.Log
-import android.widget.EditText
-import com.quiz_together.data.model.RoomOutputType
 
 
 class MainActivity : AppCompatActivity() {
@@ -91,14 +86,15 @@ class MainActivity : AppCompatActivity() {
         var userId = intent.getStringExtra(BROADCAST_ID)
 
 
-        broadcastId?.run{
-//            var isAdmin = (userId == SC.USER_ID)
-            val intent = Intent(applicationContext , QuizingActivity::class.java)
-            intent.putExtra(QuizingActivity.BROADCAST_ID,this)
+        broadcastId?.run {
+            //            var isAdmin = (userId == SC.USER_ID)
+            val intent = Intent(applicationContext, QuizingActivity::class.java)
+            intent.putExtra(QuizingActivity.BROADCAST_ID, this)
             //TODO need to remove
 //            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
             intent.putExtra(QuizingActivity.IS_ADMIN, userId == SC.USER_ID)
-            startActivity(intent)}
+            startActivity(intent)
+        }
 
     }
 

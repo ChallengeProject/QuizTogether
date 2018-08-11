@@ -29,11 +29,11 @@ class QuizingActivity : AppCompatActivity() {
 
         val broadcastId = intent.getStringExtra(BROADCAST_ID)
 
-    //TODO need to remove
+        //TODO need to remove
         val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
 //        val lastQuestionNum = intent.getIntExtra(LAST_QUESTION_NUM,-1)
-        Log.i(TAG,broadcastId.toString())
-        Log.i(TAG,isAdmin.toString())
+        Log.i(TAG, broadcastId.toString())
+        Log.i(TAG, isAdmin.toString())
 //        Log.i(TAG,lastQuestionNum.toString())
 
 
@@ -52,9 +52,9 @@ class QuizingActivity : AppCompatActivity() {
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
-                // TODO need to remove
+        // TODO need to remove
 //        QuizingFragment.newInstance(isAdmin,lastQuestionNum).also {
-            QuizingFragment.newInstance(isAdmin).also {
+        QuizingFragment.newInstance(isAdmin).also {
 
             replaceFragmentInActivity(it, R.id.fl_content)
         }
@@ -94,7 +94,7 @@ class QuizingActivity : AppCompatActivity() {
 
     companion object {
         const val BROADCAST_ID = "BROADCAST_ID"
-//        const val LAST_QUESTION_NUM = "LAST_QUESTION_NUM"
+        //        const val LAST_QUESTION_NUM = "LAST_QUESTION_NUM"
         const val IS_ADMIN = "IS_ADMIN"
     }
 

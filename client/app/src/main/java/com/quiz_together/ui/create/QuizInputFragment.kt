@@ -13,11 +13,16 @@ import kotlinx.android.synthetic.main.frag_create.*
 import kotlinx.android.synthetic.main.frag_edit_quiz.*
 
 class QuizInputFragment : Fragment(), View.OnClickListener {
+    var step: Int = 0
+
     companion object {
 
         @JvmStatic
-        fun newInstance(): QuizInputFragment {
-            return QuizInputFragment()
+        fun newInstance(step: Int): QuizInputFragment {
+            val fragment = QuizInputFragment()
+            fragment.step = step
+
+            return fragment
         }
     }
 
@@ -60,7 +65,7 @@ class QuizInputFragment : Fragment(), View.OnClickListener {
         options.add(option2.text.toString())
         options.add(option3.text.toString())
 
-        return Question(getAnswerNo(), null,
+        return Question(getAnswerNo(), step, null,
                 QuestionProp(etQuizTitle.text.toString(), options), CategoryType.NORMAL)
     }
 
