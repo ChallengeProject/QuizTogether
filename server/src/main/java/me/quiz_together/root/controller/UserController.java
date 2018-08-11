@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.ApiImplicitParam;
 import me.quiz_together.root.model.request.user.UserIdReq;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
+import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
-import me.quiz_together.root.model.response.user.UserView;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.user.UserViewService;
 import me.quiz_together.root.support.hashid.HashUserId;
@@ -24,7 +24,7 @@ public class UserController implements ApiController {
     private UserViewService userViewService;
 
     @PostMapping("/user/signup")
-    public ResultContainer<UserView> signup(@RequestBody UserSignupRequest user) {
+    public ResultContainer<UserInfoView> signup(@RequestBody UserSignupRequest user) {
 
         return new ResultContainer<>(userViewService.insertUser(user));
     }
@@ -37,7 +37,7 @@ public class UserController implements ApiController {
     }
 
     @PostMapping("/user/login")
-    public ResultContainer<UserView> login(@RequestBody UserIdReq userIdReq) {
+    public ResultContainer<UserInfoView> login(@RequestBody UserIdReq userIdReq) {
         return new ResultContainer<>(userViewService.login(userIdReq));
     }
 

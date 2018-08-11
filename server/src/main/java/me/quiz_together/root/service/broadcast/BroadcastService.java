@@ -25,8 +25,12 @@ public class BroadcastService {
         return broadcastRepository.selectBroadcastById(broadcastId);
     }
 
-    public List<Broadcast> getPagingBroadcastList(long next, int limit) {
-        return broadcastRepository.selectPagingBroadcastList(next, limit);
+    public List<Broadcast> getPagingBroadcastList(long next, int limit, Long userId) {
+        return broadcastRepository.selectPagingBroadcastList(next, limit, userId);
+    }
+
+    public List<Broadcast> getMyBroadcastList(Long userId) {
+        return broadcastRepository.selectMyBroadcastList(userId);
     }
 
     public void insertBroadcast(Broadcast broadcast) {
