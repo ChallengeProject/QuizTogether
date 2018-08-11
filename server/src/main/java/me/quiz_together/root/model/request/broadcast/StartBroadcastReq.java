@@ -17,7 +17,6 @@ public class StartBroadcastReq {
     @ApiModelProperty(dataType = "java.lang.String")
     @HashBroadcastId
     private Long broadcastId;
-    @NotNull
     private Long scheduledTime;
     @NotNull
     private String streamingUrl;
