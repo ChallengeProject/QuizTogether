@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
@@ -20,6 +22,7 @@ import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
+import me.quiz_together.root.model.request.question.QuestionReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
@@ -32,6 +35,8 @@ import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.service.FcmService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Slf4j
 @Service
@@ -81,6 +86,8 @@ public class BroadcastViewService {
     }
 
     public int updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
+        //TODO: 권한 체크 필요
+
         Broadcast broadcast = new Broadcast();
         broadcast.setId(broadcastUpdateReq.getBroadcastId());
         broadcast.setDescription(broadcastUpdateReq.getDescription());
@@ -93,6 +100,9 @@ public class BroadcastViewService {
         broadcast.setWinnerMessage(broadcastUpdateReq.getWinnerMessage());
 
         int result = broadcastService.updateBroadcast(broadcast);
+
+//        convertQuestionList(broadcastUpdateReq.getQuestionList(), broadcast);
+
         questionService.updateQuestionListByQuestionId(
                 broadcastUpdateReq.getQuestionList().stream().map(questionView -> {
                     Question question = new Question();
@@ -107,7 +117,7 @@ public class BroadcastViewService {
         return result;
     }
 
-    public void createBroadcast(BroadcastReq broadcastReq) {
+    public String createBroadcast(BroadcastReq broadcastReq) {
         if (broadcastService.getPreparedBroadcastByUserId(broadcastReq.getUserId())) {
             //TODO: 에러 코드 정의
             throw new RuntimeException("최대 생성 갯수 제한 초과!!");
@@ -122,19 +132,14 @@ public class BroadcastViewService {
 
         broadcastService.insertBroadcast(broadcast);
 
-        questionService.insertQuestionList(
-                broadcastReq.getQuestionList().stream().map(questionReq -> {
-                    Question question = new Question();
-                    question.setAnswerNo(questionReq.getAnswerNo());
-                    question.setCategory(questionReq.getCategory());
-                    question.setQuestionProp(questionReq.getQuestionProp());
-                    question.setStep(questionReq.getStep());
-                    question.setBroadcastId(broadcast.getId());
-                    question.setUserId(broadcastReq.getUserId());
-                    return question;
-                }).collect(Collectors.toList()));
+        log.debug("questionList : {}", broadcastReq);
+        log.debug("questionList : {}", broadcastReq.getQuestionList());
+        List<Question> questionList = convertQuestionList(broadcastReq.getQuestionList(), broadcast);
+        questionService.insertQuestionList(questionList);
 
         fcmService.sendCreateBroadcastNotice(broadcast);
+
+        return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
     public void sendAnswer(SendAnswerReq sendAnswerReq) {
@@ -339,5 +344,22 @@ public class BroadcastViewService {
             return true;
         }
         return false;
+    }
+
+    private List<Question> convertQuestionList(List<QuestionReq> questionReqList, Broadcast broadcast) {
+        List<Question> questionList = Lists.newArrayList();
+        for (int i = 0 ; i < questionReqList.size(); ++i) {
+            Question question = new Question();
+            question.setAnswerNo(questionReqList.get(i).getAnswerNo());
+            question.setCategory(questionReqList.get(i).getCategory());
+            question.setQuestionProp(questionReqList.get(i).getQuestionProp());
+            question.setStep(i+1);
+            question.setBroadcastId(broadcast.getId());
+            question.setUserId(broadcast.getUserId());
+
+            questionList.add(question);
+        }
+
+        return questionList;
     }
 }
