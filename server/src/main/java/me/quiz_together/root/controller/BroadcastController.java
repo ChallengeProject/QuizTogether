@@ -70,9 +70,8 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/updateBroadcast")
-    public ResultContainer<Void> updateBroadcast(@RequestBody @Valid BroadcastUpdateReq broadcastUpdateReq) {
-        broadcastViewService.updateBroadcast(broadcastUpdateReq);
-        return new ResultContainer<>();
+    public ResultContainer<String> updateBroadcast(@RequestBody @Valid BroadcastUpdateReq broadcastUpdateReq) {
+        return new ResultContainer<>(broadcastViewService.updateBroadcast(broadcastUpdateReq));
     }
 
     @PostMapping("/broadcast/sendAnswer")
