@@ -11,8 +11,6 @@ public class QuestionReq {
     @NotNull
     private Integer answerNo;
     @NotNull
-    private Integer step;
-    @NotNull
     private QuestionProp questionProp;
     @NotNull
     private CategoryType category;

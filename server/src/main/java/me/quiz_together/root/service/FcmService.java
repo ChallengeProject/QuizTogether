@@ -185,8 +185,8 @@ public class FcmService {
         return fcmResponse;
     }
 
-    public FcmResponse sendCreateBroadcastNotice(Broadcast broadcast) {
-        String to = generateTopics(broadcast.getId(), HashIdType.BROADCAST_ID);
+    public FcmResponse sendStartBroadcastNotice(Broadcast broadcast) {
+        String to = String.format("%s%s", TO_PREFIX, "quiztogether");
 
         NoticeMessage noticeMessage = NoticeMessage.builder()
                                                    .title(broadcast.getTitle())

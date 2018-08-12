@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
@@ -15,11 +17,13 @@ import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
+import me.quiz_together.root.model.request.broadcast.DeleteBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
+import me.quiz_together.root.model.request.question.QuestionReq;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
@@ -32,6 +36,8 @@ import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.service.FcmService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
+import me.quiz_together.root.support.HashIdUtils;
+import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Slf4j
 @Service
@@ -80,7 +86,9 @@ public class BroadcastViewService {
                                      .build();
     }
 
-    public int updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
+    public String updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
+        //TODO: 권한 체크 필요
+
         Broadcast broadcast = new Broadcast();
         broadcast.setId(broadcastUpdateReq.getBroadcastId());
         broadcast.setDescription(broadcastUpdateReq.getDescription());
@@ -93,21 +101,16 @@ public class BroadcastViewService {
         broadcast.setWinnerMessage(broadcastUpdateReq.getWinnerMessage());
 
         int result = broadcastService.updateBroadcast(broadcast);
-        questionService.updateQuestionListByQuestionId(
-                broadcastUpdateReq.getQuestionList().stream().map(questionView -> {
-                    Question question = new Question();
-                    question.setId(questionView.getQuestionId());
-                    question.setAnswerNo(questionView.getAnswerNo());
-                    question.setCategory(questionView.getCategory());
-                    question.setQuestionProp(questionView.getQuestionProp());
-                    question.setStep(questionView.getStep());
+        if (result == 0) {
+            throw new RuntimeException("broadcast update fail");
+        }
+        List<Question> questionList = convertQuestionList(broadcastUpdateReq.getQuestionList());
+        questionService.updateQuestionListByQuestionId(questionList);
 
-                    return question;
-                }).collect(Collectors.toList()));
-        return result;
+        return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
-    public void createBroadcast(BroadcastReq broadcastReq) {
+    public String createBroadcast(BroadcastReq broadcastReq) {
         if (broadcastService.getPreparedBroadcastByUserId(broadcastReq.getUserId())) {
             //TODO: 에러 코드 정의
             throw new RuntimeException("최대 생성 갯수 제한 초과!!");
@@ -117,24 +120,22 @@ public class BroadcastViewService {
             //TODO : 에러 코드 정의
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
+        // TODO : questionList size가 0보다 커야 함
+        if (Objects.isNull(broadcastReq.getQuestionList()) || broadcastReq.getQuestionList().size() == 0) {
+            throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
+        }
         // scheduledTime이 null이면 즉시 시작
         Broadcast broadcast = convertBroadcast(broadcastReq);
 
         broadcastService.insertBroadcast(broadcast);
 
-        questionService.insertQuestionList(
-                broadcastReq.getQuestionList().stream().map(questionReq -> {
-                    Question question = new Question();
-                    question.setAnswerNo(questionReq.getAnswerNo());
-                    question.setCategory(questionReq.getCategory());
-                    question.setQuestionProp(questionReq.getQuestionProp());
-                    question.setStep(questionReq.getStep());
-                    question.setBroadcastId(broadcast.getId());
-                    question.setUserId(broadcastReq.getUserId());
-                    return question;
-                }).collect(Collectors.toList()));
+        log.debug("questionList : {}", broadcastReq);
+        log.debug("questionList : {}", broadcastReq.getQuestionList());
+        List<Question> questionList = convertQuestionList(broadcastReq.getQuestionList(), broadcast);
+        questionService.insertQuestionList(questionList);
 
-        fcmService.sendCreateBroadcastNotice(broadcast);
+
+        return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
     public void sendAnswer(SendAnswerReq sendAnswerReq) {
@@ -173,14 +174,20 @@ public class BroadcastViewService {
     }
 
     public StartBroadcastView startBroadcast(StartBroadcastReq startBroadcastReq) {
-        // stream 등록
-        // chat 생성
-        // 팬들?에게 push 발송
+        // TODO:stream 등록
+        // TODO:chat 생성
         // 해당 방송자인지 권한 체크
         checkPermissionBroadcast(startBroadcastReq.getBroadcastId(), startBroadcastReq.getUserId());
         // 방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.WATING, startBroadcastReq.getBroadcastId());
-        return new StartBroadcastView();
+
+        // TODO:팬들에게 push 발송 현재 전체 발송
+        Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastReq.getBroadcastId());
+        fcmService.sendStartBroadcastNotice(broadcast);
+
+        return StartBroadcastView.builder()
+                                 .broadcastView(buildBroadcastView(broadcast))
+                                 .build();
     }
 
     public void endBroadcast(EndBroadcastReq endBroadcastReq) {
@@ -257,6 +264,11 @@ public class BroadcastViewService {
                                                updateBroadcastStatusReq.getBroadcastId());
     }
 
+    public void deleteBroadcast(DeleteBroadcastReq deleteBroadcastReq) {
+        checkPermissionBroadcast(deleteBroadcastReq.getBroadcastId(), deleteBroadcastReq.getUserId());
+        broadcastService.deleteBroadcastById(deleteBroadcastReq.getBroadcastId());
+    }
+
     public QuestionView buildQuestionView(Question question) {
         return QuestionView.builder()
                            .answerNo(question.getAnswerNo())
@@ -267,18 +279,8 @@ public class BroadcastViewService {
     }
 
     private BroadcastView buildBroadcastView(Broadcast broadcast) {
-        return BroadcastView.builder()
-                            .broadcastId(broadcast.getId())
-                            .broadcastStatus(broadcast.getBroadcastStatus())
-                            .description(broadcast.getDescription())
-                            .giftDescription(broadcast.getGiftDescription())
-                            .giftType(broadcast.getGiftType())
-                            .prize(broadcast.getPrize())
-                            .questionCount(broadcast.getQuestionCount())
-                            .scheduledTime(broadcast.getScheduledTime())
-                            .title(broadcast.getTitle())
-                            .winnerMessage(broadcast.getWinnerMessage())
-                            .build();
+        User user = userService.getUserById(broadcast.getUserId());
+        return buildBroadcastView(broadcast, user);
     }
 
     private List<BroadcastView> buildBroadcastViewList(List<Broadcast> broadcastList) {
@@ -302,6 +304,7 @@ public class BroadcastViewService {
                             .giftType(broadcast.getGiftType())
                             .broadcastStatus(broadcast.getBroadcastStatus())
                             .description(broadcast.getDescription())
+                            .questionCount(broadcast.getQuestionCount())
                             .userInfoView(UserInfoView.builder()
                                                       .userId(user.getId())
                                                       .name(user.getName())
@@ -339,5 +342,38 @@ public class BroadcastViewService {
             return true;
         }
         return false;
+    }
+
+    private List<Question> convertQuestionList(List<QuestionReq> questionReqList, Broadcast broadcast) {
+        List<Question> questionList = Lists.newArrayList();
+        for (int i = 0 ; i < questionReqList.size(); ++i) {
+            Question question = new Question();
+            question.setAnswerNo(questionReqList.get(i).getAnswerNo());
+            question.setCategory(questionReqList.get(i).getCategory());
+            question.setQuestionProp(questionReqList.get(i).getQuestionProp());
+            question.setStep(i+1);
+            question.setBroadcastId(broadcast.getId());
+            question.setUserId(broadcast.getUserId());
+
+            questionList.add(question);
+        }
+
+        return questionList;
+    }
+
+    private List<Question> convertQuestionList(List<QuestionView> questionReqList) {
+        List<Question> questionList = Lists.newArrayList();
+        for (int i = 0 ; i < questionReqList.size(); ++i) {
+            Question question = new Question();
+            question.setId(questionReqList.get(i).getQuestionId());
+            question.setAnswerNo(questionReqList.get(i).getAnswerNo());
+            question.setCategory(questionReqList.get(i).getCategory());
+            question.setQuestionProp(questionReqList.get(i).getQuestionProp());
+            question.setStep(i+1);
+
+            questionList.add(question);
+        }
+
+        return questionList;
     }
 }

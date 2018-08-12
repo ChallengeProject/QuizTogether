@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import me.quiz_together.root.model.request.broadcast.BroadcastReq;
 import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
+import me.quiz_together.root.model.request.broadcast.DeleteBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
 import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
@@ -70,9 +71,8 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/updateBroadcast")
-    public ResultContainer<Void> updateBroadcast(@RequestBody @Valid BroadcastUpdateReq broadcastUpdateReq) {
-        broadcastViewService.updateBroadcast(broadcastUpdateReq);
-        return new ResultContainer<>();
+    public ResultContainer<String> updateBroadcast(@RequestBody @Valid BroadcastUpdateReq broadcastUpdateReq) {
+        return new ResultContainer<>(broadcastViewService.updateBroadcast(broadcastUpdateReq));
     }
 
     @PostMapping("/broadcast/sendAnswer")
@@ -82,9 +82,8 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/createBroadcast")
-    public ResultContainer<Void> createBroadcast(@RequestBody @Valid BroadcastReq broadcastReq) {
-        broadcastViewService.createBroadcast(broadcastReq);
-        return new ResultContainer<>();
+    public ResultContainer<String> createBroadcast(@RequestBody @Valid BroadcastReq broadcastReq) {
+        return new ResultContainer<>(broadcastViewService.createBroadcast(broadcastReq));
     }
 
     @PostMapping("/broadcast/endBroadcast")
@@ -95,13 +94,18 @@ public class BroadcastController implements ApiController {
 
     @PostMapping("/broadcast/startBroadcast")
     public ResultContainer<StartBroadcastView> startBroadcast(@RequestBody @Valid StartBroadcastReq startBroadcastReq) {
-        broadcastViewService.startBroadcast(startBroadcastReq);
-        return new ResultContainer<>(new StartBroadcastView());
+        return new ResultContainer<>(broadcastViewService.startBroadcast(startBroadcastReq));
     }
 
     @PostMapping("/broadcast/leaveBroadcast")
     public ResultContainer<Void> leaveBroadcast(@RequestBody @Valid LeaveBroadcastReq leaveBroadcastReq) {
         broadcastViewService.leaveBroadcast(leaveBroadcastReq);
+        return new ResultContainer<>();
+    }
+
+    @PostMapping("/broadcast/deleteBroadcast")
+    public ResultContainer<Void> deleteBroadcast(@RequestBody @Valid DeleteBroadcastReq deleteBroadcastReq) {
+        broadcastViewService.deleteBroadcast(deleteBroadcastReq);
         return new ResultContainer<>();
     }
 
