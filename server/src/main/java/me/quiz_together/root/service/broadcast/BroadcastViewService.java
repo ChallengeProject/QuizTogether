@@ -178,9 +178,6 @@ public class BroadcastViewService {
         // TODO:chat 생성
         // 해당 방송자인지 권한 체크
         checkPermissionBroadcast(startBroadcastReq.getBroadcastId(), startBroadcastReq.getUserId());
-        // 방송 상태 변경
-        broadcastService.updateBroadcastStatus(BroadcastStatus.WATING, startBroadcastReq.getBroadcastId());
-
         // TODO:팬들에게 push 발송 현재 전체 발송
         Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastReq.getBroadcastId());
         fcmService.sendStartBroadcastNotice(broadcast);

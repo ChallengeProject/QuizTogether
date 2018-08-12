@@ -107,6 +107,7 @@ public class BroadcastRedisRepository {
     }
 
     public Long getCurrentBroadcastStep(long broadcastId) {
+        // 해당 key에 들어가 있는 value의 갯수
         return integerRedisTemplate.opsForSet().size(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
     }
 
