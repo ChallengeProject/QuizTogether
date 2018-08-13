@@ -79,7 +79,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         if (isAdmin) return
 
-        Log.i(TAG, "pickAnswer >> $num")
         pickNum = num
         setAnswerClickable(false)
         presenter.sendAnswer(curQuizStep, pickNum)
@@ -116,18 +115,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         rlNextStep.setOnClickListener { v ->
 
-            Log.i(TAG, "rlNextStep")
-
             if (!isAdmin) return@setOnClickListener
-            Log.i(TAG, "rlNextStep2")
-
             rlNextStep.isClickable = false
 
             if (quizBefStatus == QuizStatus.ANSWERING) {
 
-
-                Log.i(TAG, "lastQuestionNum")
-                Log.i(TAG, lastQuestionNum.toString())
                 if (lastQuestionNum == curQuizStep)
                     presenter.openWinners()
                 else
@@ -150,9 +142,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         val activityRootView = activity!!.getWindow().getDecorView().findViewById<View>(android.R.id.content)
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener({
             val heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight()
-//            Log.i(TAG,activityRootView.getRootView().getHeight().toString()) // 2960
-//            Log.i(TAG,activityRootView.getHeight().toString()) // 2672 > 1619
-//            Log.i(TAG,heightDiff.toString()) // 1341 > 288
+//            activityRootView.getRootView().getHeight().toString() // 2960
+//            TAG,activityRootView.getHeight().toString() // 2672 > 1619
+//            TAG,heightDiff.toString() // 1341 > 288
             if (heightDiff > activityRootView.getRootView().getHeight() / 6) {
 
                 if (isOpenKbd === false) {
@@ -381,9 +373,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
         val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
         val pick3Cnt = answerMsg.questionStatistics.get("3") ?: 0
-
-        Log.i(TAG, "showAnswerView : ${pick1Cnt} ${pick2Cnt} ${pick3Cnt}")
-
         val sumPick = (pick1Cnt + pick2Cnt + pick3Cnt).toDouble()
 
         rcpbController.apply {
@@ -444,12 +433,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         val users = mutableListOf<Pair<String, String>>()
 
-        //        //TODO this is dummy data for check ui
-        users.add(Pair("강우진", "김지원"))
-        users.add(Pair("서상은", "안세연"))
-        users.add(Pair("정동환", "김남양"))
-        users.add(Pair("서양주", ""))
-
         var tmpStr: String? = null
 
         winnersMsg.userName.forEach {
@@ -461,13 +444,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             }
         }
 
+        if (winnersMsg.userName.size % 2 != 0) users.add(Pair(tmpStr!!, ""))
 
-        Log.i(TAG, "tmpStr ${tmpStr}")
-
-        if (winnersMsg.userName.size % 2 != 0) {
-            Log.i(TAG, "users.size")
-            users.add(Pair(tmpStr!!, ""))
-        }
 
         if (users.size == 0) return;
 
@@ -493,7 +471,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     // for showQuestionView
     val pickEnd: () -> Any = {
 
-        Log.i(TAG, "pickEnd")
 
         if (!isAdmin && pickNum == CAN_PICK)
             pickAnswer(0)
@@ -521,8 +498,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     fun startTimer(doWhen5Sec: (() -> Any)?, doWhen10Sec: (() -> Any)?, doWhen15Sec: (() -> Any)?) {
 
-        Log.i(TAG, "startTimer start")
-
         disposer1 = Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
@@ -539,12 +514,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     companion object {
-        //        private val IS_ADMIN = "IS_ADMIN"
         fun newInstance(isAdmin_: Boolean) = QuizingFragment().apply {
-            // TODO need to remove
             isAdmin = isAdmin_
-//            lastQuestionNum = lastQuestionNum_
-//            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
         }
     }
 
@@ -575,9 +546,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                             quizStatus == QuizStatus.ENDING
                 }
                 .subscribe {
-
-                    Log.i(TAG, "showAdminMsg - ${msg}")
-
                     llNotice.visibility = View.VISIBLE
                 }
     }

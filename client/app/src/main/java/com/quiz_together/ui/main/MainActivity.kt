@@ -82,25 +82,14 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        Log.i(TAG, "main on reumse")
-
         // get broadcast from firebase for start broadcast
         var broadcastId = intent.getStringExtra(BROADCAST_ID)
         var userId = intent.getStringExtra(USER_ID)
 
-        Log.i(TAG, "$broadcastId $userId 111")
-
         broadcastId?.run {
 
-            Log.i(TAG, "broadcastId?.run")
-            Log.i(TAG, "$broadcastId $userId 222")
-
-
-            //            var isAdmin = (userId == SC.USER_ID)
             val intent = Intent(applicationContext, QuizingActivity::class.java)
             intent.putExtra(QuizingActivity.BROADCAST_ID, this)
-            //TODO need to remove
-//            intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
             if (userId != SC.USER_ID)
                 intent.putExtra(QuizingActivity.IS_ADMIN, false)
             else
