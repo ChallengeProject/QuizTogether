@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.quiz_together.R
+import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.main.event.EventFragment
 import com.quiz_together.ui.main.home.HomeFragment
 import com.quiz_together.ui.main.profile.ProfileFragment
@@ -68,12 +69,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initListener(){
+
+        ibCreate.setOnClickListener {
+            val intent = Intent(applicationContext, CreateActivity::class.java)
+            startActivity(intent)
+        }
+
+        ibSetting.setOnClickListener {
+            Log.i(TAG,"ibSetting.setOnClickListener")
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         replace(R.id.fl_content, homeFragment)
         initToolbar()
+        initListener()
         bnv.disableShiftMode()
         bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 

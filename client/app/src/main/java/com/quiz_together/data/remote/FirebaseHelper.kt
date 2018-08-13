@@ -16,6 +16,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.quiz_together.R
+import com.quiz_together.data.model.PushType
 import com.quiz_together.ui.main.MainActivity
 
 
@@ -26,7 +27,7 @@ class FirebaseHelper : FirebaseMessagingService() {
     override fun onNewToken(newToken: String?) {
         super.onNewToken(newToken)
 
-        Log.i(TAG,newToken)
+        Log.i(TAG,"newToken : $newToken")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -50,9 +51,8 @@ class FirebaseHelper : FirebaseMessagingService() {
             }
 
             Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.toString())
-            //TODO chcek enum value
-            Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.get("pushType").asString)
-            if (gsObj.get("pushType").asString == "NOTICE_MESSAGE") {//PushType.NOTICE_MESSAGE.name) {
+
+            if (gsObj.get("pushType").asString == PushType.NOTICE_MESSAGE.name) {
 
                 sendNotification("QX : 실시간 퀴즈쇼", gsObj.get("title").asString,
                         gsObj.get("broadcastId").asString, gsObj.get("userId").asString)
@@ -104,7 +104,6 @@ class FirebaseHelper : FirebaseMessagingService() {
     companion object {
         const val FMC_IN_QUIZING = "FMC_IN_QUIZING"
         const val FMC_ACTION = "FMC_ACTION"
-        const val FIREBASE_KEY_FOR_EVERYONE = "quiztogether"
 
     }
 

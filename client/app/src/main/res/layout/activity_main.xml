@@ -9,11 +9,89 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
+            android:id="@+id/cvToolbar"
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent">
-        </android.support.v7.widget.Toolbar>
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:visibility="gone"
+                    android:id="@+id/ibBack"
+                    android:layout_width="16dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icc_backbt" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="19dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icc_logo_small_deep_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="퀴즈 홈"
+                        android:textColor="@color/black"
+                        android:textSize="28dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layoutDirection="rtl">
+
+
+                    <ImageButton
+                        android:id="@+id/ibSetting"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="15dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icc_setting" />
+
+                    <ImageButton
+                        android:id="@+id/ibCreate"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="15dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icc_add" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
