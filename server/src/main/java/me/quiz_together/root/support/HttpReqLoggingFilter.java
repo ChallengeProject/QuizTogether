@@ -1,4 +1,4 @@
-package me.quiz_together.root.support.interceptor;
+package me.quiz_together.root.support;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -15,12 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.extern.slf4j.Slf4j;
-import me.quiz_together.root.support.HttpServletRequestDumpUtils;
 import me.quiz_together.root.support.security.SecurityUtils;
 
 @Slf4j
 @Component
-public class HttpReqLoggingInterceptor extends OncePerRequestFilter {
+public class HttpReqLoggingFilter extends OncePerRequestFilter {
 
     private static final  String LOG_FORMAT = "%s|%s|%s|%s|%s|%s|%s|%s";
     private static final String SUCC = "SUCC";
@@ -32,11 +31,12 @@ public class HttpReqLoggingInterceptor extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        beforeReqeust(request);
+        beforeRequest(request);
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             log.error("unhandledException", e);
+            response.setStatus(500);
         } finally {
             afterRequest(request, response);
         }
@@ -49,7 +49,7 @@ public class HttpReqLoggingInterceptor extends OncePerRequestFilter {
         return String.format("%s", SecurityUtils.encryptSHA256(Long.toString(currentTimeMillis)).substring(0,10));
     }
 
-    private void beforeReqeust(HttpServletRequest request) {
+    private void beforeRequest(HttpServletRequest request) {
         startTime.set(System.currentTimeMillis());
         requestId.set(request.getRemoteAddr() + ":" + System.nanoTime());
 
@@ -60,6 +60,7 @@ public class HttpReqLoggingInterceptor extends OncePerRequestFilter {
 
     /* Sucess or Failure, Status Code, Request Id, Request End Time, API, API Param, Response Data, Lang, Region, Client IP, Processing Time */
     private void afterRequest(HttpServletRequest request, HttpServletResponse response) {
+        //TODO : 실패시에도 200으로 내려오는 경우 발생
         String success = SUCC;
         int statusCode = response.getStatus();
         if (statusCode != 200) {
