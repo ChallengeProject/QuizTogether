@@ -169,8 +169,8 @@ public class FcmService {
         checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
         //방송 상태 validation
         //TODO 강제종료 기능 추가시엔 해당 기능 검토 필요
-        Broadcast broadcast = broadcastService.getBroadcastById(endBroadcastReq.getBroadcastId());
-        validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.COMPLETED, broadcast.getId());
+//        Broadcast broadcast = broadcastService.getBroadcastById(endBroadcastReq.getBroadcastId());
+//        validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.COMPLETED, broadcast.getId());
 
         String to = generateTopics(endBroadcastReq.getBroadcastId(), HashIdType.BROADCAST_ID);
 
