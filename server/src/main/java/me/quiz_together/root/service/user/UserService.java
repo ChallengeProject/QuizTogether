@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
-import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserIdRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
@@ -65,8 +65,9 @@ public class UserService {
         return userRepository.deleteUserById(id);
     }
 
-    public User login(UserIdReq userIdReq) {
-        return userRepository.login(userIdReq.getUserId());
+    public User login(UserIdRequest userIdRequest) {
+        //TODO : userID가 없는 유저가 있을 수 있음
+        return userRepository.login(userIdRequest.getUserId());
     }
 
     public void findUserByName(String name) {

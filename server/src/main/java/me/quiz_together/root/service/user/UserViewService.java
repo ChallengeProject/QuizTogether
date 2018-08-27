@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserIdRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
@@ -15,8 +15,8 @@ public class UserViewService {
     @Autowired
     private UserService userService;
 
-    public UserInfoView login(UserIdReq userIdReq) {
-        User user = userService.login(userIdReq);
+    public UserInfoView login(UserIdRequest userIdRequest) {
+        User user = userService.login(userIdRequest);
 
         return UserInfoView.builder()
                            .userId(user.getId())
@@ -44,8 +44,8 @@ public class UserViewService {
                            .build();
     }
 
-    public void deleteUserById(UserIdReq userIdReq) {
-        userService.deleteUserById(userIdReq.getUserId());
+    public void deleteUserById(UserIdRequest userIdRequest) {
+        userService.deleteUserById(userIdRequest.getUserId());
     }
 
     public void updateUserProfile(long userId, MultipartFile profileImage) {

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.firebase.FcmResponse;
 import me.quiz_together.root.model.firebase.PushType;
-import me.quiz_together.root.model.request.firebase.ChatMessageReq;
-import me.quiz_together.root.model.request.firebase.OpenAnswerReq;
-import me.quiz_together.root.model.request.firebase.OpenQuestionReq;
-import me.quiz_together.root.model.request.firebase.OpenWinnersReq;
+import me.quiz_together.root.model.request.firebase.ChatMessageRequest;
+import me.quiz_together.root.model.request.firebase.OpenAnswerRequest;
+import me.quiz_together.root.model.request.firebase.OpenQuestionRequest;
+import me.quiz_together.root.model.request.firebase.OpenWinnersRequest;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.FcmService;
 
@@ -24,32 +24,32 @@ public class FireBaseController implements ApiController {
     private FcmService fcmService;
 
     @PostMapping("/firebase/openAnswer")
-    public ResultContainer<FcmResponse> openAnswer(@RequestBody @Valid OpenAnswerReq openAnswerReq) {
-        log.debug("openAnswerReq : {}", openAnswerReq.toString());
-        return new ResultContainer<>(fcmService.sendAnswer(openAnswerReq));
+    public ResultContainer<FcmResponse> openAnswer(@RequestBody @Valid OpenAnswerRequest openAnswerRequest) {
+        log.debug("openAnswerRequest : {}", openAnswerRequest.toString());
+        return new ResultContainer<>(fcmService.sendAnswer(openAnswerRequest));
     }
 
     @PostMapping("/firebase/openQuestion")
-    public ResultContainer<FcmResponse> openQuestion(@RequestBody @Valid OpenQuestionReq openQuestionReq) {
-        log.debug("openQuestionReq : {}", openQuestionReq.toString());
-        return new ResultContainer<>(fcmService.sendQuestion(openQuestionReq));
+    public ResultContainer<FcmResponse> openQuestion(@RequestBody @Valid OpenQuestionRequest openQuestionRequest) {
+        log.debug("openQuestionRequest : {}", openQuestionRequest.toString());
+        return new ResultContainer<>(fcmService.sendQuestion(openQuestionRequest));
     }
 
     @PostMapping("/firebase/openWinners")
-    public ResultContainer<FcmResponse> openWinners(@RequestBody @Valid OpenWinnersReq openWinnersReq) {
-        log.debug("openWinnersReq : {}", openWinnersReq.toString());
+    public ResultContainer<FcmResponse> openWinners(@RequestBody @Valid OpenWinnersRequest openWinnersRequest) {
+        log.debug("openWinnersRequest : {}", openWinnersRequest.toString());
 
-        return new ResultContainer<>(fcmService.sendWinners(openWinnersReq));
+        return new ResultContainer<>(fcmService.sendWinners(openWinnersRequest));
     }
 
     @PostMapping("/firebase/sendChatMessage")
-    public ResultContainer<FcmResponse> sendChatMessage(@RequestBody @Valid ChatMessageReq chatMessageReq) {
-        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageReq, PushType.CHAT_MESSAGE));
+    public ResultContainer<FcmResponse> sendChatMessage(@RequestBody @Valid ChatMessageRequest chatMessageRequest) {
+        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageRequest, PushType.CHAT_MESSAGE));
     }
 
     @PostMapping("/firebase/sendAdminChatMessage")
-    public ResultContainer<FcmResponse> sendAdminChatMessage(@RequestBody @Valid ChatMessageReq chatMessageReq) {
-        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageReq, PushType.ADMIN_MESSAGE));
+    public ResultContainer<FcmResponse> sendAdminChatMessage(@RequestBody @Valid ChatMessageRequest chatMessageRequest) {
+        return new ResultContainer<>(fcmService.sendChatMessage(chatMessageRequest, PushType.ADMIN_MESSAGE));
     }
 
 }

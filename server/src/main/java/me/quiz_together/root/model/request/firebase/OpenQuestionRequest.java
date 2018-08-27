@@ -1,4 +1,4 @@
-package me.quiz_together.root.model.request.broadcast;
+package me.quiz_together.root.model.request.firebase;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,13 +8,15 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class DeleteBroadcastReq {
+public class OpenQuestionRequest {
     @NotNull
-    @ApiModelProperty(dataType = "java.lang.String")
-    @HashUserId
-    private Long userId;
+    private Integer step;
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashBroadcastId
     private Long broadcastId;
+    @NotNull
+    @ApiModelProperty(dataType = "java.lang.String")
+    @HashUserId
+    private Long userId;
 }

@@ -7,15 +7,15 @@ import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import me.quiz_together.root.model.broadcast.GiftType;
-import me.quiz_together.root.model.request.question.QuestionReq;
-import me.quiz_together.root.support.hashid.HashUserId;
+import me.quiz_together.root.model.response.question.QuestionView;
+import me.quiz_together.root.support.hashid.HashBroadcastId;
 
 @Data
-public class BroadcastReq {
+public class BroadcastUpdateRequest {
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
-    @HashUserId
-    private Long userId;
+    @HashBroadcastId
+    private Long broadcastId;
     @NotNull
     private String title;
     @NotNull
@@ -30,6 +30,5 @@ public class BroadcastReq {
     @NotNull
     private String winnerMessage;
     @NotNull
-    private List<QuestionReq> questionList;
+    private List<QuestionView> questionList;
 }
-

@@ -1,4 +1,4 @@
-package me.quiz_together.root.model.request.firebase;
+package me.quiz_together.root.model.request.broadcast;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,15 +8,17 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class OpenAnswerReq {
+public class SendAnswerRequest {
+    @NotNull
+    private Integer step;
+    @NotNull
+    @ApiModelProperty(dataType = "java.lang.String")
+    @HashUserId
+    private Long userId;
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashBroadcastId
     private Long broadcastId;
     @NotNull
-    @ApiModelProperty(dataType = "java.lang.String")
-    @HashUserId
-    private Long userId;
-    private int step;
-
+    private Integer answerNo;
 }
