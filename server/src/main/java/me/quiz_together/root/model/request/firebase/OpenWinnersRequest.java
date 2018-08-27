@@ -8,9 +8,7 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class OpenQuestionReq {
-    @NotNull
-    private Integer step;
+public class OpenWinnersRequest {
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashBroadcastId

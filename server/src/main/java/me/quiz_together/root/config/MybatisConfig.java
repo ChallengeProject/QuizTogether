@@ -22,6 +22,7 @@ import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.question.QuestionProp;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
+import me.quiz_together.root.model.user.UserFollower;
 import me.quiz_together.root.model.user.UserStatus;
 import me.quiz_together.root.support.typehandler.DateLongTypeHandler;
 import me.quiz_together.root.support.typehandler.QuestionPropTypeHandler;
@@ -58,6 +59,7 @@ public class MybatisConfig {
         typeAliasRegistry.registerAlias("UserDevice", UserDevice.class);
         typeAliasRegistry.registerAlias("Broadcast", Broadcast.class);
         typeAliasRegistry.registerAlias("Question", Question.class);
+        typeAliasRegistry.registerAlias("UserFollower", UserFollower.class);
 
         //typeHandler
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();

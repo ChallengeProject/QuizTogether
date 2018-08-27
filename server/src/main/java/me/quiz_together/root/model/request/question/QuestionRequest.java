@@ -7,7 +7,7 @@ import me.quiz_together.root.model.question.CategoryType;
 import me.quiz_together.root.model.question.QuestionProp;
 
 @Data
-public class QuestionReq {
+public class QuestionRequest {
     @NotNull
     private Integer answerNo;
     @NotNull

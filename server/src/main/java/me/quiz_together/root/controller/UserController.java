@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiImplicitParam;
-import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserIdRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
@@ -34,15 +34,15 @@ public class UserController implements ApiController {
     }
 
     @PostMapping("/user/deleteUserById")
-    public ResultContainer<Void> deleteUserById(@RequestBody @Valid UserIdReq userIdReq) {
-        userViewService.deleteUserById(userIdReq);
+    public ResultContainer<Void> deleteUserById(@RequestBody @Valid UserIdRequest userIdRequest) {
+        userViewService.deleteUserById(userIdRequest);
 
         return new ResultContainer<>();
     }
 
     @PostMapping("/user/login")
-    public ResultContainer<UserInfoView> login(@RequestBody @Valid UserIdReq userIdReq) {
-        return new ResultContainer<>(userViewService.login(userIdReq));
+    public ResultContainer<UserInfoView> login(@RequestBody @Valid UserIdRequest userIdRequest) {
+        return new ResultContainer<>(userViewService.login(userIdRequest));
     }
 
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",

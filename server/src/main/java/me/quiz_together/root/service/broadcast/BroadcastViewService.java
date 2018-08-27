@@ -15,15 +15,15 @@ import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
-import me.quiz_together.root.model.request.broadcast.BroadcastReq;
-import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
-import me.quiz_together.root.model.request.broadcast.DeleteBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
-import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
-import me.quiz_together.root.model.request.question.QuestionReq;
+import me.quiz_together.root.model.request.broadcast.BroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.BroadcastUpdateRequest;
+import me.quiz_together.root.model.request.broadcast.DeleteBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.EndBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.LeaveBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.SendAnswerRequest;
+import me.quiz_together.root.model.request.broadcast.StartBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusRequest;
+import me.quiz_together.root.model.request.question.QuestionRequest;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.BroadcastView;
 import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
@@ -86,100 +86,100 @@ public class BroadcastViewService {
                                      .build();
     }
 
-    public String updateBroadcast(BroadcastUpdateReq broadcastUpdateReq) {
+    public String updateBroadcast(BroadcastUpdateRequest broadcastUpdateRequest) {
         //TODO: 권한 체크 필요
 
         Broadcast broadcast = new Broadcast();
-        broadcast.setId(broadcastUpdateReq.getBroadcastId());
-        broadcast.setDescription(broadcastUpdateReq.getDescription());
-        broadcast.setGiftDescription(broadcastUpdateReq.getGiftDescription());
-        broadcast.setGiftType(broadcastUpdateReq.getGiftType());
-        broadcast.setPrize(broadcastUpdateReq.getPrize());
-        broadcast.setQuestionCount(broadcastUpdateReq.getQuestionList().size());
-        broadcast.setScheduledTime(broadcastUpdateReq.getScheduledTime());
-        broadcast.setTitle(broadcastUpdateReq.getTitle());
-        broadcast.setWinnerMessage(broadcastUpdateReq.getWinnerMessage());
+        broadcast.setId(broadcastUpdateRequest.getBroadcastId());
+        broadcast.setDescription(broadcastUpdateRequest.getDescription());
+        broadcast.setGiftDescription(broadcastUpdateRequest.getGiftDescription());
+        broadcast.setGiftType(broadcastUpdateRequest.getGiftType());
+        broadcast.setPrize(broadcastUpdateRequest.getPrize());
+        broadcast.setQuestionCount(broadcastUpdateRequest.getQuestionList().size());
+        broadcast.setScheduledTime(broadcastUpdateRequest.getScheduledTime());
+        broadcast.setTitle(broadcastUpdateRequest.getTitle());
+        broadcast.setWinnerMessage(broadcastUpdateRequest.getWinnerMessage());
 
         int result = broadcastService.updateBroadcast(broadcast);
         if (result == 0) {
             throw new RuntimeException("broadcast update fail");
         }
-        List<Question> questionList = convertQuestionList(broadcastUpdateReq.getQuestionList());
+        List<Question> questionList = convertQuestionList(broadcastUpdateRequest.getQuestionList());
         questionService.updateQuestionListByQuestionId(questionList);
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
-    public String createBroadcast(BroadcastReq broadcastReq) {
-        if (broadcastService.getPreparedBroadcastByUserId(broadcastReq.getUserId())) {
+    public String createBroadcast(BroadcastRequest broadcastRequest) {
+        if (broadcastService.getPreparedBroadcastByUserId(broadcastRequest.getUserId())) {
             //TODO: 에러 코드 정의
             throw new RuntimeException("최대 생성 갯수 제한 초과!!");
         }
         // 예약 시간은 현재시간 보다 커야 한다.
-        if (!isImmediateStartBroadcast(broadcastReq.getScheduledTime()) && broadcastReq.getScheduledTime() >= System.currentTimeMillis()) {
+        if (!isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) && broadcastRequest.getScheduledTime() >= System.currentTimeMillis()) {
             //TODO : 에러 코드 정의
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
         // TODO : questionList size가 0보다 커야 함
-        if (Objects.isNull(broadcastReq.getQuestionList()) || broadcastReq.getQuestionList().size() == 0) {
+        if (Objects.isNull(broadcastRequest.getQuestionList()) || broadcastRequest.getQuestionList().size() == 0) {
             throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
         }
         // scheduledTime이 null이면 즉시 시작
-        Broadcast broadcast = convertBroadcast(broadcastReq);
+        Broadcast broadcast = convertBroadcast(broadcastRequest);
 
         broadcastService.insertBroadcast(broadcast);
 
-        log.debug("questionList : {}", broadcastReq);
-        log.debug("questionList : {}", broadcastReq.getQuestionList());
-        List<Question> questionList = convertQuestionList(broadcastReq.getQuestionList(), broadcast);
+        log.debug("questionList : {}", broadcastRequest);
+        log.debug("questionList : {}", broadcastRequest.getQuestionList());
+        List<Question> questionList = convertQuestionList(broadcastRequest.getQuestionList(), broadcast);
         questionService.insertQuestionList(questionList);
 
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
-    public void sendAnswer(SendAnswerReq sendAnswerReq) {
+    public void sendAnswer(SendAnswerRequest sendAnswerRequest) {
         // 해당 방송의 스탭이랑 맞는지 확인
         //validate
-        if (!broadcastService.isCurrentBroadcastStep(sendAnswerReq.getBroadcastId(), sendAnswerReq.getStep())) {
+        if (!broadcastService.isCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep())) {
             throw new IllegalArgumentException("현재의 broadcast의 step이랑 다릅니다.");
         }
         // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
-        PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerReq.getBroadcastId(),
-                                                                           sendAnswerReq.getUserId(),
-                                                                           sendAnswerReq.getStep());
+        PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
+                                                                           sendAnswerRequest.getUserId(),
+                                                                           sendAnswerRequest.getStep());
         if (PlayUserStatus.PLAY != playUserStatus) {
             // 이전 정답자가 아니기 때문에 필터링
             log.debug("이전 정답자가 아니기 때문에 필터링 되었습니다. userId : {}, broadcastId : {}, step : {}",
-                      sendAnswerReq.getUserId(), sendAnswerReq.getBroadcastId(), sendAnswerReq.getStep());
+                      sendAnswerRequest.getUserId(), sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
             return;
         }
         // 1. 유저 정답 등록
-        broadcastService.insertPlayUserAnswer(sendAnswerReq.getBroadcastId(), sendAnswerReq.getUserId(),
-                                              sendAnswerReq.getStep(), sendAnswerReq.getAnswerNo());
+        broadcastService.insertPlayUserAnswer(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
+                                              sendAnswerRequest.getStep(), sendAnswerRequest.getAnswerNo());
         // 2. 유저가 낸 답이 정답인지 확인
-        Question question = questionService.getQuestionByBroadcastIdAndStep(sendAnswerReq.getBroadcastId(),
-                                                                            sendAnswerReq.getStep());
+        Question question = questionService.getQuestionByBroadcastIdAndStep(sendAnswerRequest.getBroadcastId(),
+                                                                            sendAnswerRequest.getStep());
 
-        if (question.getAnswerNo() == sendAnswerReq.getAnswerNo()) {
+        if (question.getAnswerNo() == sendAnswerRequest.getAnswerNo()) {
             //정답
             //오답시에는 playUser 에 등록되지 않음
-            broadcastService.insertPlayUser(sendAnswerReq.getBroadcastId(), sendAnswerReq.getUserId(),
-                                            sendAnswerReq.getStep());
+            broadcastService.insertPlayUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
+                                            sendAnswerRequest.getStep());
         }
         // 3. 퀴즈 통계 등록
-        broadcastService.incrementQuestionAnswerStat(sendAnswerReq.getBroadcastId(), sendAnswerReq.getStep(),
-                                                     sendAnswerReq.getAnswerNo());
+        broadcastService.incrementQuestionAnswerStat(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep(),
+                                                     sendAnswerRequest.getAnswerNo());
 
     }
 
-    public StartBroadcastView startBroadcast(StartBroadcastReq startBroadcastReq) {
+    public StartBroadcastView startBroadcast(StartBroadcastRequest startBroadcastRequest) {
         // TODO:stream 등록
         // TODO:chat 생성
         // 해당 방송자인지 권한 체크
-        checkPermissionBroadcast(startBroadcastReq.getBroadcastId(), startBroadcastReq.getUserId());
+        checkPermissionBroadcast(startBroadcastRequest.getBroadcastId(), startBroadcastRequest.getUserId());
         // TODO:팬들에게 push 발송 현재 전체 발송
-        Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastReq.getBroadcastId());
+        Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastRequest.getBroadcastId());
         fcmService.sendStartBroadcastNotice(broadcast);
 
         return StartBroadcastView.builder()
@@ -187,12 +187,12 @@ public class BroadcastViewService {
                                  .build();
     }
 
-    public void endBroadcast(EndBroadcastReq endBroadcastReq) {
-        checkPermissionBroadcast(endBroadcastReq.getBroadcastId(), endBroadcastReq.getUserId());
+    public void endBroadcast(EndBroadcastRequest endBroadcastRequest) {
+        checkPermissionBroadcast(endBroadcastRequest.getBroadcastId(), endBroadcastRequest.getUserId());
         // 방송 상태 변경
-        broadcastService.updateBroadcastStatus(BroadcastStatus.COMPLETED, endBroadcastReq.getBroadcastId());
+        broadcastService.updateBroadcastStatus(BroadcastStatus.COMPLETED, endBroadcastRequest.getBroadcastId());
         // 방송 종료 push 발송
-        fcmService.sendEndBroadcast(endBroadcastReq);
+        fcmService.sendEndBroadcast(endBroadcastRequest);
         // stream 업데이트
         // chat close
         // redis에서 해당 방송 관련된 정보 지우기
@@ -245,25 +245,25 @@ public class BroadcastViewService {
         return joinBroadcastView;
     }
 
-    public void leaveBroadcast(LeaveBroadcastReq leaveBroadcastReq) {
-        if (Objects.isNull(userService.getUserById(leaveBroadcastReq.getUserId()))) {
+    public void leaveBroadcast(LeaveBroadcastRequest leaveBroadcastRequest) {
+        if (Objects.isNull(userService.getUserById(leaveBroadcastRequest.getUserId()))) {
             throw new NotFoundUserException();
         }
-        broadcastService.deleteViewer(leaveBroadcastReq.getBroadcastId(), leaveBroadcastReq.getUserId());
+        broadcastService.deleteViewer(leaveBroadcastRequest.getBroadcastId(), leaveBroadcastRequest.getUserId());
     }
 
-    public void updateBroadcastStatus(UpdateBroadcastStatusReq updateBroadcastStatusReq) {
+    public void updateBroadcastStatus(UpdateBroadcastStatusRequest updateBroadcastStatusRequest) {
         // TODO : broadcast status 검증 필요
-        checkPermissionBroadcast(updateBroadcastStatusReq.getBroadcastId(),
-                                 updateBroadcastStatusReq.getUserId());
+        checkPermissionBroadcast(updateBroadcastStatusRequest.getBroadcastId(),
+                                 updateBroadcastStatusRequest.getUserId());
 
-        broadcastService.updateBroadcastStatus(updateBroadcastStatusReq.getBroadcastStatus(),
-                                               updateBroadcastStatusReq.getBroadcastId());
+        broadcastService.updateBroadcastStatus(updateBroadcastStatusRequest.getBroadcastStatus(),
+                                               updateBroadcastStatusRequest.getBroadcastId());
     }
 
-    public void deleteBroadcast(DeleteBroadcastReq deleteBroadcastReq) {
-        checkPermissionBroadcast(deleteBroadcastReq.getBroadcastId(), deleteBroadcastReq.getUserId());
-        broadcastService.deleteBroadcastById(deleteBroadcastReq.getBroadcastId());
+    public void deleteBroadcast(DeleteBroadcastRequest deleteBroadcastRequest) {
+        checkPermissionBroadcast(deleteBroadcastRequest.getBroadcastId(), deleteBroadcastRequest.getUserId());
+        broadcastService.deleteBroadcastById(deleteBroadcastRequest.getBroadcastId());
     }
 
     public QuestionView buildQuestionView(Question question) {
@@ -309,18 +309,19 @@ public class BroadcastViewService {
                             .build();
     }
 
-    private Broadcast convertBroadcast(BroadcastReq broadcastReq) {
+    private Broadcast convertBroadcast(BroadcastRequest broadcastRequest) {
         Broadcast broadcast = new Broadcast();
-        broadcast.setUserId(broadcastReq.getUserId());
-        broadcast.setTitle(broadcastReq.getTitle());
-        broadcast.setDescription(broadcastReq.getDescription());
-        broadcast.setBroadcastStatus(isImmediateStartBroadcast(broadcastReq.getScheduledTime()) ? BroadcastStatus.WATING : BroadcastStatus.CREATED);
-        broadcast.setPrize(broadcastReq.getPrize());
-        broadcast.setGiftDescription(broadcastReq.getGiftDescription());
-        broadcast.setGiftType(broadcastReq.getGiftType());
-        broadcast.setWinnerMessage(broadcastReq.getWinnerMessage());
-        broadcast.setQuestionCount(broadcastReq.getQuestionList().size());
-        broadcast.setScheduledTime(isImmediateStartBroadcast(broadcastReq.getScheduledTime()) ? System.currentTimeMillis() : broadcastReq.getScheduledTime());
+        broadcast.setUserId(broadcastRequest.getUserId());
+        broadcast.setTitle(broadcastRequest.getTitle());
+        broadcast.setDescription(broadcastRequest.getDescription());
+        broadcast.setBroadcastStatus(isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) ? BroadcastStatus.WATING : BroadcastStatus.CREATED);
+        broadcast.setPrize(broadcastRequest.getPrize());
+        broadcast.setGiftDescription(broadcastRequest.getGiftDescription());
+        broadcast.setGiftType(broadcastRequest.getGiftType());
+        broadcast.setWinnerMessage(broadcastRequest.getWinnerMessage());
+        broadcast.setQuestionCount(broadcastRequest.getQuestionList().size());
+        broadcast.setScheduledTime(isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) ? System.currentTimeMillis() : broadcastRequest
+                .getScheduledTime());
 
         return broadcast;
     }
@@ -341,13 +342,13 @@ public class BroadcastViewService {
         return false;
     }
 
-    private List<Question> convertQuestionList(List<QuestionReq> questionReqList, Broadcast broadcast) {
+    private List<Question> convertQuestionList(List<QuestionRequest> questionRequestList, Broadcast broadcast) {
         List<Question> questionList = Lists.newArrayList();
-        for (int i = 0 ; i < questionReqList.size(); ++i) {
+        for (int i = 0; i < questionRequestList.size(); ++i) {
             Question question = new Question();
-            question.setAnswerNo(questionReqList.get(i).getAnswerNo());
-            question.setCategory(questionReqList.get(i).getCategory());
-            question.setQuestionProp(questionReqList.get(i).getQuestionProp());
+            question.setAnswerNo(questionRequestList.get(i).getAnswerNo());
+            question.setCategory(questionRequestList.get(i).getCategory());
+            question.setQuestionProp(questionRequestList.get(i).getQuestionProp());
             question.setStep(i+1);
             question.setBroadcastId(broadcast.getId());
             question.setUserId(broadcast.getUserId());
