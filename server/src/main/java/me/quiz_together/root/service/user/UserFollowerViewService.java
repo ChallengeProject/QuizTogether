@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.request.user.UserFollowerRequest;
 import me.quiz_together.root.model.response.user.UserFollowerView;
+import me.quiz_together.root.model.response.user.UserFollowerViewList;
 import me.quiz_together.root.model.user.UserFollower;
 
 @Slf4j
@@ -21,7 +22,9 @@ public class UserFollowerViewService {
     public void insertFollower(UserFollowerRequest userFollowerRequest) {
         if (userFollowerRequest.getUserId().equals(userFollowerRequest.getFollower())) {
             // TODO : error code 정의
-            throw new RuntimeException("userId : " + userFollowerRequest.getUserId() + " follower : " + userFollowerRequest.getFollower());
+            throw new RuntimeException(
+                    "userId : " + userFollowerRequest.getUserId() + " follower : " + userFollowerRequest
+                            .getFollower());
         }
         userFollowerService.insertFollower(convertUserFollower(userFollowerRequest));
     }
@@ -30,10 +33,19 @@ public class UserFollowerViewService {
         userFollowerService.deleteFollower(convertUserFollower(userFollowerRequest));
     }
 
-    public List<UserFollowerView> getFollowerListByUserId(Long userId) {
+    public UserFollowerViewList getFollowerListByUserId(Long userId) {
         List<UserFollower> userFollowerList = userFollowerService.getFollowerListByUserId(userId);
 
-        return userFollowerList.stream().map(UserFollowerView::new).collect(Collectors.toList());
+        return UserFollowerViewList.builder()
+                                   .userFollowerList(userFollowerList.stream().map(this::buildUserFollowerView)
+                                                                     .collect(Collectors.toList()))
+                                   .build();
+    }
+
+    private UserFollowerView buildUserFollowerView(UserFollower userFollower) {
+        return UserFollowerView.builder()
+                               .follower(userFollower.getFollower())
+                               .build();
     }
 
     private UserFollower convertUserFollower(UserFollowerRequest userFollowerRequest) {

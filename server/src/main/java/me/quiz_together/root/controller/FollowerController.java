@@ -1,7 +1,5 @@
 package me.quiz_together.root.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiImplicitParam;
 import lombok.AllArgsConstructor;
 import me.quiz_together.root.model.request.user.UserFollowerRequest;
-import me.quiz_together.root.model.response.user.UserFollowerView;
+import me.quiz_together.root.model.response.user.UserFollowerViewList;
 import me.quiz_together.root.model.supoort.ResultContainer;
 import me.quiz_together.root.service.user.UserFollowerViewService;
 import me.quiz_together.root.support.hashid.HashUserId;
@@ -41,7 +39,7 @@ public class FollowerController implements ApiController {
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
     @GetMapping("/follower/getFollowerList")
-    public ResultContainer<List<UserFollowerView>> getFollowerList(@RequestParam @NotNull @HashUserId Long userId) {
+    public ResultContainer<UserFollowerViewList> getFollowerList(@RequestParam @NotNull @HashUserId Long userId) {
 
         return new ResultContainer<>(userFollowerViewService.getFollowerListByUserId(userId));
     }

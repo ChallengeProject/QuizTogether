@@ -14,11 +14,7 @@ public class UserFollowerRepository {
     private UserFollowerMapper userFollowerMapper;
 
     public void insertFollower(UserFollower userFollower) {
-        try {
-            userFollowerMapper.insertFollower(userFollower);
-        } catch (Exception e) {
-
-        }
+        userFollowerMapper.insertFollower(userFollower);
     }
 
     public void deleteFollower(UserFollower userFollower) {
