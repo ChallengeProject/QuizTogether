@@ -37,8 +37,6 @@ class QuizingAdapter(val context:Context) : BaseAdapter() {
         val tvName2 = retView.findViewById<TextView>(R.id.tvName2)
         val ivProfile2 = retView.findViewById<ImageView>(R.id.ivProfile2)
 
-        Log.i(TAG,"position : ${position}")
-
         tvName1.text = this.users.get(position).first
         tvName2.text = this.users.get(position).second
 
