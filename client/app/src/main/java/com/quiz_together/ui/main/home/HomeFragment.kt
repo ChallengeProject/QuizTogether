@@ -4,13 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.*
 import com.quiz_together.R
 import com.quiz_together.data.Repository
+import com.quiz_together.data.model.Follower
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.quizing.QuizingActivity
+import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
 import kotlinx.android.synthetic.main.fragm_home.*
 
@@ -25,10 +28,20 @@ class HomeFragment : Fragment(), HomeContract.View {
     private val broadcastAdapter: BroadcastAdapter by lazy {
         BroadcastAdapter(activity?.applicationContext, {
 
-            val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
-            intent.putExtra(QuizingActivity.BROADCAST_ID, it.broadcastId)
-            intent.putExtra(QuizingActivity.IS_ADMIN, if (it.roomOutputType == RoomOutputType.RESERVATION) true else false)
-            startActivity(intent)
+            cbType , broadcast ->
+
+            if(cbType.value == BroadcastAdapter.CallBackType.ROOM.value) {
+                val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
+                intent.putExtra(QuizingActivity.BROADCAST_ID, broadcast.broadcastId)
+                intent.putExtra(QuizingActivity.IS_ADMIN, if (broadcast.roomOutputType == RoomOutputType.RESERVATION) true else false)
+                startActivity(intent)
+
+            } else if(cbType.value == BroadcastAdapter.CallBackType.FOLLOW.value) {
+                presenter.insertFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
+            } else if(cbType.value == BroadcastAdapter.CallBackType.UNFOLLOW.value) {
+                presenter.deleteFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
+            }
+
 
         })
     }
@@ -50,7 +63,6 @@ class HomeFragment : Fragment(), HomeContract.View {
         return true
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater?.inflate(R.layout.fragm_home, container, false)
 
@@ -66,12 +78,9 @@ class HomeFragment : Fragment(), HomeContract.View {
         }
 
         ssrl.run{
-
             scrollUpChild = rvBroadcasts
             setOnRefreshListener { presenter.loadBroadcasts() }
-
         }
-
     }
 
     override fun onResume() {
@@ -94,12 +103,29 @@ class HomeFragment : Fragment(), HomeContract.View {
         ssrl.isRefreshing = active
     }
 
-    override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList) {
-        broadcastAdapter.run {
+    override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList,followList: List<Follower>) {
 
+        Log.i(TAG,followList.toString())
+
+        val followSet = followList.map {
+            it.follower
+        }.toSet()
+
+        Log.i(TAG,followSet.toString())
+
+
+        broadcastAdapter.run {
             clearItem()
             resGetPagingBroadcastList.myBroadcastList?.forEach { addItem(it, RoomOutputType.RESERVATION) }
-            resGetPagingBroadcastList.currentBroadcastList?.forEach { addItem(it, RoomOutputType.DEFAULT) }
+
+            resGetPagingBroadcastList.currentBroadcastList?.forEach {
+
+                if ( followSet.contains(it.userInfoView!!.userId) )
+                    addItem(it, RoomOutputType.FOLLOW)
+                else
+                    addItem(it, RoomOutputType.DEFAULT)
+            }
+
             notifyDataSetChang()
         }
     }

@@ -52,10 +52,10 @@ class FirebaseHelper : FirebaseMessagingService() {
 
             Log.i(TAG, "## GET MSG FROM FIREBASE >> " + gsObj.toString())
 
-            if (gsObj.get("pushType").asString == PushType.NOTICE_MESSAGE.name) {
+            if (gsObj.get("pushType").asString == PushType.FOLLOW_BROADCAST.name) {
 
                 sendNotification("QX : 실시간 퀴즈쇼", gsObj.get("title").asString,
-                        gsObj.get("broadcastId").asString, gsObj.get("userId").asString)
+                        gsObj.get("broadcastId").asString, gsObj.get("userName").asString,gsObj.get("description").asString)
                 return
             }
 
@@ -65,7 +65,11 @@ class FirebaseHelper : FirebaseMessagingService() {
         }
     }
 
-    fun sendNotification(title: String, msg: String, broadcastId: String, userId: String) {
+    fun sendNotification(title: String, msg: String, broadcastId: String, userName: String , description: String) {
+
+        Log.i(TAG,"sendNotification : $title $msg $broadcastId $userName $description")
+
+
 
         var channelId = "channel"
         var channelName = "Channel Name"
@@ -81,10 +85,17 @@ class FirebaseHelper : FirebaseMessagingService() {
         val builder = NotificationCompat.Builder(applicationContext, channelId)
         val notificationIntent = Intent(applicationContext, MainActivity::class.java)
         notificationIntent.putExtra(MainActivity.BROADCAST_ID, broadcastId)
-        notificationIntent.putExtra(MainActivity.USER_ID, userId)
+        notificationIntent.putExtra(MainActivity.USER_ID, userName)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val requestID = System.currentTimeMillis().toInt()
         val pendingIntent = PendingIntent.getActivity(applicationContext, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+
+
+        /////
+
+
 
         builder.setContentTitle(title)
                 .setContentText(msg)

@@ -39,7 +39,8 @@ enum class PushType(val value:Int) {
     ANSWER_MESSAGE(400),
     WINNERS_MESSAGE(500),
     NOTICE_MESSAGE(600),
-    END_MESSAGE(700)
+    END_MESSAGE(700),
+    FOLLOW_BROADCAST(800)
 }
 
 enum class RoomOutputType(value: Int) {

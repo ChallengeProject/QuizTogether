@@ -70,6 +70,8 @@ dependencies {
     // for facebook login
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
+    // for naver login
+    implementation project(path: ':naveridlogin_android_sdk_4.2.0')
 }
 
 apply plugin: 'com.google.gms.google-services'

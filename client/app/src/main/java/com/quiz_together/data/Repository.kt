@@ -116,6 +116,18 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.openAnswer(broadcastId,userId,step,cb)
     }
 
+    override fun insertFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.insertFollower(userId, followerId, cb)
+    }
+
+    override fun deleteFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.deleteFollower(userId, followerId, cb)
+    }
+
+    override fun getFollowerList(userId: String, cb: ApiHelper.GetFollowerListCallback) {
+        apiHelper.getFollowerList(userId, cb)
+    }
+
 
     override fun hasSavedQuiz(): Boolean = preferenceHelper.hasSavedQuiz()
     override fun saveQuiz(incompletedBroadcast: Broadcast) = preferenceHelper.saveQuiz(incompletedBroadcast)
