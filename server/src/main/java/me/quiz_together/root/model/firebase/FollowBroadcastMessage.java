@@ -7,11 +7,12 @@ import me.quiz_together.root.support.hashid.HashUserId;
 
 @Builder
 @Getter
-public class NoticeMessage {
+public class FollowBroadcastMessage {
     @HashBroadcastId
     private Long broadcastId;
     @HashUserId
-    private Long userId;
     private String title;
+    private String description;
+    private String userName;
     private PushType pushType;
 }

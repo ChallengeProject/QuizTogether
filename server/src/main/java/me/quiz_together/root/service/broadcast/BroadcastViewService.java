@@ -125,6 +125,7 @@ public class BroadcastViewService {
             throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
         }
         // scheduledTime이 null이면 즉시 시작
+        boolean InstantStart = broadcastRequest.getScheduledTime() == null;
         Broadcast broadcast = convertBroadcast(broadcastRequest);
 
         broadcastService.insertBroadcast(broadcast);
@@ -134,6 +135,9 @@ public class BroadcastViewService {
         List<Question> questionList = convertQuestionList(broadcastRequest.getQuestionList(), broadcast);
         questionService.insertQuestionList(questionList);
 
+        if (InstantStart) {
+            fcmService.sendFollowBroadcast(broadcast);
+        }
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
@@ -180,7 +184,7 @@ public class BroadcastViewService {
         checkPermissionBroadcast(startBroadcastRequest.getBroadcastId(), startBroadcastRequest.getUserId());
         // TODO:팬들에게 push 발송 현재 전체 발송
         Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastRequest.getBroadcastId());
-        fcmService.sendStartBroadcastNotice(broadcast);
+        fcmService.sendFollowBroadcast(broadcast);
 
         return StartBroadcastView.builder()
                                  .broadcastView(buildBroadcastView(broadcast))

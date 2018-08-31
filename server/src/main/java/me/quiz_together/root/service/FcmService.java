@@ -16,7 +16,7 @@ import me.quiz_together.root.model.firebase.ChatMessage;
 import me.quiz_together.root.model.firebase.EndBroadcastMessage;
 import me.quiz_together.root.model.firebase.FcmContainer;
 import me.quiz_together.root.model.firebase.FcmResponse;
-import me.quiz_together.root.model.firebase.NoticeMessage;
+import me.quiz_together.root.model.firebase.FollowBroadcastMessage;
 import me.quiz_together.root.model.firebase.PushType;
 import me.quiz_together.root.model.firebase.QuestionMessage;
 import me.quiz_together.root.model.firebase.WinnersMessage;
@@ -186,20 +186,24 @@ public class FcmService {
         return fcmResponse;
     }
 
-    public FcmResponse sendStartBroadcastNotice(Broadcast broadcast) {
-        String to = String.format("%s%s", TO_PREFIX, "quiztogether");
+    public FcmResponse sendFollowBroadcast(Broadcast broadcast) {
+        String to = String.format("%s%s", TO_PREFIX, HashIdUtils.encryptId(HashIdType.USER_ID, broadcast.getUserId()));
 
         validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.WATING, broadcast.getId());
 
-        NoticeMessage noticeMessage = NoticeMessage.builder()
-                                                   .title(broadcast.getTitle())
-                                                   .broadcastId(broadcast.getId())
-                                                   .userId(broadcast.getUserId())
-                                                   .pushType(PushType.NOTICE_MESSAGE)
-                                                   .build();
+        User user = userService.getUserById(broadcast.getUserId());
 
-        log.debug("NoticeMessage {}", noticeMessage);
-        FcmContainer<NoticeMessage> fcmContainer = new FcmContainer<>(to, noticeMessage);
+        FollowBroadcastMessage followBroadcastMessage = FollowBroadcastMessage.builder()
+                                                                              .title(broadcast.getTitle())
+                                                                              .broadcastId(broadcast.getId())
+                                                                              .title(broadcast.getTitle())
+                                                                              .description(broadcast.getDescription())
+                                                                              .userName(user.getName())
+                                                                              .pushType(PushType.FOLLOW_BROADCAST)
+                                                                              .build();
+
+        log.debug("FollowBroadcastMessage {}", followBroadcastMessage);
+        FcmContainer<FollowBroadcastMessage> fcmContainer = new FcmContainer<>(to, followBroadcastMessage);
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
         return fcmResponse;
