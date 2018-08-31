@@ -36,6 +36,8 @@ public class UserViewService {
     }
 
     public UserInfoView insertUser(UserSignupRequest userSignupRequest) {
+        userService.findUserByName(userSignupRequest.getName());
+
         User user = userService.insertUser(userSignupRequest);
 
         return UserInfoView.builder()

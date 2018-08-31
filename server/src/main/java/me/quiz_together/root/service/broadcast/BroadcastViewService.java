@@ -116,7 +116,7 @@ public class BroadcastViewService {
             throw new RuntimeException("최대 생성 갯수 제한 초과!!");
         }
         // 예약 시간은 현재시간 보다 커야 한다.
-        if (!isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) && broadcastRequest.getScheduledTime() >= System.currentTimeMillis()) {
+        if (!isInstantStartBroadcast(broadcastRequest.getScheduledTime()) && broadcastRequest.getScheduledTime() >= System.currentTimeMillis()) {
             //TODO : 에러 코드 정의
             throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
         }
@@ -125,7 +125,7 @@ public class BroadcastViewService {
             throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
         }
         // scheduledTime이 null이면 즉시 시작
-        boolean InstantStart = broadcastRequest.getScheduledTime() == null;
+        boolean InstantStart = isInstantStartBroadcast(broadcastRequest.getScheduledTime());
         Broadcast broadcast = convertBroadcast(broadcastRequest);
 
         broadcastService.insertBroadcast(broadcast);
@@ -318,13 +318,14 @@ public class BroadcastViewService {
         broadcast.setUserId(broadcastRequest.getUserId());
         broadcast.setTitle(broadcastRequest.getTitle());
         broadcast.setDescription(broadcastRequest.getDescription());
-        broadcast.setBroadcastStatus(isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) ? BroadcastStatus.WATING : BroadcastStatus.CREATED);
+        broadcast.setBroadcastStatus(BroadcastStatus.CREATED);
         broadcast.setPrize(broadcastRequest.getPrize());
         broadcast.setGiftDescription(broadcastRequest.getGiftDescription());
         broadcast.setGiftType(broadcastRequest.getGiftType());
         broadcast.setWinnerMessage(broadcastRequest.getWinnerMessage());
         broadcast.setQuestionCount(broadcastRequest.getQuestionList().size());
-        broadcast.setScheduledTime(isImmediateStartBroadcast(broadcastRequest.getScheduledTime()) ? System.currentTimeMillis() : broadcastRequest
+        broadcast.setScheduledTime(
+                isInstantStartBroadcast(broadcastRequest.getScheduledTime()) ? System.currentTimeMillis() : broadcastRequest
                 .getScheduledTime());
 
         return broadcast;
@@ -339,7 +340,7 @@ public class BroadcastViewService {
         }
     }
 
-    private boolean isImmediateStartBroadcast(Long scheduledTime) {
+    private boolean isInstantStartBroadcast(Long scheduledTime) {
         if (Objects.isNull(scheduledTime)) {
             return true;
         }
