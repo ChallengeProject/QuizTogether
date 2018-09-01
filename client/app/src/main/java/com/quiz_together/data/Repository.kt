@@ -72,6 +72,9 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.endBroadcast(reqEndBroadcast,cb)
     }
 
+    /**
+     * 방입장 할때 호출
+     */
     override fun startBroadcast(reqStartBroadcast: ReqStartBroadcast, cb: ApiHelper.GetBroadcastViewCallback) {
         apiHelper.startBroadcast(reqStartBroadcast,cb)
     }
@@ -108,6 +111,9 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.openWinners(broadcastId,userId,cb)
     }
 
+    /**
+     * 문제 제출 시 호출
+     */
     override fun openQuestion(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
         apiHelper.openQuestion(broadcastId,userId,step,cb)
     }
@@ -129,8 +135,12 @@ object Repository : PreferenceHelper, ApiHelper {
     }
 
 
+
     override fun hasSavedQuiz(): Boolean = preferenceHelper.hasSavedQuiz()
     override fun saveQuiz(incompletedBroadcast: Broadcast) = preferenceHelper.saveQuiz(incompletedBroadcast)
     override fun getSavedQuiz(): Broadcast? = preferenceHelper.getSavedQuiz()
+    override fun getSavedFollowerList(): List<String> = preferenceHelper.getSavedFollowerList()
+    override fun setFollowerList(setStr: Set<String>) = preferenceHelper.setFollowerList(setStr)
+
 
 }

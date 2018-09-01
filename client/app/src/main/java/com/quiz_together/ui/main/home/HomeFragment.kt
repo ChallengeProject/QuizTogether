@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Follower
@@ -25,42 +26,31 @@ class HomeFragment : Fragment(), HomeContract.View {
     override var isActive: Boolean = false
         get() = isAdded
 
+
     private val broadcastAdapter: BroadcastAdapter by lazy {
         BroadcastAdapter(activity?.applicationContext, {
 
             cbType , broadcast ->
 
-            if(cbType.value == BroadcastAdapter.CallBackType.ROOM.value) {
-                val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
-                intent.putExtra(QuizingActivity.BROADCAST_ID, broadcast.broadcastId)
-                intent.putExtra(QuizingActivity.IS_ADMIN, if (broadcast.roomOutputType == RoomOutputType.RESERVATION) true else false)
-                startActivity(intent)
+            when (cbType) {
+                BroadcastAdapter.CallBackType.ROOM -> {
+                    val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
+                    intent.putExtra(QuizingActivity.BROADCAST_ID, broadcast.broadcastId)
+                    intent.putExtra(QuizingActivity.IS_ADMIN, if (broadcast.roomOutputType == RoomOutputType.RESERVATION) true else false)
+                    // TODO Create RESERVED 로 진입할때 처리 RESERVED intent 넣어서
+                    startActivity(intent)
+                }
+                BroadcastAdapter.CallBackType.FOLLOW -> presenter.insertFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
+                BroadcastAdapter.CallBackType.UNFOLLOW -> presenter.deleteFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
+                BroadcastAdapter.CallBackType.LONG_TOUCH -> {
+                    presenter.tmpEndBroadcast(broadcast.broadcastId!!)
+                }
 
-            } else if(cbType.value == BroadcastAdapter.CallBackType.FOLLOW.value) {
-                presenter.insertFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
-            } else if(cbType.value == BroadcastAdapter.CallBackType.UNFOLLOW.value) {
-                presenter.deleteFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
             }
+
 
 
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.frag_home_menu,menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.menu_create -> {
-                val intent = Intent(activity?.applicationContext,CreateActivity::class.java)
-
-                startActivity(intent)
-            }
-        }
-        return true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -125,6 +115,8 @@ class HomeFragment : Fragment(), HomeContract.View {
                 else
                     addItem(it, RoomOutputType.DEFAULT)
             }
+
+            sortPagingList()
 
             notifyDataSetChang()
         }

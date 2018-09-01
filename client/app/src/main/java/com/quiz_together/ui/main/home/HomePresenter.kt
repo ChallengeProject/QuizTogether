@@ -5,12 +5,13 @@ import android.widget.ProgressBar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Follower
+import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ResFollowList
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
-class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:Repository) : HomeContract.Presenter {
+class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository: Repository) : HomeContract.Presenter {
 
     private val TAG = "HomePresenter#$#"
 
@@ -20,34 +21,41 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
     }
 
 
-
     override fun loadBroadcasts() {
-        repository.getFollowerList(SC.USER_ID,object :ApiHelper.GetFollowerListCallback{
-            override fun onFollowerList(followList: ResFollowList) {
 
-                Log.i(TAG,followList.toString())
+        if (repository.isFirstLaunch()) {
+            repository.setIsFirst(false)
+            repository.getFollowerList(SC.USER_ID, object : ApiHelper.GetFollowerListCallback {
+                override fun onFollowerList(followList: ResFollowList) {
 
-                tmpLoadBroadcast(followList.userFollowerList)
-            }
+                    Log.i(TAG, followList.toString())
+                    getPagingListAndProcWithFollowerList(followList.userFollowerList)
+                }
 
-            override fun onDataNotAvailable() {
-                Log.i(TAG,"getFollowerList onDataNotAvailable")
-            }
-        })
+                override fun onDataNotAvailable() {
+                    Log.i(TAG, "getFollowerList onDataNotAvailable")
+                }
+            })
+        } else {
+            getPagingListAndProcWithFollowerList(
+                    repository.getSavedFollowerList()
+                            .map { Follower(it) }
+            )
+        }
+
     }
 
-    //TODO 추후 최초한번만 호출하고 추후에는 로컬로 비교할 수 있게 바꿔야함
-    fun tmpLoadBroadcast(followList: List<Follower>) {
+    fun getPagingListAndProcWithFollowerList(followList: List<Follower>) {
         repository.getPagingBroadcastList(SC.USER_ID, object : ApiHelper.GetPagingBroadcastList {
             override fun onPagingBroadcastListLoaded(resGetPagingBroadcastList: ResGetPagingBroadcastList) {
-                view.run{
+                view.run {
                     if (!isActive) return@run
 
                     Log.i(TAG, resGetPagingBroadcastList.toString())
 
                     setLoadingIndicator(false)
 
-                    showBroadcasts(resGetPagingBroadcastList,followList)
+                    showBroadcasts(resGetPagingBroadcastList, followList)
                 }
             }
 
@@ -55,7 +63,7 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
                 view.run {
                     if (!isActive) return@onDataNotAvailable
 
-                    Log.i(TAG,"onPagingBroadcastListLoaded onDataNotAvailable")
+                    Log.i(TAG, "onPagingBroadcastListLoaded onDataNotAvailable")
                     setLoadingIndicator(false)
                 }
             }
@@ -67,7 +75,13 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
 
     override fun insertFollower(userId: String, followerId: String) {
 
-        repository.insertFollower(userId,followerId, object  : ApiHelper.GetSuccessCallback{
+
+        val tmpFollowList = repository.getSavedFollowerList()
+                .toMutableSet()
+        tmpFollowList.add(followerId)
+        repository.setFollowerList(tmpFollowList)
+
+        repository.insertFollower(userId, followerId, object : ApiHelper.GetSuccessCallback {
             override fun onSuccessLoaded() {
 
                 FirebaseMessaging.getInstance().subscribeToTopic(userId)
@@ -76,13 +90,20 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
             }
 
             override fun onDataNotAvailable() {
-                Log.i(TAG,"insertFollower onDataNotAvailable")
+                Log.i(TAG, "insertFollower onDataNotAvailable")
             }
         })
     }
 
     override fun deleteFollower(userId: String, followerId: String) {
-        repository.deleteFollower(userId,followerId, object  : ApiHelper.GetSuccessCallback{
+
+        val tmpFollowList = repository.getSavedFollowerList()
+                .toMutableSet()
+        tmpFollowList.remove(followerId)
+        repository.setFollowerList(tmpFollowList)
+
+
+        repository.deleteFollower(userId, followerId, object : ApiHelper.GetSuccessCallback {
             override fun onSuccessLoaded() {
                 loadBroadcasts()
 
@@ -90,9 +111,26 @@ class HomePresenter  (val view: HomeFragment,val pb: ProgressBar,val repository:
             }
 
             override fun onDataNotAvailable() {
-                Log.i(TAG,"deleteFollower onDataNotAvailable")
+                Log.i(TAG, "deleteFollower onDataNotAvailable")
             }
         })
+    }
+
+    override fun tmpEndBroadcast(broadcastId: String) {
+
+        repository.endBroadcast(ReqEndBroadcast(broadcastId, SC.USER_ID, "", ""),
+                object : ApiHelper.GetSuccessCallback {
+                    override fun onSuccessLoaded() {
+                        Log.i(TAG, "endBroadcast onSuccessLoaded")
+                        loadBroadcasts()
+                    }
+
+                    override fun onDataNotAvailable() {
+                        Log.i(TAG, "endBroadcast onDataNotAvailable")
+                    }
+
+                })
+
     }
 
 

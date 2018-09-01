@@ -24,5 +24,6 @@ interface HomeContract {
         fun insertFollower(userId:String, followerId:String)
         fun deleteFollower(userId:String, followerId:String)
 
+        fun tmpEndBroadcast(broadcastId: String)
     }
 }

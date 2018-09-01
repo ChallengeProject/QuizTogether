@@ -3,11 +3,14 @@ package com.quiz_together.ui.main.home
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
+import android.telecom.Call
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.GiftType
+import com.quiz_together.data.model.Question
 import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.util.toStringTemplate
 import kotlinx.android.synthetic.main.item_home_broadcast.view.*
@@ -30,6 +33,11 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
     fun addItem(data: Broadcast, roomOutputType: RoomOutputType) {
         data.roomOutputType = roomOutputType
         list.add(data)
+    }
+
+    fun sortPagingList() {
+        list.
+                sortByDescending { it.roomOutputType }
     }
 
     fun clearItem() = list.clear()
@@ -72,6 +80,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                     cbOnClickLl.invoke(CallBackType.FOLLOW,item)
                 })
 
+                rl.setOnLongClickListener { _ ->  false }
 
             } else if (item.roomOutputType == RoomOutputType.FOLLOW) {
                 ivProfile.borderColor = getResources().getColor(R.color.deepBlue)
@@ -90,6 +99,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                     cbOnClickLl.invoke(CallBackType.UNFOLLOW,item)
                 })
 
+                rl.setOnLongClickListener { _ ->  false }
 
             } else if (item.roomOutputType == RoomOutputType.RESERVATION) {
                 ivProfile.borderColor = getResources().getColor(R.color.shallowDark)
@@ -107,10 +117,11 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                 tvShare.setOnClickListener({ _ -> null
                 })
 
+
+                rl.setOnLongClickListener { _ ->
+                    cbOnClickLl.invoke(CallBackType.LONG_TOUCH,item)
+                    true }
             }
-
-
-
 
             rl.setOnClickListener({ _ ->
                 cbOnClickLl.invoke(CallBackType.ROOM,item)
@@ -119,17 +130,17 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
 
 
 
+
         }
 
     }
 
-    companion object {
-        var aa = 0
-    }
 
     enum class CallBackType(val value:Int) {
         FOLLOW(100),
         UNFOLLOW(150),
-        ROOM(200)
+        ROOM(200),
+        LONG_TOUCH(200),
+
     }
 }

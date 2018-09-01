@@ -14,6 +14,9 @@ class AppPreferenceHelper : PreferenceHelper {
     private val INCOMPLETED_QUIZ = "INCOMPLETED_QUIZ"
     private val HAS_SAVED_QUIZ = "HAS_SAVED_QUIZ"
 
+    private val PFRK_FOLLOW_LIST = "PFRK_FOLLOW_LIST"
+
+
     val mPrefs = App.instance.getSharedPreferences(BuildConfig.PREF_FILE_NAME, Context.MODE_PRIVATE)
 
     override fun isFirstLaunch(): Boolean {
@@ -21,11 +24,11 @@ class AppPreferenceHelper : PreferenceHelper {
     }
 
     override fun setIsFirst(isFirst: Boolean) {
-        mPrefs.edit().putBoolean(PFRK_IS_FIRST_LAUNCH, isFirst).commit()
+        mPrefs.edit().putBoolean(PFRK_IS_FIRST_LAUNCH, isFirst).apply()
     }
 
     override fun setUserId(userId: String) {
-        mPrefs.edit().putString(PFRK_USER_ID, userId).commit()
+        mPrefs.edit().putString(PFRK_USER_ID, userId).apply()
     }
 
     override fun getUserId(): String? = mPrefs.getString(PFRK_USER_ID, null)
@@ -45,6 +48,15 @@ class AppPreferenceHelper : PreferenceHelper {
         mPrefs.edit().putBoolean(HAS_SAVED_QUIZ, false).apply()
         return Gson().fromJson<Broadcast>(json, Broadcast::class.java)
     }
+
+    override fun getSavedFollowerList(): List<String>
+            = mPrefs.getStringSet(PFRK_FOLLOW_LIST, setOf<String>()).toList()
+
+    override fun setFollowerList(setStr : Set<String>) {
+        mPrefs.edit().putStringSet(PFRK_FOLLOW_LIST, setStr).apply()
+    }
+
 }
+
 
 
