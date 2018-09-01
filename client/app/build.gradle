@@ -72,6 +72,10 @@ dependencies {
 
     // for naver login
     implementation project(path: ':naveridlogin_android_sdk_4.2.0')
+
+    // for loading anmation in quizing
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

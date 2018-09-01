@@ -12,6 +12,8 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.text.SimpleDateFormat
 
 val TAG = "ViewExt##"
@@ -63,7 +65,9 @@ fun Long.toStringTemplate() :String {
     return SimpleDateFormat("yyyy. MM. dd. HH시 mm분").format(Date(long))
 }
 
-
+operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
+    add(disposable)
+}
 
 
 
