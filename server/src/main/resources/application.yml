@@ -49,7 +49,7 @@ fcm:
 ---
 
 spring:
-  profiles: dev
+  profiles: real
   datasource:
     url: jdbc:mysql://127.0.0.1:13306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false
     username: root
