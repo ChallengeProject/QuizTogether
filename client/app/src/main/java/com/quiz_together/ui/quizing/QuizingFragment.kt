@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.GridView
 import com.bumptech.glide.Glide
+import com.github.lzyzsd.circleprogress.CircleProgress
 import com.quiz_together.R
 import com.quiz_together.data.model.*
 import com.quiz_together.util.plusAssign
@@ -220,24 +221,33 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         initListeners()
         initQuizCalledByOncreate()
 
+
+
     }
 
     fun setQuizNum(num: Int,gage:Boolean) {
 
         if(gage) {
-            //TODO GAGE ㄱㄱ
+            cpGage.visibility = View.VISIBLE
 
+            compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .take(10)
+                    .subscribe {
+                        val curSec = it.toInt() + 1
+                        cpGage.progress = curSec
+
+                        if(curSec == 10)
+                            cpGage.visibility = View.GONE
+                    }
         }
 
         curQuizStep = num
 
         tvQuizNum.text = "$num"
         tvQuizNum.visibility = View.VISIBLE
-//        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle)) // need to use
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle)) // need to use
 
-        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_deep_blue_circle)) // for test
-
-//        ivIcon.visibility = View.INVISIBLE
     }
 
     fun setIcon(imgId: Int) {
