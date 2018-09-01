@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.request.user.UserIdRequest;
@@ -20,13 +21,12 @@ import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private UserDeviceService userDeviceService;
-    @Autowired
     private AmazonS3Service amazonS3Service;
+    private UserInventoryService userInventoryService;
 
     public User insertUser(UserSignupRequest userSignupRequest) {
         // user 중복 검사
@@ -39,6 +39,7 @@ public class UserService {
         userDevice.setUserId(user.getId());
         userDevice.setPushToken(userSignupRequest.getPushToken());
         userDeviceService.insertUserDevice(userDevice);
+        userInventoryService.insertUserInventory(user.getId());
 
         return user;
     }

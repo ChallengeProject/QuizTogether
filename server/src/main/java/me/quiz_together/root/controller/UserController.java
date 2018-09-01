@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiImplicitParam;
 import me.quiz_together.root.model.request.user.UserIdRequest;
+import me.quiz_together.root.model.request.user.UserReferralRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
@@ -54,6 +55,13 @@ public class UserController implements ApiController {
         return new ResultContainer<>();
     }
 
+    @PostMapping("/user/insertReferralCode")
+    public ResultContainer<Void> insertReferralCode(UserReferralRequest userReferralRequest) {
+        userViewService.insertReferralCode(userReferralRequest);
+        return new ResultContainer<>();
+    }
+
+
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
     @GetMapping("/user/getUserProfile")
@@ -75,4 +83,5 @@ public class UserController implements ApiController {
         userViewService.findUserByName(name);
         return new ResultContainer<>();
     }
+
 }
