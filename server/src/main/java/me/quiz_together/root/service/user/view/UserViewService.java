@@ -4,17 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import me.quiz_together.root.model.request.user.UserIdRequest;
+import me.quiz_together.root.model.request.user.UserReferralRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.service.user.UserReferralService;
 import me.quiz_together.root.service.user.UserService;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserViewService {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserReferralService userReferralService;
+
 
     public UserInfoView login(UserIdRequest userIdRequest) {
         User user = userService.login(userIdRequest);
@@ -37,8 +42,6 @@ public class UserViewService {
     }
 
     public UserInfoView insertUser(UserSignupRequest userSignupRequest) {
-        userService.findUserByName(userSignupRequest.getName());
-
         User user = userService.insertUser(userSignupRequest);
 
         return UserInfoView.builder()
@@ -57,5 +60,9 @@ public class UserViewService {
 
     public void findUserByName(String name) {
         userService.findUserByName(name);
+    }
+
+    public void insertReferralCode(UserReferralRequest userReferralRequest) {
+        userReferralService.insertReferralUser(userReferralRequest.getUserId(), userReferralRequest.getReferralUser());
     }
 }

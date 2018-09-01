@@ -45,8 +45,6 @@ spring:
 
 fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
-server:
-  port: 8081
 
 ---
 
