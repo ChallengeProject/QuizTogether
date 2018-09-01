@@ -1,5 +1,6 @@
 package com.quiz_together.ui.login
 
+import android.app.Activity
 import com.quiz_together.BasePresenter
 import com.quiz_together.BaseView
 
@@ -12,6 +13,8 @@ interface LoginContract {
         fun showLoadingUi()
         fun isCheckSuccess(isSuccess:Boolean)
         fun showFailLoginTxt()
+
+        fun getAct() : Activity
 
     }
 

@@ -33,8 +33,6 @@ class LoadingPresenter(
 
         repository.getUserId()?.let {
 
-            Log.i(TAG,it)
-
             repository.login(it, object :ApiHelper.UserViewCallback {
 
                 override fun onLoginLoaded(respLogin: UserView) {

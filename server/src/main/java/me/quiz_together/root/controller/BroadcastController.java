@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import me.quiz_together.root.model.request.broadcast.BroadcastReq;
-import me.quiz_together.root.model.request.broadcast.BroadcastUpdateReq;
-import me.quiz_together.root.model.request.broadcast.DeleteBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.EndBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.LeaveBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.SendAnswerReq;
-import me.quiz_together.root.model.request.broadcast.StartBroadcastReq;
-import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusReq;
+import me.quiz_together.root.model.request.broadcast.BroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.BroadcastUpdateRequest;
+import me.quiz_together.root.model.request.broadcast.DeleteBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.EndBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.LeaveBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.SendAnswerRequest;
+import me.quiz_together.root.model.request.broadcast.StartBroadcastRequest;
+import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusRequest;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
 import me.quiz_together.root.model.response.broadcast.JoinBroadcastView;
 import me.quiz_together.root.model.response.broadcast.PagingBroadcastListView;
@@ -65,47 +65,47 @@ public class BroadcastController implements ApiController {
     }
 
     @PostMapping("/broadcast/updateBroadcastStatus")
-    public ResultContainer<Void> updateBroadcastStatus(@RequestBody @Valid UpdateBroadcastStatusReq updateBroadcastStatusReq) {
-        broadcastViewService.updateBroadcastStatus(updateBroadcastStatusReq);
+    public ResultContainer<Void> updateBroadcastStatus(@RequestBody @Valid UpdateBroadcastStatusRequest updateBroadcastStatusRequest) {
+        broadcastViewService.updateBroadcastStatus(updateBroadcastStatusRequest);
         return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/updateBroadcast")
-    public ResultContainer<String> updateBroadcast(@RequestBody @Valid BroadcastUpdateReq broadcastUpdateReq) {
-        return new ResultContainer<>(broadcastViewService.updateBroadcast(broadcastUpdateReq));
+    public ResultContainer<String> updateBroadcast(@RequestBody @Valid BroadcastUpdateRequest broadcastUpdateRequest) {
+        return new ResultContainer<>(broadcastViewService.updateBroadcast(broadcastUpdateRequest));
     }
 
     @PostMapping("/broadcast/sendAnswer")
-    public ResultContainer<Void> sendAnswer(@RequestBody @Valid SendAnswerReq sendAnswerReq) {
-        broadcastViewService.sendAnswer(sendAnswerReq);
+    public ResultContainer<Void> sendAnswer(@RequestBody @Valid SendAnswerRequest sendAnswerRequest) {
+        broadcastViewService.sendAnswer(sendAnswerRequest);
         return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/createBroadcast")
-    public ResultContainer<String> createBroadcast(@RequestBody @Valid BroadcastReq broadcastReq) {
-        return new ResultContainer<>(broadcastViewService.createBroadcast(broadcastReq));
+    public ResultContainer<String> createBroadcast(@RequestBody @Valid BroadcastRequest broadcastRequest) {
+        return new ResultContainer<>(broadcastViewService.createBroadcast(broadcastRequest));
     }
 
     @PostMapping("/broadcast/endBroadcast")
-    public ResultContainer<Void> endBroadcast(@RequestBody @Valid EndBroadcastReq endBroadcastReq) {
-        broadcastViewService.endBroadcast(endBroadcastReq);
+    public ResultContainer<Void> endBroadcast(@RequestBody @Valid EndBroadcastRequest endBroadcastRequest) {
+        broadcastViewService.endBroadcast(endBroadcastRequest);
         return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/startBroadcast")
-    public ResultContainer<StartBroadcastView> startBroadcast(@RequestBody @Valid StartBroadcastReq startBroadcastReq) {
-        return new ResultContainer<>(broadcastViewService.startBroadcast(startBroadcastReq));
+    public ResultContainer<StartBroadcastView> startBroadcast(@RequestBody @Valid StartBroadcastRequest startBroadcastRequest) {
+        return new ResultContainer<>(broadcastViewService.startBroadcast(startBroadcastRequest));
     }
 
     @PostMapping("/broadcast/leaveBroadcast")
-    public ResultContainer<Void> leaveBroadcast(@RequestBody @Valid LeaveBroadcastReq leaveBroadcastReq) {
-        broadcastViewService.leaveBroadcast(leaveBroadcastReq);
+    public ResultContainer<Void> leaveBroadcast(@RequestBody @Valid LeaveBroadcastRequest leaveBroadcastRequest) {
+        broadcastViewService.leaveBroadcast(leaveBroadcastRequest);
         return new ResultContainer<>();
     }
 
     @PostMapping("/broadcast/deleteBroadcast")
-    public ResultContainer<Void> deleteBroadcast(@RequestBody @Valid DeleteBroadcastReq deleteBroadcastReq) {
-        broadcastViewService.deleteBroadcast(deleteBroadcastReq);
+    public ResultContainer<Void> deleteBroadcast(@RequestBody @Valid DeleteBroadcastRequest deleteBroadcastRequest) {
+        broadcastViewService.deleteBroadcast(deleteBroadcastRequest);
         return new ResultContainer<>();
     }
 

@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import me.quiz_together.root.exceptions.ConflictUserException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
-import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserIdRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
@@ -20,13 +21,12 @@ import me.quiz_together.root.repository.user.UserRepository;
 import me.quiz_together.root.service.AmazonS3Service;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private UserDeviceService userDeviceService;
-    @Autowired
     private AmazonS3Service amazonS3Service;
+    private UserInventoryService userInventoryService;
 
     public User insertUser(UserSignupRequest userSignupRequest) {
         // user 중복 검사
@@ -39,6 +39,7 @@ public class UserService {
         userDevice.setUserId(user.getId());
         userDevice.setPushToken(userSignupRequest.getPushToken());
         userDeviceService.insertUserDevice(userDevice);
+        userInventoryService.insertUserInventory(user.getId());
 
         return user;
     }
@@ -65,8 +66,9 @@ public class UserService {
         return userRepository.deleteUserById(id);
     }
 
-    public User login(UserIdReq userIdReq) {
-        return userRepository.login(userIdReq.getUserId());
+    public User login(UserIdRequest userIdRequest) {
+        //TODO : userID가 없는 유저가 있을 수 있음
+        return userRepository.login(userIdRequest.getUserId());
     }
 
     public void findUserByName(String name) {

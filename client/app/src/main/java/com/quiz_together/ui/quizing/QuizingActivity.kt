@@ -28,31 +28,10 @@ class QuizingActivity : AppCompatActivity() {
 
         val broadcastId = intent.getStringExtra(BROADCAST_ID)
 
-        //TODO need to remove
         val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
-//        val lastQuestionNum = intent.getIntExtra(LAST_QUESTION_NUM,-1)
-        Log.i(TAG, broadcastId.toString())
-        Log.i(TAG, isAdmin.toString())
-//        Log.i(TAG,lastQuestionNum.toString())
-
-
-        //TODO using dummy [broadcastId] now
-//        val broadcastId = "thisisdummy-asdfasdf"
-//        val broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
-//         val broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
-//         val isAdmin = false
-//         val lastQuestionNum = 12
-
-//       broadcastId = "b50c883a8d7e25eb3d523a3768ae10973" // 3
-//       isAdmin = true
-
-
-
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
-        // TODO need to remove
-//        QuizingFragment.newInstance(isAdmin,lastQuestionNum).also {
         QuizingFragment.newInstance(isAdmin).also {
 
             replaceFragmentInActivity(it, R.id.fl_content)

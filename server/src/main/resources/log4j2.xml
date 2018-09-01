@@ -10,6 +10,7 @@
     <Logger name="springfox.documentation" level="INFO"/>
     <Logger name="org.springframework" level="INFO"/>
     <Logger name="com.zaxxer.hikari" level="INFO"/>
+    <Logger name="org.springframework.data.redis.core" level="INFO"/>
 
     <Root level="DEBUG">
       <AppenderRef ref="CONSOLE" />

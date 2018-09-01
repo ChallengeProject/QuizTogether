@@ -26,16 +26,10 @@ class QuizingPresenter(
 
         registFirbaseSubscribe()
 
-//        TODO need to remove, now using test
-//        return
-
         if (!isAdmin) {
             repository.joinBroadcast(broadcastId, SC.USER_ID, object : ApiHelper.GetJoinBroadcastInfoCallback {
                 override fun onJoinBroadcastInfoLoaded(broadcastJoinInfo: BroadcastJoinInfo) {
                     registFirbaseSubscribe()
-
-                    Log.i(TAG, "broadcastJoinInfo.broadcastView.questionCount.toString()")
-                    Log.i(TAG, broadcastJoinInfo.broadcastView.questionCount.toString())
 
                     view.setQuestionCnt(broadcastJoinInfo.broadcastView.questionCount)
                 }
@@ -48,6 +42,8 @@ class QuizingPresenter(
             })
 
         } else {
+
+
             repository.startBroadcast(ReqStartBroadcast(broadcastId, SC.USER_ID, "", ""), object : ApiHelper.GetBroadcastViewCallback {
                 override fun onBroadcastViewLoaded(resStartBroadcast: ResStartBroadcast) {
                     view.setQuestionCnt(resStartBroadcast.broadcastView.questionCount)
@@ -81,18 +77,12 @@ class QuizingPresenter(
 
     fun onFcmListener(fcmMsg:String ) {
 
-        Log.i(TAG,fcmMsg)
-
-        
         val gsObj = SC.gson.fromJson(fcmMsg,JsonObject::class.java)
 
         when(gsObj.get("pushType").asString) {
             PushType.ADMIN_MESSAGE.name -> view.showAdminMsg(SC.gson.fromJson(fcmMsg, AdminMsg::class.java))
             PushType.ANSWER_MESSAGE.name -> {
-
-                //TODO map to custom
                 view.showAnswerView(SC.gson.fromJson(fcmMsg, AnswerMsg::class.java))
-//                if(isAdmin) updateBroadcastStatus(BroadcastStatus.OPEN_ANSWER)
             }
             PushType.CHAT_MESSAGE.name -> view.showChatMsg(SC.gson.fromJson(fcmMsg, ChatMsg::class.java))
             PushType.END_MESSAGE.name -> {
@@ -175,9 +165,7 @@ class QuizingPresenter(
     override fun updateBroadcastStatus(broadcastStatus: BroadcastStatus) {
 
         Log.i(TAG,"## updateBroadcastStatus ##")
-        Log.i(TAG,"SC.USER_ID : " + SC.USER_ID)
-        Log.i(TAG,"broadcastId : " + broadcastId)
-        Log.i(TAG,"broadcastStatus : " + broadcastStatus)
+        Log.i(TAG,"SC.USER_ID : " + SC.USER_ID + "   broadcastId : " + broadcastId + "   broadcastStatus : " + broadcastStatus)
 
         repository.updateBroadcastStatus(broadcastId,SC.USER_ID,broadcastStatus,
                 object : ApiHelper.GetSuccessCallback{

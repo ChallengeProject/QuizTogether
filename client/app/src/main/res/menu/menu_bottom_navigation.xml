@@ -10,17 +10,11 @@
     <item
         android:id="@+id/menu_bot_nav_2"
         android:checked="false"
-        android:icon="@drawable/vtic_lock"
+        android:icon="@drawable/icc_add_new"
         android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_bot_nav_3"
-        android:checked="false"
-        android:icon="@drawable/vtic_calendar"
-        android:title=""
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menu_bot_nav_4"
         android:checked="false"
         android:icon="@drawable/vtic_profile"
         android:title=""

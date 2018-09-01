@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.GridView
 import com.bumptech.glide.Glide
+import com.github.lzyzsd.circleprogress.CircleProgress
 import com.quiz_together.R
 import com.quiz_together.data.model.*
+import com.quiz_together.util.plusAssign
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
 
@@ -48,9 +52,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-    var disposer1: Disposable? = null
-    var disposer2: Disposable? = null
-
+//    var disposer1: Disposable? = null
+//    var disposer2: Disposable? = null
+    private val compositeDisposable = CompositeDisposable()
 
     var isAdmin = false
     var lastQuestionNum = -1
@@ -71,15 +75,12 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     override fun setLoadingIndicator(active: Boolean) {
         activity?.getWindow()?.setTouchable(active)
-
     }
-
 
     fun pickAnswer(num: Int) {
 
         if (isAdmin) return
 
-        Log.i(TAG, "pickAnswer >> $num")
         pickNum = num
         setAnswerClickable(false)
         presenter.sendAnswer(curQuizStep, pickNum)
@@ -87,7 +88,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         if (pickNum > 0)
             rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100, true)
     }
-
 
     fun initListeners() {
 
@@ -116,18 +116,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         rlNextStep.setOnClickListener { v ->
 
-            Log.i(TAG, "rlNextStep")
-
             if (!isAdmin) return@setOnClickListener
-            Log.i(TAG, "rlNextStep2")
-
             rlNextStep.isClickable = false
 
             if (quizBefStatus == QuizStatus.ANSWERING) {
 
-
-                Log.i(TAG, "lastQuestionNum")
-                Log.i(TAG, lastQuestionNum.toString())
                 if (lastQuestionNum == curQuizStep)
                     presenter.openWinners()
                 else
@@ -150,9 +143,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         val activityRootView = activity!!.getWindow().getDecorView().findViewById<View>(android.R.id.content)
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener({
             val heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight()
-//            Log.i(TAG,activityRootView.getRootView().getHeight().toString()) // 2960
-//            Log.i(TAG,activityRootView.getHeight().toString()) // 2672 > 1619
-//            Log.i(TAG,heightDiff.toString()) // 1341 > 288
+//            activityRootView.getRootView().getHeight().toString() // 2960
+//            TAG,activityRootView.getHeight().toString() // 2672 > 1619
+//            TAG,heightDiff.toString() // 1341 > 288
             if (heightDiff > activityRootView.getRootView().getHeight() / 6) {
 
                 if (isOpenKbd === false) {
@@ -228,16 +221,33 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         initListeners()
         initQuizCalledByOncreate()
 
+
+
     }
 
-    fun setQuizNum(num: Int) {
+    fun setQuizNum(num: Int,gage:Boolean) {
+
+        if(gage) {
+            cpGage.visibility = View.VISIBLE
+
+            compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .take(10)
+                    .subscribe {
+                        val curSec = it.toInt() + 1
+                        cpGage.progress = curSec
+
+                        if(curSec == 10)
+                            cpGage.visibility = View.GONE
+                    }
+        }
 
         curQuizStep = num
 
         tvQuizNum.text = "$num"
         tvQuizNum.visibility = View.VISIBLE
-        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle))
-//        ivIcon.visibility = View.INVISIBLE
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle)) // need to use
+
     }
 
     fun setIcon(imgId: Int) {
@@ -287,7 +297,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
         if (questionNum == ICON_IS_IMG_SATUS) setIcon(imgId)
-        else setQuizNum(questionNum)
+        else setQuizNum(questionNum,true)
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
@@ -376,14 +386,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 imgId = imgRss)
 
         // exception !!
-        if (isAdmin) setQuizNum(answerMsg.step)
+        if (isAdmin) setQuizNum(answerMsg.step,false)
 
         val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
         val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
         val pick3Cnt = answerMsg.questionStatistics.get("3") ?: 0
-
-        Log.i(TAG, "showAnswerView : ${pick1Cnt} ${pick2Cnt} ${pick3Cnt}")
-
         val sumPick = (pick1Cnt + pick2Cnt + pick3Cnt).toDouble()
 
         rcpbController.apply {
@@ -425,7 +432,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         llNotice.visibility = View.VISIBLE
         tvAdminMsg.text = winnersMsg.winnerMessage
 
-        disposer2 = Observable.interval(3, TimeUnit.SECONDS)
+        compositeDisposable += Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (!isOpenKbd)
@@ -444,12 +451,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         val users = mutableListOf<Pair<String, String>>()
 
-        //        //TODO this is dummy data for check ui
-        users.add(Pair("강우진", "김지원"))
-        users.add(Pair("서상은", "안세연"))
-        users.add(Pair("정동환", "김남양"))
-        users.add(Pair("서양주", ""))
-
         var tmpStr: String? = null
 
         winnersMsg.userName.forEach {
@@ -461,13 +462,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             }
         }
 
+        if (winnersMsg.userName.size % 2 != 0) users.add(Pair(tmpStr!!, ""))
 
-        Log.i(TAG, "tmpStr ${tmpStr}")
-
-        if (winnersMsg.userName.size % 2 != 0) {
-            Log.i(TAG, "users.size")
-            users.add(Pair(tmpStr!!, ""))
-        }
 
         if (users.size == 0) return;
 
@@ -493,7 +489,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     // for showQuestionView
     val pickEnd: () -> Any = {
 
-        Log.i(TAG, "pickEnd")
 
         if (!isAdmin && pickNum == CAN_PICK)
             pickAnswer(0)
@@ -521,9 +516,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     fun startTimer(doWhen5Sec: (() -> Any)?, doWhen10Sec: (() -> Any)?, doWhen15Sec: (() -> Any)?) {
 
-        Log.i(TAG, "startTimer start")
-
-        disposer1 = Observable.interval(5, TimeUnit.SECONDS)
+        compositeDisposable += Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
                 .map { ((it + 1) * 5).toInt() }
@@ -539,12 +532,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     companion object {
-        //        private val IS_ADMIN = "IS_ADMIN"
         fun newInstance(isAdmin_: Boolean) = QuizingFragment().apply {
-            // TODO need to remove
             isAdmin = isAdmin_
-//            lastQuestionNum = lastQuestionNum_
-//            arguments = Bundle().apply { putBoolean(IS_ADMIN,false) }
         }
     }
 
@@ -575,9 +564,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                             quizStatus == QuizStatus.ENDING
                 }
                 .subscribe {
-
-                    Log.i(TAG, "showAdminMsg - ${msg}")
-
                     llNotice.visibility = View.VISIBLE
                 }
     }
@@ -623,18 +609,13 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         ENDING(500),
     }
 
-    fun fortest() {
-
-        for (i in 1..10) {
-            updateUserMsg("$i$i$i$i$i$i$i")
-        }
-    }
-
     override fun onPause() {
         super.onPause()
 
-        disposer1?.dispose()
-        disposer2?.dispose()
+        if(!compositeDisposable.isDisposed)
+            compositeDisposable.dispose()
+//        disposer1?.dispose()
+//        disposer2?.dispose()
 
     }
 

@@ -81,17 +81,17 @@ class ExampleInstrumentedTest {
     fun testGetPagingBroadcastList(){
         testRunText("testGetPagingBroadcastList")
 
-        Repository.getPagingBroadcastList(object:ApiHelper.GetBroadcastsCallback{
-            override fun onBroadcastsLoaded(broadcasts: List<Broadcast>) {
-                broadcasts.forEach{
-                    tt(it.toString())
-                }
-                tt("onBroadcastsLoaded")
-            }
-            override fun onDataNotAvailable() {
-                tt("onDataNotAvailable")
-            }
-        })
+//        Repository.getPagingBroadcastList(object:ApiHelper.GetBroadcastsCallback{
+//            override fun onBroadcastsLoaded(broadcasts: List<Broadcast>) {
+//                broadcasts.forEach{
+//                    tt(it.toString())
+//                }
+//                tt("onBroadcastsLoaded")
+//            }
+//            override fun onDataNotAvailable() {
+//                tt("onDataNotAvailable")
+//            }
+//        })
 
     }
 
@@ -139,33 +139,33 @@ class ExampleInstrumentedTest {
 
         ql.add(Question(1, null, QuestionProp(dummyString, options), CategoryType.NORMAL))
         ql.add(Question(2, null, QuestionProp(dummyString, options), CategoryType.NORMAL))
-
-        Repository.createBroadcast(Broadcast(
-                null,
-                dummyString,
-                dummyString,
-                null,
-                GiftType.PRIZE,
-                dummyLong,
-                dummyString,
-                "u51746133bf56b26c7e0988465c5e8c31",
-                null,
-                dummyString,
-                null,
-                ql,
-                0
-
-        ),
-        object: ApiHelper.GetSuccessCallback{
-            override fun onSuccessLoaded() {
-                tt("onSuccessLoaded")
-            }
-
-            override fun onDataNotAvailable() {
-                tt("onDataNotAvailable")
-            }
-
-        })
+//
+//        Repository.createBroadcast(Broadcast(
+//                null,
+//                dummyString,
+//                dummyString,
+//                null,
+//                GiftType.PRIZE,
+//                dummyLong,
+//                dummyString,
+//                "u51746133bf56b26c7e0988465c5e8c31",
+//                null,
+//                dummyString,
+//                null,
+//                ql,
+//                0
+//
+//        ),
+//        object: ApiHelper.GetSuccessCallback{
+//            override fun onSuccessLoaded() {
+//                tt("onSuccessLoaded")
+//            }
+//
+//            override fun onDataNotAvailable() {
+//                tt("onDataNotAvailable")
+//            }
+//
+//        })
 
     }
 
@@ -252,6 +252,25 @@ class ExampleInstrumentedTest {
         )
 
     }
+
+    @Test
+    fun enumCompareString() {
+
+        val str = "NOTICE_MESSAGE"
+
+        Log.i(TAG,PushType.NOTICE_MESSAGE.toString())
+        Log.i(TAG,PushType.NOTICE_MESSAGE.name)
+        Log.i(TAG,PushType.NOTICE_MESSAGE.value.toString())
+
+//        if ( str == PushType.NOTICE_MESSAGE.toString() )
+
+
+
+
+
+    }
+
+
 
 
 

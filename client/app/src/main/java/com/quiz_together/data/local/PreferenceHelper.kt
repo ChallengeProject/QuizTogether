@@ -12,4 +12,7 @@ interface PreferenceHelper {
     fun hasSavedQuiz(): Boolean
     fun saveQuiz(incompletedBroadcast: Broadcast)
     fun getSavedQuiz(): Broadcast?
+
+    fun getSavedFollowerList() : List<String>
+    fun setFollowerList(setStr : Set<String>)
 }

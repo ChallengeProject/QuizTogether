@@ -6,15 +6,16 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import com.quiz_together.App
 import com.quiz_together.R
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragm_profile.*
 
 class ProfileFragment : Fragment(), ProfileContract.View {
 
     private val TAG = "ProfileFragment#$#"
     private lateinit var profilePresenter : ProfilePresenter
-
 
 
 

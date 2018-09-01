@@ -9,15 +9,12 @@ import io.reactivex.schedulers.Schedulers
 
 class AppApiHelper : ApiHelper {
 
-
     val TAG = "AppApiHelper#$#"
 
     val apiServices = ApiServices.create()
 
     // dummy method
     override fun getEvents(cb: ApiHelper.GetEventsCallback) {
-
-        Log.i(TAG,"getEvents")
 
         apiServices.getEvents()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -107,9 +104,6 @@ class AppApiHelper : ApiHelper {
 
     // broadcast
     override fun createBroadcast(broadcast: Broadcast, cb: ApiHelper.GetSuccessBroadcastIdCallback) {
-        Log.i(TAG, broadcast.toString())
-        Log.i(TAG, broadcast.questionList.toString())
-        Log.e(TAG, Gson().toJson(broadcast))
 
         apiServices.createBroadcast(broadcast)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -136,9 +130,6 @@ class AppApiHelper : ApiHelper {
                         cb.onDataNotAvailable()
                 }, { err ->
 
-                    Log.i(TAG, err.message)
-                    Log.i(TAG, err.toString())
-                    err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
     }
@@ -329,11 +320,6 @@ class AppApiHelper : ApiHelper {
 
     override fun openQuestion(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
 
-        Log.i(TAG,"openQuestion")
-        Log.i(TAG,broadcastId)
-        Log.i(TAG,userId)
-        Log.i(TAG,step.toString())
-
         apiServices.openQuestion(ReqOpenAnsAndQus(broadcastId,userId,step))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -349,11 +335,6 @@ class AppApiHelper : ApiHelper {
 
     override fun openAnswer(broadcastId: String, userId: String, step: Int, cb: ApiHelper.GetSuccessCallback) {
 
-        Log.i(TAG,"openAnswer")
-        Log.i(TAG,broadcastId)
-        Log.i(TAG,userId)
-        Log.i(TAG,step.toString())
-
         apiServices.openAnswer(ReqOpenAnsAndQus(broadcastId,userId,step))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -363,12 +344,66 @@ class AppApiHelper : ApiHelper {
                     else
                         cb.onDataNotAvailable()
                 }, { err ->
+                    cb.onDataNotAvailable()
+                })
+    }
 
-                    Log.i(TAG, err.message)
-                    Log.i(TAG, err.toString())
+    override fun insertFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.insertFollower(ReqFollow(userId,followerId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { err ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun deleteFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.deleteFollower(ReqFollow(userId,followerId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200)
+                        cb.onSuccessLoaded()
+                    else
+                        cb.onDataNotAvailable()
+                }, { err ->
+                    cb.onDataNotAvailable()
+                })
+
+
+    }
+
+
+    override fun getFollowerList(userId: String, cb: ApiHelper.GetFollowerListCallback) {
+
+        apiServices.getFollowerListById(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200) {
+
+//                        it.data ?.run {
+                            cb.onFollowerList(it.data)
+//                        } ?: cb.onFollowerList(ResFollowList(listOf<Follower>()))
+
+                    } else {
+                        cb.onDataNotAvailable()
+                    }
+                }, { err ->
+                    Log.i(TAG,err.message)
                     err.printStackTrace()
                     cb.onDataNotAvailable()
                 })
+
+
     }
 
 

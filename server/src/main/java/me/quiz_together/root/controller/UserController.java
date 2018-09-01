@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiImplicitParam;
-import me.quiz_together.root.model.request.user.UserIdReq;
+import me.quiz_together.root.model.request.user.UserIdRequest;
+import me.quiz_together.root.model.request.user.UserReferralRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.supoort.ResultContainer;
-import me.quiz_together.root.service.user.UserViewService;
+import me.quiz_together.root.service.user.view.UserViewService;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 
@@ -34,15 +35,15 @@ public class UserController implements ApiController {
     }
 
     @PostMapping("/user/deleteUserById")
-    public ResultContainer<Void> deleteUserById(@RequestBody @Valid UserIdReq userIdReq) {
-        userViewService.deleteUserById(userIdReq);
+    public ResultContainer<Void> deleteUserById(@RequestBody @Valid UserIdRequest userIdRequest) {
+        userViewService.deleteUserById(userIdRequest);
 
         return new ResultContainer<>();
     }
 
     @PostMapping("/user/login")
-    public ResultContainer<UserInfoView> login(@RequestBody @Valid UserIdReq userIdReq) {
-        return new ResultContainer<>(userViewService.login(userIdReq));
+    public ResultContainer<UserInfoView> login(@RequestBody @Valid UserIdRequest userIdRequest) {
+        return new ResultContainer<>(userViewService.login(userIdRequest));
     }
 
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
@@ -51,6 +52,12 @@ public class UserController implements ApiController {
     public ResultContainer<Void> updateUserProfile(@RequestParam @NotNull @HashUserId Long userId,
                                                      @RequestPart MultipartFile profileImage) {
         userViewService.updateUserProfile(userId, profileImage);
+        return new ResultContainer<>();
+    }
+
+    @PostMapping("/user/insertReferralCode")
+    public ResultContainer<Void> insertReferralCode(UserReferralRequest userReferralRequest) {
+        userViewService.insertReferralCode(userReferralRequest);
         return new ResultContainer<>();
     }
 
@@ -75,4 +82,5 @@ public class UserController implements ApiController {
         userViewService.findUserByName(name);
         return new ResultContainer<>();
     }
+
 }
