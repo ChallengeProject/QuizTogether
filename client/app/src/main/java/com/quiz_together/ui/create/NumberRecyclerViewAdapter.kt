@@ -63,7 +63,7 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
     }
 
     fun setCurrentItem(currentIdx: Int) {
-        mStates[mCurrentIdx] = if (mFragmentList[mCurrentIdx].isCompleted()) STATE.COMPLETED else STATE.DEFAULT
+        mStates[mCurrentIdx] = if (mFragmentList[mCurrentIdx].isValidatedQuiz()) STATE.COMPLETED else STATE.DEFAULT
         notifyItemChanged(mCurrentIdx)
         mStates[currentIdx] = STATE.FOCUSING
         notifyItemChanged(currentIdx)

@@ -5,33 +5,33 @@ import android.support.v4.app.FragmentPagerAdapter
 import com.quiz_together.data.model.Question
 
 class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-    val fragmentList = ArrayList<QuizInputFragment>()
+    val quizFragmentList = ArrayList<QuizInputFragment>()
     private val FRAG_NO = 12
 
     init {
-        while (fragmentList.size < FRAG_NO) {
+        while (quizFragmentList.size < FRAG_NO) {
             val fragment = QuizInputFragment.newInstance()
-            fragmentList.add(fragment)
+            quizFragmentList.add(fragment)
         }
     }
 
     override fun getItem(position: Int): QuizInputFragment {
-        return fragmentList[position]
+        return quizFragmentList[position]
     }
 
     override fun getCount(): Int {
         return FRAG_NO
     }
 
-    fun extractQuestions(): ArrayList<Question> {
-        val questionList = ArrayList<Question>()
+    fun extractQuestions(): ArrayList<Question>? {
+        val quizList = ArrayList<Question>()
 
-        for (fragment in fragmentList) {
-            if (fragment.isCompleted()) {
-                questionList.add(fragment.extractQuestion())
+        for (quizInputFragment in quizFragmentList) {
+            if (quizInputFragment.isValidatedQuiz()) {
+                quizList.add(quizInputFragment.extractQuestion())
             }
         }
 
-        return questionList
+        return if (quizList.size == 0) null else quizList
     }
 }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.quiz_together.R
 import com.quiz_together.data.model.CategoryType
 import com.quiz_together.data.model.Question
@@ -32,13 +33,32 @@ class QuizInputFragment : Fragment(), View.OnClickListener {
         cbAnswer3.setOnClickListener(this)
     }
 
-    fun isCompleted(): Boolean {
-        return cbAnswer1 != null && (getAnswerNo() > 0) && option1.text.isNotEmpty() &&
-                option2.text.isNotEmpty() && option3.text.isNotEmpty() && etQuizTitle.text.isNotEmpty()
+    fun isValidatedQuiz(): Boolean {
+        if (isEmpty()) {
+            return false
+        }
+
+        val toastMsg = when {
+            option1.text.isEmpty() -> "보기1을 입력하지 않았습니다"
+            option2.text.isEmpty() -> "보기2을 입력하지 않았습니다"
+            option3.text.isEmpty() -> "보기3을 입력하지 않았습니다"
+            getAnswerNo() < 0 -> "정답을 선택하지 않았습니다"
+            else -> null
+        }
+
+        return if (toastMsg == null) true else {
+            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
+            false
+        }
+    }
+
+    private fun isEmpty(): Boolean {
+        return cbAnswer1 == null || option1 == null || (getAnswerNo() < 0 && option1.text.isEmpty()
+                && option2.text.isEmpty() && option3.text.isEmpty())
     }
 
     private fun getAnswerNo(): Int {
-        return when {
+        return if (cbAnswer1 == null) -1 else when {
             cbAnswer1.isChecked -> 1
             cbAnswer2.isChecked -> 2
             cbAnswer3.isChecked -> 3
