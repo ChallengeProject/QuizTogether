@@ -125,7 +125,6 @@ public class BroadcastViewService {
             throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
         }
         // scheduledTime이 null이면 즉시 시작
-        boolean InstantStart = isInstantStartBroadcast(broadcastRequest.getScheduledTime());
         Broadcast broadcast = convertBroadcast(broadcastRequest);
 
         broadcastService.insertBroadcast(broadcast);
@@ -134,10 +133,6 @@ public class BroadcastViewService {
         log.debug("questionList : {}", broadcastRequest.getQuestionList());
         List<Question> questionList = convertQuestionList(broadcastRequest.getQuestionList(), broadcast);
         questionService.insertQuestionList(questionList);
-
-        if (InstantStart) {
-            fcmService.sendFollowBroadcast(broadcast);
-        }
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
