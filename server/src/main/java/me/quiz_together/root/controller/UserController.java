@@ -61,7 +61,6 @@ public class UserController implements ApiController {
         return new ResultContainer<>();
     }
 
-
     @ApiImplicitParam(name = "userId", value = "user hash Id", paramType = "query",
             dataType = "string")
     @GetMapping("/user/getUserProfile")
