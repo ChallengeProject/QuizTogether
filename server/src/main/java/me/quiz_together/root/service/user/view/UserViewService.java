@@ -1,4 +1,4 @@
-package me.quiz_together.root.service.user;
+package me.quiz_together.root.service.user.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,7 @@ import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.service.user.UserService;
 
 @Service
 public class UserViewService {

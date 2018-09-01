@@ -1,4 +1,4 @@
-package me.quiz_together.root.service.user;
+package me.quiz_together.root.service.user.view;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import me.quiz_together.root.model.request.user.UserFollowerRequest;
 import me.quiz_together.root.model.response.user.UserFollowerView;
 import me.quiz_together.root.model.response.user.UserFollowerViewList;
 import me.quiz_together.root.model.user.UserFollower;
+import me.quiz_together.root.service.user.UserFollowerService;
 
 @Slf4j
 @Service
