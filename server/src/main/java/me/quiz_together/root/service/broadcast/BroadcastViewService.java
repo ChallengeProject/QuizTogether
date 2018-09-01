@@ -142,7 +142,13 @@ public class BroadcastViewService {
         // 해당 방송의 스탭이랑 맞는지 확인
         //validate
         if (!broadcastService.isCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep())) {
-            throw new IllegalArgumentException("현재의 broadcast의 step이랑 다릅니다.");
+            // TODO : 에러 코드 정의
+            throw new RuntimeException("현재의 broadcast의 step이랑 다릅니다.");
+        }
+        Broadcast broadcast = broadcastService.getBroadcastById(sendAnswerRequest.getBroadcastId());
+        if (broadcast.getBroadcastStatus() == BroadcastStatus.OPEN_QUESTION) {
+            // TODO : 에러 코드 정의
+            throw new RuntimeException("Broadcast Status invalid current status: [" + broadcast.getBroadcastStatus().name() + ']');
         }
         // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
         PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
