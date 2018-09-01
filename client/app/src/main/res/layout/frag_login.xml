@@ -83,11 +83,10 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp" />
 
-            <ImageView
-                android:layout_margin="15dp"
-                android:src="@drawable/login_naver"
+            <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
+                android:id="@+id/btNaver"
                 android:layout_width="32dp"
-                android:layout_height="32dp"/>
+                android:layout_height="32dp" />
 
             <ImageView
                 android:id="@+id/tmptmpTEST"
@@ -112,6 +111,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp" />
+
+
+
+
     </LinearLayout>
 
     <ProgressBar

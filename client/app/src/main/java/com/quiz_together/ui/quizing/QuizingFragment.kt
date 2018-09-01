@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.GridView
 import com.bumptech.glide.Glide
+import com.github.lzyzsd.circleprogress.CircleProgress
 import com.quiz_together.R
 import com.quiz_together.data.model.*
+import com.quiz_together.util.plusAssign
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
 
@@ -48,9 +52,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-    var disposer1: Disposable? = null
-    var disposer2: Disposable? = null
-
+//    var disposer1: Disposable? = null
+//    var disposer2: Disposable? = null
+    private val compositeDisposable = CompositeDisposable()
 
     var isAdmin = false
     var lastQuestionNum = -1
@@ -71,9 +75,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     override fun setLoadingIndicator(active: Boolean) {
         activity?.getWindow()?.setTouchable(active)
-
     }
-
 
     fun pickAnswer(num: Int) {
 
@@ -86,7 +88,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         if (pickNum > 0)
             rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100, true)
     }
-
 
     fun initListeners() {
 
@@ -220,16 +221,33 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         initListeners()
         initQuizCalledByOncreate()
 
+
+
     }
 
-    fun setQuizNum(num: Int) {
+    fun setQuizNum(num: Int,gage:Boolean) {
+
+        if(gage) {
+            cpGage.visibility = View.VISIBLE
+
+            compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .take(10)
+                    .subscribe {
+                        val curSec = it.toInt() + 1
+                        cpGage.progress = curSec
+
+                        if(curSec == 10)
+                            cpGage.visibility = View.GONE
+                    }
+        }
 
         curQuizStep = num
 
         tvQuizNum.text = "$num"
         tvQuizNum.visibility = View.VISIBLE
-        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle))
-//        ivIcon.visibility = View.INVISIBLE
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle)) // need to use
+
     }
 
     fun setIcon(imgId: Int) {
@@ -279,7 +297,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
         if (questionNum == ICON_IS_IMG_SATUS) setIcon(imgId)
-        else setQuizNum(questionNum)
+        else setQuizNum(questionNum,true)
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
@@ -368,7 +386,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 imgId = imgRss)
 
         // exception !!
-        if (isAdmin) setQuizNum(answerMsg.step)
+        if (isAdmin) setQuizNum(answerMsg.step,false)
 
         val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
         val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
@@ -414,7 +432,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         llNotice.visibility = View.VISIBLE
         tvAdminMsg.text = winnersMsg.winnerMessage
 
-        disposer2 = Observable.interval(3, TimeUnit.SECONDS)
+        compositeDisposable += Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (!isOpenKbd)
@@ -498,7 +516,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
     fun startTimer(doWhen5Sec: (() -> Any)?, doWhen10Sec: (() -> Any)?, doWhen15Sec: (() -> Any)?) {
 
-        disposer1 = Observable.interval(5, TimeUnit.SECONDS)
+        compositeDisposable += Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
                 .map { ((it + 1) * 5).toInt() }
@@ -591,18 +609,13 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         ENDING(500),
     }
 
-    fun fortest() {
-
-        for (i in 1..10) {
-            updateUserMsg("$i$i$i$i$i$i$i")
-        }
-    }
-
     override fun onPause() {
         super.onPause()
 
-        disposer1?.dispose()
-        disposer2?.dispose()
+        if(!compositeDisposable.isDisposed)
+            compositeDisposable.dispose()
+//        disposer1?.dispose()
+//        disposer2?.dispose()
 
     }
 

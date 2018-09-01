@@ -19,8 +19,13 @@ import com.facebook.Profile
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
+import com.nhn.android.naverlogin.OAuthLogin
+import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.quiz_together.R
 import com.quiz_together.ui.loading.LoadingActivity
+import com.quiz_together.util.SC.OAUTH_CLIENT_ID
+import com.quiz_together.util.SC.OAUTH_CLIENT_NAME
+import com.quiz_together.util.SC.OAUTH_CLIENT_SECRET
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.setVisibilityFromBoolean
 import com.quiz_together.util.toast
@@ -70,6 +75,7 @@ class LoginFragment : Fragment(), LoginContract.View {
 
 
         initFb()
+        initNv()
 
     }
 
@@ -105,7 +111,8 @@ class LoginFragment : Fragment(), LoginContract.View {
         })
 
         tmptmpTEST.setOnClickListener { v ->
-            Log.i(TAG,Profile.getCurrentProfile().id)
+            mOAuthLoginModule!!.logout(activity!!);
+
         }
 
         val accessToken = AccessToken.getCurrentAccessToken()
@@ -113,6 +120,53 @@ class LoginFragment : Fragment(), LoginContract.View {
 
         Log.i(TAG,"Fb isLogin $isLoggedIn")
         if(isLoggedIn) Log.i(TAG,Profile.getCurrentProfile().id)
+
+    }
+
+    var mOAuthLoginModule : OAuthLogin? = null
+
+    fun initNv(){
+
+        mOAuthLoginModule = OAuthLogin.getInstance()
+        mOAuthLoginModule!!.init(
+                activity!!.applicationContext
+                ,OAUTH_CLIENT_ID
+                ,OAUTH_CLIENT_SECRET
+                ,OAUTH_CLIENT_NAME
+                //,OAUTH_CALLBACK_INTENT
+                // SDK 4.1.4 버전부터는 OAUTH_CALLBACK_INTENT변수를 사용하지 않습니다.
+        )
+
+        btNaver.setOAuthLoginHandler(object: OAuthLoginHandler() {
+            override fun run(success: Boolean) {
+
+                val oalm = mOAuthLoginModule!!
+                val act = activity!!
+                if (success) {
+                    val accessToken = oalm.getAccessToken(act)
+                    val refreshToken = oalm.getRefreshToken(act)
+                    val expiresAt = oalm.getExpiresAt(act)
+                    val tokenType = oalm.getTokenType(act)
+
+                    Log.i(TAG,accessToken)
+                    Log.i(TAG,refreshToken)
+                    Log.i(TAG,expiresAt.toString())
+                    Log.i(TAG,tokenType)
+                    Log.i(TAG,oalm.getState(act).toString())
+
+                } else {
+                    val errorCode = oalm.getLastErrorCode(act).getCode()
+                    val errorDesc = oalm.getLastErrorDesc(act)
+                    "errorCode : $errorCode  errorDesc : $errorDesc".toast()
+                }
+            }
+        })
+
+        btNaver.setBgResourceId(R.drawable.login_naver);
+
+
+
+
 
     }
 

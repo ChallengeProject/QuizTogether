@@ -12,6 +12,8 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.text.SimpleDateFormat
 
 val TAG = "ViewExt##"
@@ -32,26 +34,26 @@ fun Window.setTouchable(active:Boolean) {
         this.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 }
 
-@SuppressLint("RestrictedApi")
-fun BottomNavigationView.disableShiftMode() {
-    val menuView = getChildAt(0) as BottomNavigationMenuView
-    try {
-        val shiftingMode = menuView::class.java.getDeclaredField("mShiftingMode")
-        shiftingMode.isAccessible = true
-        shiftingMode.setBoolean(menuView, false)
-        shiftingMode.isAccessible = false
-        for (i in 0 until menuView.childCount) {
-            val item = menuView.getChildAt(i) as BottomNavigationItemView
-            item.setShiftingMode(false)
-            // set once again checked value, so view will be updated
-            item.setChecked(item.itemData.isChecked)
-        }
-    } catch (e: NoSuchFieldException) {
-        Log.e(TAG, "Unable to get shift mode field", e)
-    } catch (e: IllegalStateException) {
-        Log.e(TAG, "Unable to change value of shift mode", e)
-    }
-}
+//@SuppressLint("RestrictedApi")
+//fun BottomNavigationView.disableShiftMode() {
+//    val menuView = getChildAt(0) as BottomNavigationMenuView
+//    try {
+//        val shiftingMode = menuView::class.java.getDeclaredField("mShiftingMode")
+//        shiftingMode.isAccessible = true
+//        shiftingMode.setBoolean(menuView, false)
+//        shiftingMode.isAccessible = false
+//        for (i in 0 until menuView.childCount) {
+//            val item = menuView.getChildAt(i) as BottomNavigationItemView
+//            item.setShiftingMode(false)
+//            // set once again checked value, so view will be updated
+//            item.setChecked(item.itemData.isChecked)
+//        }
+//    } catch (e: NoSuchFieldException) {
+//        Log.e(TAG, "Unable to get shift mode field", e)
+//    } catch (e: IllegalStateException) {
+//        Log.e(TAG, "Unable to change value of shift mode", e)
+//    }
+//}
 
 fun Long.toStringTemplate() :String {
 
@@ -63,7 +65,9 @@ fun Long.toStringTemplate() :String {
     return SimpleDateFormat("yyyy. MM. dd. HH시 mm분").format(Date(long))
 }
 
-
+operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
+    add(disposable)
+}
 
 
 

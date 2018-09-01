@@ -42,6 +42,8 @@ class QuizingPresenter(
             })
 
         } else {
+
+
             repository.startBroadcast(ReqStartBroadcast(broadcastId, SC.USER_ID, "", ""), object : ApiHelper.GetBroadcastViewCallback {
                 override fun onBroadcastViewLoaded(resStartBroadcast: ResStartBroadcast) {
                     view.setQuestionCnt(resStartBroadcast.broadcastView.questionCount)

@@ -49,12 +49,6 @@ class ProfileFragment : Fragment(), ProfileContract.View {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity!!.findViewById<ImageButton>(R.id.ibSetting).visibility = View.VISIBLE
-        activity!!.findViewById<ImageButton>(R.id.ibCreate).visibility = View.GONE
-    }
-
 
 
 }
