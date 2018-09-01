@@ -72,7 +72,7 @@
     broadcast
     WHERE
     user_id = #{userId}
-    AND bradcast_status != 600
+    AND broadcast_status != 600
   </select>
 
   <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">
