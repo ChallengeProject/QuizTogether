@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import me.quiz_together.root.model.request.user.UserFollowerRequest;
 import me.quiz_together.root.model.response.user.UserFollowerViewList;
 import me.quiz_together.root.model.supoort.ResultContainer;
-import me.quiz_together.root.service.user.UserFollowerViewService;
+import me.quiz_together.root.service.user.view.UserFollowerViewService;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @RestController

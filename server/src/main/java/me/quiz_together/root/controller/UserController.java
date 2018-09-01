@@ -18,7 +18,7 @@ import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.supoort.ResultContainer;
-import me.quiz_together.root.service.user.UserViewService;
+import me.quiz_together.root.service.user.view.UserViewService;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 
