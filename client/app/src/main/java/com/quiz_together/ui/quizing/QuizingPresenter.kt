@@ -165,7 +165,7 @@ class QuizingPresenter(
     override fun updateBroadcastStatus(broadcastStatus: BroadcastStatus) {
 
         Log.i(TAG,"## updateBroadcastStatus ##")
-        Log.i(TAG,"SC.USER_ID : " + SC.USER_ID + "   broadcastId : " + broadcastId + "   broadcastStatus : " + broadcastStatus)
+        Log.i(TAG, "SC.USER_ID : " + SC.USER_ID + "   broadcastId : " + broadcastId + "   broadcastStatus : " + broadcastStatus)
 
         repository.updateBroadcastStatus(broadcastId,SC.USER_ID,broadcastStatus,
                 object : ApiHelper.GetSuccessCallback{

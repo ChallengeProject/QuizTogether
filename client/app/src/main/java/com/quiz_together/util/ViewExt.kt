@@ -6,15 +6,10 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.quiz_together.App
-import java.util.*
-import android.annotation.SuppressLint
-import android.support.design.internal.BottomNavigationItemView
-import android.support.design.internal.BottomNavigationMenuView
-import android.support.design.widget.BottomNavigationView
-import android.util.Log
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.text.SimpleDateFormat
+import java.util.*
 
 val TAG = "ViewExt##"
 

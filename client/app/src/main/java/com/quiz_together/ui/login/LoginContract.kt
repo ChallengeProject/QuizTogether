@@ -14,7 +14,7 @@ interface LoginContract {
         fun isCheckSuccess(isSuccess:Boolean)
         fun showFailLoginTxt()
 
-        fun getAct() : Activity
+        fun getAct(): Activity
 
     }
 

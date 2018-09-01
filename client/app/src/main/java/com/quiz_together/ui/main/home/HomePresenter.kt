@@ -134,5 +134,4 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
     }
 
 
-
 }

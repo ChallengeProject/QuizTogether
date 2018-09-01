@@ -16,6 +16,6 @@ data class EndMsg(val pushType: PushType)
 
 data class ReqOpenAnsAndQus(val broadcastId: String, val userId: String, val step:Int)
 
-data class FollowBroadcastMsg( val pushType: PushType, val broadcastId: String , val title:String, val description:String, val userName: String )
+data class FollowBroadcastMsg(val pushType: PushType, val broadcastId: String, val title: String, val description: String, val userName: String)
 
 

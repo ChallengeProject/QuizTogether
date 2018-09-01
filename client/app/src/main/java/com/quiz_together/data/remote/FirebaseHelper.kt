@@ -27,7 +27,7 @@ class FirebaseHelper : FirebaseMessagingService() {
     override fun onNewToken(newToken: String?) {
         super.onNewToken(newToken)
 
-        Log.i(TAG,"newToken : $newToken")
+        Log.i(TAG, "newToken : $newToken")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -55,7 +55,7 @@ class FirebaseHelper : FirebaseMessagingService() {
             if (gsObj.get("pushType").asString == PushType.FOLLOW_BROADCAST.name) {
 
                 sendNotification("QX : 실시간 퀴즈쇼", gsObj.get("title").asString,
-                        gsObj.get("broadcastId").asString, gsObj.get("userName").asString,gsObj.get("description").asString)
+                        gsObj.get("broadcastId").asString, gsObj.get("userName").asString, gsObj.get("description").asString)
                 return
             }
 
@@ -65,9 +65,9 @@ class FirebaseHelper : FirebaseMessagingService() {
         }
     }
 
-    fun sendNotification(title: String, msg: String, broadcastId: String, userName: String , description: String) {
+    fun sendNotification(title: String, msg: String, broadcastId: String, userName: String, description: String) {
 
-        Log.i(TAG,"sendNotification : $title $msg $broadcastId $userName $description")
+        Log.i(TAG, "sendNotification : $title $msg $broadcastId $userName $description")
 
 
 
@@ -91,10 +91,7 @@ class FirebaseHelper : FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getActivity(applicationContext, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
-
-
         /////
-
 
 
         builder.setContentTitle(title)

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.quiz_together.R
 import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.main.home.HomeFragment
@@ -15,7 +14,6 @@ import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initListener(){
+    private fun initListener() {
 
         ibFindLock.setOnClickListener {
 
@@ -49,12 +47,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         ibSetting.setOnClickListener {
-            Log.i(TAG,"ibSetting.setOnClickListener")
+            Log.i(TAG, "ibSetting.setOnClickListener")
         }
 
         ibCreate.setOnClickListener {
-                val intent = Intent(applicationContext,CreateActivity::class.java)
-                startActivity(intent)
+            val intent = Intent(applicationContext, CreateActivity::class.java)
+            startActivity(intent)
         }
 
         ibPrf.setOnClickListener {
@@ -77,8 +75,6 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.fl_content, homeFragment)
 
         }
-
-
 
 
     }

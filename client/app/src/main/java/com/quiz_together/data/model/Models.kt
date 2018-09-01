@@ -60,8 +60,8 @@ data class ReqUpdateBroadcast(val broadcastId: String, val userId: String, var b
 
 data class ReqBrdIdAndUsrId(val broadcastId: String, val userId: String)
 
-data class ReqFollow(val userId: String,val follower:String)
+data class ReqFollow(val userId: String, val follower: String)
 
-data class ResFollowList(val userFollowerList : List<Follower>)
+data class ResFollowList(val userFollowerList: List<Follower>)
 
 data class Follower(val follower: String)

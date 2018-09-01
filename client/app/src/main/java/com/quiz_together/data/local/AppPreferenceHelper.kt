@@ -49,10 +49,9 @@ class AppPreferenceHelper : PreferenceHelper {
         return Gson().fromJson<Broadcast>(json, Broadcast::class.java)
     }
 
-    override fun getSavedFollowerList(): List<String>
-            = mPrefs.getStringSet(PFRK_FOLLOW_LIST, setOf<String>()).toList()
+    override fun getSavedFollowerList(): List<String> = mPrefs.getStringSet(PFRK_FOLLOW_LIST, setOf<String>()).toList()
 
-    override fun setFollowerList(setStr : Set<String>) {
+    override fun setFollowerList(setStr: Set<String>) {
         mPrefs.edit().putStringSet(PFRK_FOLLOW_LIST, setStr).apply()
     }
 

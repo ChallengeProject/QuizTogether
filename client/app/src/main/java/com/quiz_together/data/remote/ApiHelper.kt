@@ -58,7 +58,7 @@ interface ApiHelper {
         fun onDataNotAvailable()
     }
 
-    interface GetFollowerListCallback{
+    interface GetFollowerListCallback {
 
         fun onFollowerList(followList: ResFollowList)
         fun onDataNotAvailable()
@@ -86,9 +86,9 @@ interface ApiHelper {
     fun joinBroadcast(broadcastId:String, userId:String, cb: ApiHelper.GetJoinBroadcastInfoCallback)
     fun updateBroadcastStatus(broadcastId: String,userId: String,broadcastStatus: BroadcastStatus, cb: ApiHelper.GetSuccessCallback)
     fun leaveBroadcast(broadcastId: String,userId: String, cb: ApiHelper.GetSuccessCallback)
-    fun insertFollower(userId: String, followerId: String,cb :ApiHelper.GetSuccessCallback)
-    fun deleteFollower(userId: String, followerId: String,cb :ApiHelper.GetSuccessCallback)
-    fun getFollowerList(userId: String,cb :ApiHelper.GetFollowerListCallback)
+    fun insertFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback)
+    fun deleteFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback)
+    fun getFollowerList(userId: String, cb: ApiHelper.GetFollowerListCallback)
 
 
     //firebase

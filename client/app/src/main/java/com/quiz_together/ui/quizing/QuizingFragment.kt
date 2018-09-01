@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.GridView
 import com.bumptech.glide.Glide
-import com.github.lzyzsd.circleprogress.CircleProgress
 import com.quiz_together.R
 import com.quiz_together.data.model.*
 import com.quiz_together.util.plusAssign
@@ -20,8 +19,6 @@ import com.quiz_together.util.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
 
@@ -52,7 +49,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-//    var disposer1: Disposable? = null
+    //    var disposer1: Disposable? = null
 //    var disposer2: Disposable? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -222,12 +219,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         initQuizCalledByOncreate()
 
 
-
     }
 
-    fun setQuizNum(num: Int,gage:Boolean) {
+    fun setQuizNum(num: Int, gage: Boolean) {
 
-        if(gage) {
+        if (gage) {
             cpGage.visibility = View.VISIBLE
 
             compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
@@ -237,7 +233,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                         val curSec = it.toInt() + 1
                         cpGage.progress = curSec
 
-                        if(curSec == 10)
+                        if (curSec == 10)
                             cpGage.visibility = View.GONE
                     }
         }
@@ -297,7 +293,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         quizStatus = quizStatus_
         isExpandChatWindow = isExpandChatWindow_
         if (questionNum == ICON_IS_IMG_SATUS) setIcon(imgId)
-        else setQuizNum(questionNum,true)
+        else setQuizNum(questionNum, true)
         cvToolbar.visibility = View.VISIBLE
         llNotice.visibility = llNoticeShow
         llQuestion.visibility = llQuestionShow
@@ -386,7 +382,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 imgId = imgRss)
 
         // exception !!
-        if (isAdmin) setQuizNum(answerMsg.step,false)
+        if (isAdmin) setQuizNum(answerMsg.step, false)
 
         val pick1Cnt = answerMsg.questionStatistics.get("1") ?: 0
         val pick2Cnt = answerMsg.questionStatistics.get("2") ?: 0
@@ -612,7 +608,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun onPause() {
         super.onPause()
 
-        if(!compositeDisposable.isDisposed)
+        if (!compositeDisposable.isDisposed)
             compositeDisposable.dispose()
 //        disposer1?.dispose()
 //        disposer2?.dispose()

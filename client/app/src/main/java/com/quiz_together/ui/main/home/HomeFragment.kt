@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.*
-import android.widget.ImageButton
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Follower
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.RoomOutputType
-import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
@@ -30,7 +30,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     private val broadcastAdapter: BroadcastAdapter by lazy {
         BroadcastAdapter(activity?.applicationContext, {
 
-            cbType , broadcast ->
+            cbType, broadcast ->
 
             when (cbType) {
                 BroadcastAdapter.CallBackType.ROOM -> {
@@ -40,14 +40,13 @@ class HomeFragment : Fragment(), HomeContract.View {
                     // TODO Create RESERVED 로 진입할때 처리 RESERVED intent 넣어서
                     startActivity(intent)
                 }
-                BroadcastAdapter.CallBackType.FOLLOW -> presenter.insertFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
-                BroadcastAdapter.CallBackType.UNFOLLOW -> presenter.deleteFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
+                BroadcastAdapter.CallBackType.FOLLOW -> presenter.insertFollower(SC.USER_ID, broadcast.userInfoView!!.userId)
+                BroadcastAdapter.CallBackType.UNFOLLOW -> presenter.deleteFollower(SC.USER_ID, broadcast.userInfoView!!.userId)
                 BroadcastAdapter.CallBackType.LONG_TOUCH -> {
                     presenter.tmpEndBroadcast(broadcast.broadcastId!!)
                 }
 
             }
-
 
 
         })
@@ -93,15 +92,15 @@ class HomeFragment : Fragment(), HomeContract.View {
         ssrl.isRefreshing = active
     }
 
-    override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList,followList: List<Follower>) {
+    override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList, followList: List<Follower>) {
 
-        Log.i(TAG,followList.toString())
+        Log.i(TAG, followList.toString())
 
         val followSet = followList.map {
             it.follower
         }.toSet()
 
-        Log.i(TAG,followSet.toString())
+        Log.i(TAG, followSet.toString())
 
 
         broadcastAdapter.run {
@@ -110,7 +109,7 @@ class HomeFragment : Fragment(), HomeContract.View {
 
             resGetPagingBroadcastList.currentBroadcastList?.forEach {
 
-                if ( followSet.contains(it.userInfoView!!.userId) )
+                if (followSet.contains(it.userInfoView!!.userId))
                     addItem(it, RoomOutputType.FOLLOW)
                 else
                     addItem(it, RoomOutputType.DEFAULT)

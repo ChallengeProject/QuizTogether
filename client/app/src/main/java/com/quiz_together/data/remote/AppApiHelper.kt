@@ -350,11 +350,11 @@ class AppApiHelper : ApiHelper {
 
     override fun insertFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
 
-        apiServices.insertFollower(ReqFollow(userId,followerId))
+        apiServices.insertFollower(ReqFollow(userId, followerId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
-                    if(it.code == 200)
+                    if (it.code == 200)
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
@@ -366,11 +366,11 @@ class AppApiHelper : ApiHelper {
 
     override fun deleteFollower(userId: String, followerId: String, cb: ApiHelper.GetSuccessCallback) {
 
-        apiServices.deleteFollower(ReqFollow(userId,followerId))
+        apiServices.deleteFollower(ReqFollow(userId, followerId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
-                    if(it.code == 200)
+                    if (it.code == 200)
                         cb.onSuccessLoaded()
                     else
                         cb.onDataNotAvailable()
@@ -388,17 +388,17 @@ class AppApiHelper : ApiHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
-                    if(it.code == 200) {
+                    if (it.code == 200) {
 
 //                        it.data ?.run {
-                            cb.onFollowerList(it.data)
+                        cb.onFollowerList(it.data)
 //                        } ?: cb.onFollowerList(ResFollowList(listOf<Follower>()))
 
                     } else {
                         cb.onDataNotAvailable()
                     }
                 }, { err ->
-                    Log.i(TAG,err.message)
+                    Log.i(TAG, err.message)
                     err.printStackTrace()
                     cb.onDataNotAvailable()
                 })

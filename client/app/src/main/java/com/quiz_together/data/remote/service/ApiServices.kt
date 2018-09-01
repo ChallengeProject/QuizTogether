@@ -63,7 +63,7 @@ interface ApiServices {
                       @Query("userId") userId:String) : Observable<Resp<BroadcastJoinInfo>>
 
     @GET("${BuildConfig.REST_PREFIX}/follower/getFollowerList")
-    fun getFollowerListById(@Query("userId") userId:String) : Observable<Resp<ResFollowList>>
+    fun getFollowerListById(@Query("userId") userId: String): Observable<Resp<ResFollowList>>
 
 
     @POST("${BuildConfig.REST_PREFIX}/broadcast/updateBroadcastStatus")
@@ -85,10 +85,10 @@ interface ApiServices {
     fun openAnswer(@Body data: ReqOpenAnsAndQus) : Observable<Resp<RespEmpty>>
 
     @POST("${BuildConfig.REST_PREFIX}/follower/insertFollower")
-    fun insertFollower(@Body data:ReqFollow) : Observable<Resp<RespEmpty>>
+    fun insertFollower(@Body data: ReqFollow): Observable<Resp<RespEmpty>>
 
     @POST("${BuildConfig.REST_PREFIX}/follower/deleteFollower")
-    fun deleteFollower(@Body data:ReqFollow) : Observable<Resp<RespEmpty>>
+    fun deleteFollower(@Body data: ReqFollow): Observable<Resp<RespEmpty>>
 
 
     companion object Factory {

@@ -13,7 +13,7 @@ interface HomeContract {
 
         val isActive: Boolean
 
-        fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList,followList: List<Follower>)
+        fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList, followList: List<Follower>)
 
     }
 
@@ -21,8 +21,8 @@ interface HomeContract {
 
         fun loadBroadcasts()
 
-        fun insertFollower(userId:String, followerId:String)
-        fun deleteFollower(userId:String, followerId:String)
+        fun insertFollower(userId: String, followerId: String)
+        fun deleteFollower(userId: String, followerId: String)
 
         fun tmpEndBroadcast(broadcastId: String)
     }

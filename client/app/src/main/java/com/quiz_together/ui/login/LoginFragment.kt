@@ -8,19 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.FacebookSdk
-import com.facebook.GraphRequest
-import com.facebook.GraphResponse
-import com.facebook.Profile
-import com.facebook.appevents.AppEventsLogger
-import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
-import com.nhn.android.naverlogin.OAuthLogin
-import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.quiz_together.R
 import com.quiz_together.ui.loading.LoadingActivity
 import com.quiz_together.util.SC.OAUTH_CLIENT_ID
@@ -41,8 +28,8 @@ class LoginFragment : Fragment(), LoginContract.View {
     override var isActive: Boolean = false
         get() = isAdded
 
-    var callbackManager : CallbackManager? = null
-    var accTkn : AccessToken? = null
+    var callbackManager: CallbackManager? = null
+    var accTkn: AccessToken? = null
 
     override fun onResume() {
         super.onResume()
@@ -79,7 +66,7 @@ class LoginFragment : Fragment(), LoginContract.View {
 
     }
 
-    fun initFb(){
+    fun initFb() {
 
         btFb.setOnClickListener { v ->
             lbtFb.performClick()
@@ -90,9 +77,9 @@ class LoginFragment : Fragment(), LoginContract.View {
 
         lbtFb.setReadPermissions("email");
         lbtFb.setFragment(this);
-        lbtFb.registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+        lbtFb.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult?) {
-                Log.i(TAG,"override fun onSuccess")
+                Log.i(TAG, "override fun onSuccess")
 
                 accTkn = result!!.accessToken
 
@@ -101,11 +88,11 @@ class LoginFragment : Fragment(), LoginContract.View {
             }
 
             override fun onCancel() {
-                Log.i(TAG,"override fun onCancel")
+                Log.i(TAG, "override fun onCancel")
             }
 
             override fun onError(error: FacebookException?) {
-                Log.i(TAG,"override fun onError")
+                Log.i(TAG, "override fun onError")
             }
 
         })
@@ -118,26 +105,26 @@ class LoginFragment : Fragment(), LoginContract.View {
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
 
-        Log.i(TAG,"Fb isLogin $isLoggedIn")
-        if(isLoggedIn) Log.i(TAG,Profile.getCurrentProfile().id)
+        Log.i(TAG, "Fb isLogin $isLoggedIn")
+        if (isLoggedIn) Log.i(TAG, Profile.getCurrentProfile().id)
 
     }
 
-    var mOAuthLoginModule : OAuthLogin? = null
+    var mOAuthLoginModule: OAuthLogin? = null
 
-    fun initNv(){
+    fun initNv() {
 
         mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule!!.init(
                 activity!!.applicationContext
-                ,OAUTH_CLIENT_ID
-                ,OAUTH_CLIENT_SECRET
-                ,OAUTH_CLIENT_NAME
+                , OAUTH_CLIENT_ID
+                , OAUTH_CLIENT_SECRET
+                , OAUTH_CLIENT_NAME
                 //,OAUTH_CALLBACK_INTENT
                 // SDK 4.1.4 버전부터는 OAUTH_CALLBACK_INTENT변수를 사용하지 않습니다.
         )
 
-        btNaver.setOAuthLoginHandler(object: OAuthLoginHandler() {
+        btNaver.setOAuthLoginHandler(object : OAuthLoginHandler() {
             override fun run(success: Boolean) {
 
                 val oalm = mOAuthLoginModule!!
@@ -148,11 +135,11 @@ class LoginFragment : Fragment(), LoginContract.View {
                     val expiresAt = oalm.getExpiresAt(act)
                     val tokenType = oalm.getTokenType(act)
 
-                    Log.i(TAG,accessToken)
-                    Log.i(TAG,refreshToken)
-                    Log.i(TAG,expiresAt.toString())
-                    Log.i(TAG,tokenType)
-                    Log.i(TAG,oalm.getState(act).toString())
+                    Log.i(TAG, accessToken)
+                    Log.i(TAG, refreshToken)
+                    Log.i(TAG, expiresAt.toString())
+                    Log.i(TAG, tokenType)
+                    Log.i(TAG, oalm.getState(act).toString())
 
                 } else {
                     val errorCode = oalm.getLastErrorCode(act).getCode()
@@ -163,9 +150,6 @@ class LoginFragment : Fragment(), LoginContract.View {
         })
 
         btNaver.setBgResourceId(R.drawable.login_naver);
-
-
-
 
 
     }
@@ -194,20 +178,20 @@ class LoginFragment : Fragment(), LoginContract.View {
     }
 
     override fun showFailLoginTxt() {
-           "error".toast()
+        "error".toast()
     }
 
 
-    override fun getAct() : Activity {
+    override fun getAct(): Activity {
         return activity!!
     }
 
-    fun getFbUserProfile(currentAccessToken: AccessToken ) {
+    fun getFbUserProfile(currentAccessToken: AccessToken) {
         GraphRequest.newMeRequest(
-                currentAccessToken, object :  GraphRequest.GraphJSONObjectCallback {
+                currentAccessToken, object : GraphRequest.GraphJSONObjectCallback {
             override fun onCompleted(js: JSONObject?, response: GraphResponse?) {
 
-                Log.i(TAG,js!!.get("id").toString())
+                Log.i(TAG, js!!.get("id").toString())
             }
         }).run {
             val parameters = Bundle()

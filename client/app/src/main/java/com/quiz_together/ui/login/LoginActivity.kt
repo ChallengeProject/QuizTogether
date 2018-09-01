@@ -1,7 +1,7 @@
 package com.quiz_together.ui.login
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.util.replaceFragmentInActivity
@@ -36,10 +36,6 @@ class LoginActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-
-
-
 
 
 }

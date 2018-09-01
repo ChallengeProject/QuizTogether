@@ -150,8 +150,6 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         if (!mIsClickedReservation) { // 방 개설 시
             val intent = Intent(context, QuizingActivity::class.java)
             intent.putExtra(QuizingActivity.BROADCAST_ID, broadcastId)
-            //TODO need to remove
-            //intent.putExtra(QuizingActivity.LAST_QUESTION_NUM, it.questionCount)
             intent.putExtra(QuizingActivity.IS_ADMIN, true)
 
             startActivity(intent)

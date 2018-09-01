@@ -3,19 +3,16 @@ package com.quiz_together.ui.main.home
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.telecom.Call
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.model.Broadcast
-import com.quiz_together.data.model.GiftType
-import com.quiz_together.data.model.Question
 import com.quiz_together.data.model.RoomOutputType
 import com.quiz_together.util.toStringTemplate
 import kotlinx.android.synthetic.main.item_home_broadcast.view.*
 
-class BroadcastAdapter(private val context: Context?, val cb: (callBackType : CallBackType,broadcast: Broadcast) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BroadcastAdapter(private val context: Context?, val cb: (callBackType: CallBackType, broadcast: Broadcast) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TAG = "BroadcastAdapter#$#"
 
@@ -36,15 +33,14 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
     }
 
     fun sortPagingList() {
-        list.
-                sortByDescending { it.roomOutputType }
+        list.sortByDescending { it.roomOutputType }
     }
 
     fun clearItem() = list.clear()
 
     fun notifyDataSetChang() = notifyDataSetChanged()
 
-    class ImageViewHolder(context: Context?, parent: ViewGroup?, val cbOnClickLl: (callBackType : CallBackType,broadcast: Broadcast) -> Unit)
+    class ImageViewHolder(context: Context?, parent: ViewGroup?, val cbOnClickLl: (callBackType: CallBackType, broadcast: Broadcast) -> Unit)
         : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_home_broadcast, parent, false)) {
 
         val TAG = "ImageViewHolder#$#"
@@ -77,10 +73,10 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                 tvDate.setTextColor(Color.parseColor("#a2a8b0"))
 
                 tvShare.setOnClickListener({ _ ->
-                    cbOnClickLl.invoke(CallBackType.FOLLOW,item)
+                    cbOnClickLl.invoke(CallBackType.FOLLOW, item)
                 })
 
-                rl.setOnLongClickListener { _ ->  false }
+                rl.setOnLongClickListener { _ -> false }
 
             } else if (item.roomOutputType == RoomOutputType.FOLLOW) {
                 ivProfile.borderColor = getResources().getColor(R.color.deepBlue)
@@ -96,10 +92,10 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                 tvDate.text = "해당 방은 ${calcedMin}분 뒤에 진행되기로 예정되어있습니다."
 
                 tvShare.setOnClickListener({ _ ->
-                    cbOnClickLl.invoke(CallBackType.UNFOLLOW,item)
+                    cbOnClickLl.invoke(CallBackType.UNFOLLOW, item)
                 })
 
-                rl.setOnLongClickListener { _ ->  false }
+                rl.setOnLongClickListener { _ -> false }
 
             } else if (item.roomOutputType == RoomOutputType.RESERVATION) {
                 ivProfile.borderColor = getResources().getColor(R.color.shallowDark)
@@ -114,17 +110,19 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
                 tvDate.setTextColor(Color.parseColor("#fafd47"))
                 tvDate.text = "준비하신 퀴즈가 ${calcedMin}분 뒤에 진행되기로 예정되어있습니다."
 
-                tvShare.setOnClickListener({ _ -> null
+                tvShare.setOnClickListener({ _ ->
+                    null
                 })
 
 
                 rl.setOnLongClickListener { _ ->
-                    cbOnClickLl.invoke(CallBackType.LONG_TOUCH,item)
-                    true }
+                    cbOnClickLl.invoke(CallBackType.LONG_TOUCH, item)
+                    true
+                }
             }
 
             rl.setOnClickListener({ _ ->
-                cbOnClickLl.invoke(CallBackType.ROOM,item)
+                cbOnClickLl.invoke(CallBackType.ROOM, item)
             })
 
 
@@ -136,7 +134,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
     }
 
 
-    enum class CallBackType(val value:Int) {
+    enum class CallBackType(val value: Int) {
         FOLLOW(100),
         UNFOLLOW(150),
         ROOM(200),

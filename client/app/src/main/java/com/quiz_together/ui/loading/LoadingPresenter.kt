@@ -1,6 +1,5 @@
 package com.quiz_together.ui.base
 
-import android.util.Log
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.UserView
 import com.quiz_together.data.remote.ApiHelper

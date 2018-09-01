@@ -258,14 +258,11 @@ class ExampleInstrumentedTest {
 
         val str = "NOTICE_MESSAGE"
 
-        Log.i(TAG,PushType.NOTICE_MESSAGE.toString())
-        Log.i(TAG,PushType.NOTICE_MESSAGE.name)
-        Log.i(TAG,PushType.NOTICE_MESSAGE.value.toString())
+        Log.i(TAG, PushType.NOTICE_MESSAGE.toString())
+        Log.i(TAG, PushType.NOTICE_MESSAGE.name)
+        Log.i(TAG, PushType.NOTICE_MESSAGE.value.toString())
 
 //        if ( str == PushType.NOTICE_MESSAGE.toString() )
-
-
-
 
 
     }
