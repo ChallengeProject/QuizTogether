@@ -84,7 +84,7 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
         repository.insertFollower(userId, followerId, object : ApiHelper.GetSuccessCallback {
             override fun onSuccessLoaded() {
 
-                FirebaseMessaging.getInstance().subscribeToTopic(userId)
+                FirebaseMessaging.getInstance().subscribeToTopic(followerId)
 
                 loadBroadcasts()
             }

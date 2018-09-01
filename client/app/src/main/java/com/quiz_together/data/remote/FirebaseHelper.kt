@@ -54,8 +54,8 @@ class FirebaseHelper : FirebaseMessagingService() {
 
             if (gsObj.get("pushType").asString == PushType.FOLLOW_BROADCAST.name) {
 
-                sendNotification("QX : 실시간 퀴즈쇼", gsObj.get("title").asString,
-                        gsObj.get("broadcastId").asString, gsObj.get("userName").asString,gsObj.get("description").asString)
+                sendNotification(title = gsObj.get("title").asString, description = gsObj.get("description").asString,
+                        broadcastId =  gsObj.get("broadcastId").asString,userName =  gsObj.get("userName").asString)
                 return
             }
 
@@ -65,9 +65,9 @@ class FirebaseHelper : FirebaseMessagingService() {
         }
     }
 
-    fun sendNotification(title: String, msg: String, broadcastId: String, userName: String , description: String) {
+    fun sendNotification(title: String, broadcastId: String, userName: String , description: String) {
 
-        Log.i(TAG,"sendNotification : $title $msg $broadcastId $userName $description")
+        Log.i(TAG,"sendNotification : $title $broadcastId $userName $description")
 
 
 
@@ -98,13 +98,13 @@ class FirebaseHelper : FirebaseMessagingService() {
 
 
         builder.setContentTitle(title)
-                .setContentText(msg)
+                .setContentText(description)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setSound(RingtoneManager
                         .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setSmallIcon(android.R.drawable.btn_star)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icc_add))
+                .setSmallIcon(android.R.drawable.btn_star) // TODO 로고 백터이미지
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.qx_icon_512))
                 .setBadgeIconType(R.drawable.icc_add)
                 .setContentIntent(pendingIntent)
 

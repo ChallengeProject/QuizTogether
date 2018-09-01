@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">quiz-together</string>
+    <string name="app_name">QX : 함께하는 퀴즈쇼</string>
     <string name="room_info">방 정보</string>
     <string name="prize">상금</string>
     <string name="goods">상품</string>
