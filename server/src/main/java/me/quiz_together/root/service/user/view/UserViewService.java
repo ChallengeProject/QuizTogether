@@ -11,6 +11,8 @@ import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.model.user.UserInventory;
+import me.quiz_together.root.service.user.UserInventoryService;
 import me.quiz_together.root.service.user.UserReferralService;
 import me.quiz_together.root.service.user.UserService;
 
@@ -19,7 +21,7 @@ import me.quiz_together.root.service.user.UserService;
 public class UserViewService {
     private final UserService userService;
     private final UserReferralService userReferralService;
-
+    private final UserInventoryService userInventoryService;
 
     public UserInfoView login(UserIdRequest userIdRequest) {
         User user = userService.login(userIdRequest);
@@ -32,13 +34,15 @@ public class UserViewService {
 
     public UserProfileView getUserProfileView(long userId) {
         User user = userService.getUserById(userId);
+        UserInventory userInventory = userInventoryService.getUserInventoryByUserId(userId);
 
         return UserProfileView.builder()
-                .userId(user.getId())
-                .profilePath(user.getProfilePath())
-                .money(user.getMoney())
-                .name(user.getName())
-                .build();
+                              .userId(user.getId())
+                              .profilePath(user.getProfilePath())
+                              .money(user.getMoney())
+                              .name(user.getName())
+                              .heartCount(userInventory.getHeartCount())
+                              .build();
     }
 
     public UserInfoView insertUser(UserSignupRequest userSignupRequest) {
@@ -63,6 +67,7 @@ public class UserViewService {
     }
 
     public void insertReferralCode(UserReferralRequest userReferralRequest) {
-        userReferralService.insertReferralUser(userReferralRequest.getUserId(), userReferralRequest.getReferralUser());
+        userReferralService.insertReferralUser(userReferralRequest.getUserId(),
+                                               userReferralRequest.getReferralUser());
     }
 }

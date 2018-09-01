@@ -16,6 +16,7 @@ public class UserProfileView {
     private String profilePath;
     private Long money;
     private BroadcastBeforeStarting broadcastBeforeStarting;
+    private int heartCount;
 
     @Data
     @Builder
