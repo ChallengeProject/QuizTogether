@@ -1,4 +1,4 @@
-package me.quiz_together.root.model.request.broadcast;
+package me.quiz_together.root.model.request.firebase;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +8,7 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class EndBroadcastReq {
+public class ChatMessageRequest {
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashUserId
@@ -18,7 +18,5 @@ public class EndBroadcastReq {
     @HashBroadcastId
     private Long broadcastId;
     @NotNull
-    private String streamId;
-    @NotNull
-    private String chatId;
+    private String message;
 }

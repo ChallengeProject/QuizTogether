@@ -8,7 +8,7 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class StartBroadcastReq {
+public class EndBroadcastRequest {
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashUserId
@@ -17,7 +17,8 @@ public class StartBroadcastReq {
     @ApiModelProperty(dataType = "java.lang.String")
     @HashBroadcastId
     private Long broadcastId;
-    private Long scheduledTime;
     @NotNull
-    private String streamingUrl;
+    private String streamId;
+    @NotNull
+    private String chatId;
 }

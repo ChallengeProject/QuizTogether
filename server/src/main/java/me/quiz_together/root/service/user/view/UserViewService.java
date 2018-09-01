@@ -1,22 +1,28 @@
-package me.quiz_together.root.service.user;
+package me.quiz_together.root.service.user.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import me.quiz_together.root.model.request.user.UserIdReq;
+import lombok.AllArgsConstructor;
+import me.quiz_together.root.model.request.user.UserIdRequest;
+import me.quiz_together.root.model.request.user.UserReferralRequest;
 import me.quiz_together.root.model.request.user.UserSignupRequest;
 import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.service.user.UserReferralService;
+import me.quiz_together.root.service.user.UserService;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserViewService {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserReferralService userReferralService;
 
-    public UserInfoView login(UserIdReq userIdReq) {
-        User user = userService.login(userIdReq);
+
+    public UserInfoView login(UserIdRequest userIdRequest) {
+        User user = userService.login(userIdRequest);
 
         return UserInfoView.builder()
                            .userId(user.getId())
@@ -44,8 +50,8 @@ public class UserViewService {
                            .build();
     }
 
-    public void deleteUserById(UserIdReq userIdReq) {
-        userService.deleteUserById(userIdReq.getUserId());
+    public void deleteUserById(UserIdRequest userIdRequest) {
+        userService.deleteUserById(userIdRequest.getUserId());
     }
 
     public void updateUserProfile(long userId, MultipartFile profileImage) {
@@ -54,5 +60,9 @@ public class UserViewService {
 
     public void findUserByName(String name) {
         userService.findUserByName(name);
+    }
+
+    public void insertReferralCode(UserReferralRequest userReferralRequest) {
+        userReferralService.insertReferralUser(userReferralRequest.getUserId(), userReferralRequest.getReferralUser());
     }
 }

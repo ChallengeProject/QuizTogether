@@ -4,13 +4,12 @@ import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.support.hashid.HashBroadcastId;
 import me.quiz_together.root.support.hashid.HashUserId;
 
 @Data
-public class SendAnswerReq {
-    @NotNull
-    private Integer step;
+public class UpdateBroadcastStatusRequest {
     @NotNull
     @ApiModelProperty(dataType = "java.lang.String")
     @HashUserId
@@ -20,5 +19,5 @@ public class SendAnswerReq {
     @HashBroadcastId
     private Long broadcastId;
     @NotNull
-    private Integer answerNo;
+    private BroadcastStatus broadcastStatus;
 }
