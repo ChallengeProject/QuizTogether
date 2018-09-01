@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.exceptions.NotFoundUserException;
 import me.quiz_together.root.model.broadcast.Broadcast;
@@ -31,25 +32,25 @@ import me.quiz_together.root.model.response.broadcast.PagingBroadcastListView;
 import me.quiz_together.root.model.response.broadcast.StartBroadcastView;
 import me.quiz_together.root.model.response.question.QuestionView;
 import me.quiz_together.root.model.response.user.UserInfoView;
+import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.PlayUserStatus;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.service.FcmService;
 import me.quiz_together.root.service.question.QuestionService;
 import me.quiz_together.root.service.user.UserService;
+import me.quiz_together.root.service.user.view.UserViewService;
 import me.quiz_together.root.support.HashIdUtils;
 import me.quiz_together.root.support.HashIdUtils.HashIdType;
 
 @Slf4j
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BroadcastViewService {
-    @Autowired
-    private BroadcastService broadcastService;
-    @Autowired
-    private QuestionService questionService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private FcmService fcmService;
+    private final BroadcastService broadcastService;
+    private final QuestionService questionService;
+    private final UserService userService;
+    private final FcmService fcmService;
+    private final UserViewService userViewService;
 
     public PagingBroadcastListView getPagingBroadcastList(long next, int limit, Long userId) {
         PagingBroadcastListView pagingBroadcastListView = new PagingBroadcastListView();
@@ -177,12 +178,15 @@ public class BroadcastViewService {
         // TODO:chat 생성
         // 해당 방송자인지 권한 체크
         checkPermissionBroadcast(startBroadcastRequest.getBroadcastId(), startBroadcastRequest.getUserId());
-        // TODO:팬들에게 push 발송 현재 전체 발송
+
+        //follower에게 push 발송
         Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastRequest.getBroadcastId());
         fcmService.sendFollowBroadcast(broadcast);
+        UserProfileView userProfileView = userViewService.getUserProfileView(broadcast.getUserId());
 
         return StartBroadcastView.builder()
                                  .broadcastView(buildBroadcastView(broadcast))
+                                 .userProfileView(userProfileView)
                                  .build();
     }
 
@@ -240,6 +244,7 @@ public class BroadcastViewService {
 
         //currentViewers
         joinBroadcastView.setViewerCount(broadcastService.getCurrentViewers(broadcastId));
+        joinBroadcastView.setUserProfileView(userViewService.getUserProfileView(userId));
 
         return joinBroadcastView;
     }
