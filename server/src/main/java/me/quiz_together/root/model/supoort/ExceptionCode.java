@@ -11,7 +11,7 @@ public enum ExceptionCode {
     CREATED_BROADCAST_MAX(HttpStatus.FORBIDDEN, "최대 생성 갯수 초과"),
     PAST_SCHEDULE_TIME_THAN_CURRENT_TIME(HttpStatus.FORBIDDEN, "예약 시간은 현재 시간 보다 커야 합니다."),
     INVALID_CREATE(HttpStatus.FORBIDDEN, "invalid create try!!"),
-    INACCESSIBLE_BROADCAST(HttpStatus.FORBIDDEN, "현재 입장 불가능한 방입니다."),
+    INACCESSIBLE_BROADCAST(HttpStatus.FORBIDDEN, "현재 접근 불가능한 방입니다."),
     INACCESSIBLE_PERMISSION(HttpStatus.FORBIDDEN, "해당 권한이 없습니다."),
     NOT_MATCH(HttpStatus.FORBIDDEN),
     FILE_NAME_EMPTY(HttpStatus.FORBIDDEN, "file name must be not empty"),

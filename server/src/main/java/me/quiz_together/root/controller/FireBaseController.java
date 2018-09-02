@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.model.firebase.FcmResponse;
 import me.quiz_together.root.model.firebase.PushType;
+import me.quiz_together.root.model.request.firebase.BroadcastPlayInfoRequest;
 import me.quiz_together.root.model.request.firebase.ChatMessageRequest;
 import me.quiz_together.root.model.request.firebase.OpenAnswerRequest;
 import me.quiz_together.root.model.request.firebase.OpenQuestionRequest;
@@ -50,6 +51,11 @@ public class FireBaseController implements ApiController {
     @PostMapping("/firebase/sendAdminChatMessage")
     public ResultContainer<FcmResponse> sendAdminChatMessage(@RequestBody @Valid ChatMessageRequest chatMessageRequest) {
         return new ResultContainer<>(fcmService.sendChatMessage(chatMessageRequest, PushType.ADMIN_MESSAGE));
+    }
+
+    @PostMapping("/firebase/sendBroadcastPlayInfo")
+    public ResultContainer<FcmResponse> sendBroadcastPlayInfo(@RequestBody @Valid BroadcastPlayInfoRequest broadcastPlayInfoRequest) {
+        return new ResultContainer<>(fcmService.sendBroadcastPlayInfo(broadcastPlayInfoRequest));
     }
 
 }
