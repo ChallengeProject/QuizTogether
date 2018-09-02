@@ -237,7 +237,6 @@ class QuizingPresenter(
                 object : ApiHelper.GetSuccessCallback {
                     override fun onSuccessLoaded() {
                         Log.i(TAG,"endBroadcast onSuccessLoaded")
-                        view.finishActivity()
                     }
 
                     override fun onDataNotAvailable() {

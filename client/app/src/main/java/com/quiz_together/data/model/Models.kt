@@ -12,7 +12,7 @@ data class ReqSignup(val name:String, val pushToken :String)
 data class ReqLogin(val userId:String)
 
 //updateUserProfile
-data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
+data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val heartCount:Int, val broadcastBeforeStarting:BroadcastBeforeStarting)
 
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 

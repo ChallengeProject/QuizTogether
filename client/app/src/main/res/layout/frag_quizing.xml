@@ -362,7 +362,7 @@
                     android:gravity="center_horizontal"
                     android:letterSpacing="-0.02"
                     android:lineSpacingExtra="12dp"
-                    android:text="진행자의 한마디\n 총 2줄까지입력가능"
+                    android:text="QX : 함께하는 퀴즈쇼"
                     android:textColor="#1a273d"
                     android:textSize="20dp" />
 
@@ -421,16 +421,6 @@
                 app:civ_border_color="#ffffff"
                 app:civ_border_width="5dp" />
 
-            <TextView
-                android:id="@+id/tvQuizNum"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:lineSpacingExtra="3dp"
-                android:text=""
-                android:textColor="#0e8199"
-                android:textSize="16dp" />
-
             <LinearLayout
                 android:padding="5dp"
                 android:layout_width="match_parent"
@@ -450,19 +440,17 @@
                     />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvQuizNum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"
+                android:text=""
+                android:textColor="@color/deepBlue"
+                android:textSize="16dp" />
 
-            <!--<com.github.lzyzsd.circleprogress.CircleProgress-->
-                <!--android:id="@+id/donut_progress"-->
-                <!--android:layout_width="200dp"-->
-                <!--android:layout_height="200dp"-->
-                <!--custom:donut_finished_color="#0066FF"-->
-                <!--custom:donut_finished_stroke_width="15dp"-->
-                <!--android:backgroundTint="#0066FF"-->
-                <!--android:backgroundTintMode="add"-->
-                <!--custom:donut_inner_drawable="@drawable/icc_chat"-->
-                <!--custom:donut_show_text="false"-->
-                <!--custom:donut_unfinished_color="@color/primary_material_light"-->
-                <!--custom:donut_unfinished_stroke_width="15dp" />-->
+
 
         </RelativeLayout>
     </RelativeLayout>

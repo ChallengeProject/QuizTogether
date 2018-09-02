@@ -22,6 +22,8 @@ class QuizingActivity : AppCompatActivity() {
 
     lateinit var quizingPresenter:QuizingPresenter
 
+    var isAdmin = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -29,7 +31,7 @@ class QuizingActivity : AppCompatActivity() {
 
         val broadcastId = intent.getStringExtra(BROADCAST_ID)
 
-        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
+        isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
@@ -87,7 +89,8 @@ class QuizingActivity : AppCompatActivity() {
                     when(it) {
                         1 -> {
                             quizingPresenter.unsubscribeFirebase(true)
-                            quizingPresenter.endBroadcast()
+                            if(isAdmin) quizingPresenter.endBroadcast()
+                            else finish()
                         }
                     }
                 }).create()
