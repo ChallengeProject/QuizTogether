@@ -66,10 +66,10 @@ public class FcmService {
     }
 
     public FcmResponse sendQuestion(OpenQuestionRequest openQuestionRequest) {
-        checkPermissionBroadcast(openQuestionRequest.getBroadcastId(), openQuestionRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(openQuestionRequest.getBroadcastId(), openQuestionRequest.getUserId());
         //broadcast step validation
         // 문제 제출 시에는 step이 올라가있지 않아 -1을 해줌
-        validCurrentBroadcastStep(openQuestionRequest.getBroadcastId(), openQuestionRequest.getStep()-1);
+        broadcastService.validCurrentBroadcastStep(openQuestionRequest.getBroadcastId(), openQuestionRequest.getStep()-1);
         // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임
         //방송 상태 validation
         Broadcast broadcast = broadcastService.getBroadcastById(openQuestionRequest.getBroadcastId());
@@ -97,12 +97,12 @@ public class FcmService {
     }
 
     public FcmResponse sendAnswer(OpenAnswerRequest openAnswerRequest) {
-        checkPermissionBroadcast(openAnswerRequest.getBroadcastId(), openAnswerRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(openAnswerRequest.getBroadcastId(), openAnswerRequest.getUserId());
         // TODO: 방송 마감 시간 이후 인지 확인하는 로직 추가
         ///// this ///////
 
         //broadcast step validation
-        validCurrentBroadcastStep(openAnswerRequest.getBroadcastId(), openAnswerRequest.getStep());
+        broadcastService.validCurrentBroadcastStep(openAnswerRequest.getBroadcastId(), openAnswerRequest.getStep());
 
         //방송 상태 validation
         Broadcast broadcast = broadcastService.getBroadcastById(openAnswerRequest.getBroadcastId());
@@ -133,11 +133,11 @@ public class FcmService {
     }
 
     public FcmResponse sendWinners(OpenWinnersRequest openWinnersRequest) {
-        checkPermissionBroadcast(openWinnersRequest.getBroadcastId(), openWinnersRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(openWinnersRequest.getBroadcastId(), openWinnersRequest.getUserId());
         //broadcast step validation
         Broadcast broadcast = broadcastService.getBroadcastById(openWinnersRequest.getBroadcastId());
         int totalStep = broadcast.getQuestionCount();
-        validCurrentBroadcastStep(openWinnersRequest.getBroadcastId(), totalStep);
+        broadcastService.validCurrentBroadcastStep(openWinnersRequest.getBroadcastId(), totalStep);
         //방송 상태 validation
         validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.OPEN_WINNER, broadcast.getId());
 
@@ -147,7 +147,7 @@ public class FcmService {
         Map<Long, User> userList = userService.getUserByIds(userIds);
         List<String> userNameList = userList.values().stream().map(User::getName).collect(Collectors.toList());
 
-        //TODO : 상금이 PRize인 경우 우승 자 수 만큼 나눈 뒤에 소수 자리 정하기
+        //TODO : 상금이 Prize인 경우 우승 자 수 만큼 나눈 뒤에 소수 자리 정하기
 
         WinnersMessage winnersMessage = WinnersMessage.builder()
                                                       .giftDescription(broadcast.getGiftDescription())
@@ -167,7 +167,7 @@ public class FcmService {
     }
 
     public FcmResponse sendEndBroadcast(EndBroadcastRequest endBroadcastRequest) {
-        checkPermissionBroadcast(endBroadcastRequest.getBroadcastId(), endBroadcastRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(endBroadcastRequest.getBroadcastId(), endBroadcastRequest.getUserId());
         //방송 상태 validation
         //TODO 강제종료 기능 추가시엔 해당 기능 검토 필요
 //        Broadcast broadcast = broadcastService.getBroadcastById(endBroadcastRequest.getBroadcastId());
@@ -208,22 +208,6 @@ public class FcmService {
 
         FcmResponse fcmResponse = fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
         return fcmResponse;
-    }
-
-    private void checkPermissionBroadcast(long broadcastId, long userId) {
-        //TODO: 인터셉터에서 권한 체크가 필요할듯
-        Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
-        if (broadcast.getUserId() != userId) {
-            throw new IllegalArgumentException(
-                    "해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
-        }
-    }
-
-    private void validCurrentBroadcastStep(long broadcastId, int sendStep) {
-        Long currentStep = broadcastService.getCurrentBroadcastStep(broadcastId);
-        if (currentStep.intValue() != sendStep) {
-            throw new RuntimeException("step 불일치!! currentStep :" + currentStep + " sendStep : " + sendStep);
-        }
     }
 
     private void validBroadcastStatusAndUpdateBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus, long broadcastId) {

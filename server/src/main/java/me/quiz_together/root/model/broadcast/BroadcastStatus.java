@@ -2,6 +2,7 @@ package me.quiz_together.root.model.broadcast;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import me.quiz_together.root.exceptions.InvalidUpdateException;
 import me.quiz_together.root.support.enumeration.ValueEnum;
 
 @AllArgsConstructor
@@ -51,6 +52,6 @@ public enum BroadcastStatus implements ValueEnum {
                 break;
         }
 
-        throw new IllegalArgumentException("해당 status 변경 할 수 없습니다! currentStatus : " + currentBroadcastStatus.name() + " / nextStatus : " + nextBroadcastStatus.name());
+        throw new InvalidUpdateException("해당 status 변경 할 수 없습니다! currentStatus : " + currentBroadcastStatus.name() + " / nextStatus : " + nextBroadcastStatus.name());
     }
 }

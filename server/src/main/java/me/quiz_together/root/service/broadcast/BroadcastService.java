@@ -8,19 +8,23 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.InaccessiblePermissionException;
+import me.quiz_together.root.exceptions.NotMatchException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.user.PlayUserStatus;
 import me.quiz_together.root.repository.broadcast.BroadcastRedisRepository;
 import me.quiz_together.root.repository.broadcast.BroadcastRepository;
 
+@Slf4j
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BroadcastService {
     private static final Integer MAX_BROADCAST = 1;
-    @Autowired
-    private BroadcastRepository broadcastRepository;
-    @Autowired
-    private BroadcastRedisRepository broadcastRedisRepository;
+    private final BroadcastRepository broadcastRepository;
+    private final BroadcastRedisRepository broadcastRedisRepository;
 
     public Broadcast getBroadcastById(long broadcastId) {
         return broadcastRepository.selectBroadcastById(broadcastId);
@@ -119,5 +123,21 @@ public class BroadcastService {
 
     public Long getCurrentViewers(long broadcastId) {
         return broadcastRedisRepository.getCurrentViewers(broadcastId);
+    }
+
+    public void checkPermissionBroadcast(long broadcastId, long userId) {
+        Broadcast broadcast = getBroadcastById(broadcastId);
+        if (broadcast.getUserId() != userId) {
+            log.error("해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
+            throw new InaccessiblePermissionException();
+        }
+    }
+
+    public void validCurrentBroadcastStep(long broadcastId, int sendStep) {
+        Long currentStep = getCurrentBroadcastStep(broadcastId);
+        if (currentStep.intValue() != sendStep) {
+            log.error("step 불일치!! currentStep :" + currentStep + " sendStep : " + sendStep);
+            throw new NotMatchException("현재 step 불일치!!");
+        }
     }
 }

@@ -12,7 +12,12 @@ import com.google.common.collect.Lists;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.CreatedBroadcastMaxException;
+import me.quiz_together.root.exceptions.InaccessibleBroadcastException;
+import me.quiz_together.root.exceptions.InvalidCreateException;
+import me.quiz_together.root.exceptions.InvalidUpdateException;
 import me.quiz_together.root.exceptions.NotFoundUserException;
+import me.quiz_together.root.exceptions.PastScheduleTimeThanCurrentTimeException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
 import me.quiz_together.root.model.question.Question;
@@ -70,7 +75,8 @@ public class BroadcastViewService {
 
         if (broadcast.getBroadcastStatus() != BroadcastStatus.CREATED) {
             // update fail
-            throw new IllegalArgumentException(broadcast.getBroadcastStatus().name() + "상태에서는 변경할 수 없습니다.");
+            log.error("{} 상태에서는 변경할 수 없습니다.", broadcast.getBroadcastStatus().name());
+            throw new InvalidUpdateException(broadcast.getBroadcastStatus().name() + "상태에서는 변경할 수 없습니다.");
         }
         List<Question> questionList = questionService.getQuestionListByBroadcastId(broadcastId);
 
@@ -88,7 +94,7 @@ public class BroadcastViewService {
     }
 
     public String updateBroadcast(BroadcastUpdateRequest broadcastUpdateRequest) {
-        //TODO: 권한 체크 필요
+        broadcastService.checkPermissionBroadcast(broadcastUpdateRequest.getBroadcastId(), broadcastUpdateRequest.getUserId());
 
         Broadcast broadcast = new Broadcast();
         broadcast.setId(broadcastUpdateRequest.getBroadcastId());
@@ -103,6 +109,7 @@ public class BroadcastViewService {
 
         int result = broadcastService.updateBroadcast(broadcast);
         if (result == 0) {
+            log.error("broadcast update fail");
             throw new RuntimeException("broadcast update fail");
         }
         List<Question> questionList = convertQuestionList(broadcastUpdateRequest.getQuestionList());
@@ -113,17 +120,15 @@ public class BroadcastViewService {
 
     public String createBroadcast(BroadcastRequest broadcastRequest) {
         if (broadcastService.getPreparedBroadcastByUserId(broadcastRequest.getUserId())) {
-            //TODO: 에러 코드 정의
-            throw new RuntimeException("최대 생성 갯수 제한 초과!!");
+            throw new CreatedBroadcastMaxException();
         }
         // 예약 시간은 현재시간 보다 커야 한다.
         if (!isInstantStartBroadcast(broadcastRequest.getScheduledTime()) && broadcastRequest.getScheduledTime() >= System.currentTimeMillis()) {
-            //TODO : 에러 코드 정의
-            throw new RuntimeException("예약 시간은 현재시간 보다 커야 합니다.");
+            throw new PastScheduleTimeThanCurrentTimeException();
         }
-        // TODO : questionList size가 0보다 커야 함
-        if (Objects.isNull(broadcastRequest.getQuestionList()) || broadcastRequest.getQuestionList().size() == 0) {
-            throw new RuntimeException("QuestionList null 또는 size가 0 입니다.");
+
+        if (Objects.isNull(broadcastRequest.getQuestionList()) || broadcastRequest.getQuestionList().isEmpty()) {
+            throw new InvalidCreateException("QuestionList null 또는 size가 0 입니다.");
         }
         // scheduledTime이 null이면 즉시 시작
         Broadcast broadcast = convertBroadcast(broadcastRequest);
@@ -141,9 +146,7 @@ public class BroadcastViewService {
     public void sendAnswer(SendAnswerRequest sendAnswerRequest) {
         // 해당 방송의 스탭이랑 맞는지 확인
         //validate
-        if (!broadcastService.isCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep())) {
-            throw new IllegalArgumentException("현재의 broadcast의 step이랑 다릅니다.");
-        }
+        broadcastService.validCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
         // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
         PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
                                                                            sendAnswerRequest.getUserId(),
@@ -177,7 +180,7 @@ public class BroadcastViewService {
         // TODO:stream 등록
         // TODO:chat 생성
         // 해당 방송자인지 권한 체크
-        checkPermissionBroadcast(startBroadcastRequest.getBroadcastId(), startBroadcastRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(startBroadcastRequest.getBroadcastId(), startBroadcastRequest.getUserId());
 
         //follower에게 push 발송
         Broadcast broadcast = broadcastService.getBroadcastById(startBroadcastRequest.getBroadcastId());
@@ -191,7 +194,7 @@ public class BroadcastViewService {
     }
 
     public void endBroadcast(EndBroadcastRequest endBroadcastRequest) {
-        checkPermissionBroadcast(endBroadcastRequest.getBroadcastId(), endBroadcastRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(endBroadcastRequest.getBroadcastId(), endBroadcastRequest.getUserId());
         // 방송 상태 변경
         broadcastService.updateBroadcastStatus(BroadcastStatus.COMPLETED, endBroadcastRequest.getBroadcastId());
         // 방송 종료 push 발송
@@ -208,8 +211,7 @@ public class BroadcastViewService {
         //방송 상태 validate
         // wating, openQuation, openAnswer, openWinners에서만 가능
         if (!broadcastView.getBroadcastStatus().isAccessibleBroadcast()) {
-            //TODO : 에러 코드 및 Exception 정하기
-            throw new IllegalArgumentException("입장 불가능한 방입니다.");
+            throw new InaccessibleBroadcastException();
         }
 
         JoinBroadcastView joinBroadcastView = new JoinBroadcastView();
@@ -257,16 +259,16 @@ public class BroadcastViewService {
     }
 
     public void updateBroadcastStatus(UpdateBroadcastStatusRequest updateBroadcastStatusRequest) {
-        // TODO : broadcast status 검증 필요
-        checkPermissionBroadcast(updateBroadcastStatusRequest.getBroadcastId(),
+        broadcastService.checkPermissionBroadcast(updateBroadcastStatusRequest.getBroadcastId(),
                                  updateBroadcastStatusRequest.getUserId());
+        // TODO : broadcast status 검증 필요 추후 검토
 
         broadcastService.updateBroadcastStatus(updateBroadcastStatusRequest.getBroadcastStatus(),
                                                updateBroadcastStatusRequest.getBroadcastId());
     }
 
     public void deleteBroadcast(DeleteBroadcastRequest deleteBroadcastRequest) {
-        checkPermissionBroadcast(deleteBroadcastRequest.getBroadcastId(), deleteBroadcastRequest.getUserId());
+        broadcastService.checkPermissionBroadcast(deleteBroadcastRequest.getBroadcastId(), deleteBroadcastRequest.getUserId());
         broadcastService.deleteBroadcastById(deleteBroadcastRequest.getBroadcastId());
     }
 
@@ -331,14 +333,7 @@ public class BroadcastViewService {
         return broadcast;
     }
 
-    private void checkPermissionBroadcast(long broadcastId, long userId) {
-        //TODO: 인터셉터에서 권한 체크가 필요할듯
-        Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
-        if (broadcast.getUserId() != userId) {
-            throw new IllegalArgumentException(
-                    "해당 유저는 권한이 없습니다. broadcastId : " + broadcastId + " userId : " + userId + "!!");
-        }
-    }
+
 
     private boolean isInstantStartBroadcast(Long scheduledTime) {
         if (Objects.isNull(scheduledTime)) {

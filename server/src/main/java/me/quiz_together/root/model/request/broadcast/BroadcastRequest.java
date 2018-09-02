@@ -2,6 +2,7 @@ package me.quiz_together.root.model.request.broadcast;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -23,13 +24,11 @@ public class BroadcastRequest {
     private Long scheduledTime;
     @NotNull
     private GiftType giftType;
-    @NotNull
     private Long prize;
-    @NotNull
     private String giftDescription;
     @NotNull
     private String winnerMessage;
-    @NotNull
+    @NotEmpty
     private List<QuestionRequest> questionList;
 }
 
