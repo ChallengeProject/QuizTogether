@@ -1,5 +1,11 @@
 package me.quiz_together.root.service.broadcast;
 
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.COMPLETED;
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_ANSWER;
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_QUESTION;
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_WINNER;
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.WATING;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.exceptions.InaccessiblePermissionException;
+import me.quiz_together.root.exceptions.InvalidUpdateException;
 import me.quiz_together.root.exceptions.NotMatchException;
 import me.quiz_together.root.model.broadcast.Broadcast;
 import me.quiz_together.root.model.broadcast.BroadcastStatus;
@@ -139,5 +146,43 @@ public class BroadcastService {
             log.error("step 불일치!! currentStep :" + currentStep + " sendStep : " + sendStep);
             throw new NotMatchException("현재 step 불일치!!");
         }
+    }
+
+    public void validBroadcastStatusAndUpdateBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus, long broadcastId) {
+        validateNextBroadcastStatus(currentBroadcastStatus, nextBroadcastStatus);
+        //방송 상태 변경
+        updateBroadcastStatus(nextBroadcastStatus, broadcastId);
+    }
+
+    public void validateNextBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus) {
+        switch (currentBroadcastStatus) {
+            case CREATED:
+                if (nextBroadcastStatus == WATING) {
+                    return;
+                }
+                break;
+            case WATING:
+                if (nextBroadcastStatus == OPEN_ANSWER || nextBroadcastStatus == OPEN_QUESTION || nextBroadcastStatus == OPEN_WINNER) {
+                    return;
+                }
+                break;
+            case OPEN_QUESTION:
+                if (nextBroadcastStatus == WATING) {
+                    return;
+                }
+                break;
+            case OPEN_ANSWER:
+                if (nextBroadcastStatus == WATING) {
+                    return;
+                }
+                break;
+            case OPEN_WINNER:
+                if (nextBroadcastStatus == COMPLETED) {
+                    return;
+                }
+                break;
+        }
+
+        throw new InvalidUpdateException("해당 status 변경 할 수 없습니다! currentStatus : " + currentBroadcastStatus.name() + " / nextStatus : " + nextBroadcastStatus.name());
     }
 }
