@@ -15,20 +15,18 @@ import me.quiz_together.root.model.supoort.ResultContainer;
 @RestControllerAdvice
 public class ResponseExceptionHandler {
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundUserException.class)
-    public final ResultContainer<Object> handleNotFoundUserException(HttpServletRequest request, NotFoundUserException e) {
+    @ExceptionHandler(ResponseException.class)
+    public final ResultContainer<Object> handleResponseException(HttpServletRequest request, ResponseException e) {
         log.warn(e.toString(), e);
 
-        return new ResultContainer<>(ExceptionCode.NOT_FOUND_USER, e.toString(), null);
+        return new ResultContainer<>(e.getExceptionCode(), e.getMessage(), null);
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(ConflictUserException.class)
-    public final ResultContainer<Object> handleNotFoundUserException(HttpServletRequest request, ConflictUserException e) {
-        log.warn(e.toString(), e);
-
-        return new ResultContainer<>(ExceptionCode.CONFLICT_USER, e.toString(), null);
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ResultContainer<Object> handleException(HttpServletRequest req, Exception exception) {
+        log.error(exception.toString(), exception);
+        return new ResultContainer<>(ExceptionCode.INTERNAL_SERVER_ERROR, exception.getMessage(), null);
     }
 
 }

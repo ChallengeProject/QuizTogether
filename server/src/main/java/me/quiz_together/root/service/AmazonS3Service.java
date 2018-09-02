@@ -24,6 +24,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.FileNameEmptyException;
 import me.quiz_together.root.support.security.SecurityUtils;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class AmazonS3Service {
 
     public String uploadImage(MultipartFile multipartFile){
         if (StringUtils.isEmpty(multipartFile.getOriginalFilename())) {
-            throw new IllegalArgumentException("파일 이름 없음!!");
+            throw new FileNameEmptyException();
         }
 
         String uploadKey = createHashFileName(multipartFile.getOriginalFilename());

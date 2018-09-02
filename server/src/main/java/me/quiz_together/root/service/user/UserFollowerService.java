@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.ConflictFollowerException;
 import me.quiz_together.root.model.user.UserFollower;
 import me.quiz_together.root.repository.user.UserFollowerRepository;
 
@@ -21,9 +22,8 @@ public class UserFollowerService {
         try {
             userFollowerRepository.insertFollower(userFollower);
         } catch (DataIntegrityViolationException e) {
-            //TODO : error code 정의
             log.warn("userId : {} follower : {}", userFollower.getUserId(), userFollower.getFollower());
-            throw new DataIntegrityViolationException("userId : " + userFollower.getUserId() + " follower : " + userFollower.getFollower() , e);
+            throw new ConflictFollowerException();
         }
     }
 

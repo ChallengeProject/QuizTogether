@@ -67,7 +67,6 @@ public class UserService {
     }
 
     public User login(UserIdRequest userIdRequest) {
-        //TODO : userID가 없는 유저가 있을 수 있음
         return userRepository.login(userIdRequest.getUserId());
     }
 

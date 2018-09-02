@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.ConflictFollowerException;
 import me.quiz_together.root.model.request.user.UserFollowerRequest;
 import me.quiz_together.root.model.response.user.UserFollowerView;
 import me.quiz_together.root.model.response.user.UserFollowerViewList;
@@ -22,10 +23,7 @@ public class UserFollowerViewService {
 
     public void insertFollower(UserFollowerRequest userFollowerRequest) {
         if (userFollowerRequest.getUserId().equals(userFollowerRequest.getFollower())) {
-            // TODO : error code 정의
-            throw new RuntimeException(
-                    "userId : " + userFollowerRequest.getUserId() + " follower : " + userFollowerRequest
-                            .getFollower());
+            throw new ConflictFollowerException();
         }
         userFollowerService.insertFollower(convertUserFollower(userFollowerRequest));
     }
