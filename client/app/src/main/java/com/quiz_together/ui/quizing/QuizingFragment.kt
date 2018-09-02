@@ -3,6 +3,7 @@ package com.quiz_together.ui.quizing
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -11,17 +12,22 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.GridView
 import com.bumptech.glide.Glide
-import com.github.lzyzsd.circleprogress.CircleProgress
+import com.quiz_together.App
 import com.quiz_together.R
-import com.quiz_together.data.model.*
+import com.quiz_together.data.model.AdminMsg
+import com.quiz_together.data.model.AnswerMsg
+import com.quiz_together.data.model.BroadcastStatus
+import com.quiz_together.data.model.ChatMsg
+import com.quiz_together.data.model.EndMsg
+import com.quiz_together.data.model.GiftType
+import com.quiz_together.data.model.QuestionMsg
+import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.util.plusAssign
 import com.quiz_together.util.setTouchable
 import com.quiz_together.util.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.frag_quizing.*
 import java.util.concurrent.TimeUnit
 
@@ -52,8 +58,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-//    var disposer1: Disposable? = null
-//    var disposer2: Disposable? = null
     private val compositeDisposable = CompositeDisposable()
 
     var isAdmin = false
@@ -74,7 +78,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     }
 
     override fun setLoadingIndicator(active: Boolean) {
-        activity?.getWindow()?.setTouchable(active)
+        activity?.window?.setTouchable(active)
     }
 
     fun pickAnswer(num: Int) {
@@ -88,6 +92,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         if (pickNum > 0)
             rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100, true)
     }
+
+
 
     fun initListeners() {
 
@@ -119,6 +125,11 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             if (!isAdmin) return@setOnClickListener
             rlNextStep.isClickable = false
 
+            if (quizStatus == QuizStatus.ENDING) {
+                presenter.endBroadcast()
+                return@setOnClickListener
+            }
+
             if (quizBefStatus == QuizStatus.ANSWERING) {
 
                 if (lastQuestionNum == curQuizStep)
@@ -130,9 +141,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             } else if (quizBefStatus == QuizStatus.QUIZING) {
                 presenter.openAnswer(curQuizStep)
                 quizBefStatus = QuizStatus.ANSWERING
-            } else if (quizBefStatus == QuizStatus.ENDING) {
-                presenter.endBroadcast()
-                "종료".toast()
             }
 
         }
@@ -141,7 +149,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 //        >> second answer
 
         val activityRootView = activity!!.getWindow().getDecorView().findViewById<View>(android.R.id.content)
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener({
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener{
             val heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight()
 //            activityRootView.getRootView().getHeight().toString() // 2960
 //            TAG,activityRootView.getHeight().toString() // 2672 > 1619
@@ -173,27 +181,27 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
                 isOpenKbd = false
             }
-        })
+        }
 
 
-        etMsg.setOnKeyListener({ v, keyCode, event ->
+        etMsg.setOnKeyListener{ v, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 sendEdittextMessage()
                 true
             } else
                 false
-        })
+        }
 
 
         ibChatOn.setOnClickListener { v ->
             csMsgBox.visibility = View.VISIBLE
 
             // give focus to edittext ( https://stackoverflow.com/questions/8080579/android-textfield-set-focus-soft-input-programmatically )
-            etMsg.post({
+            etMsg.post{
                 etMsg.requestFocusFromTouch()
                 val lManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 lManager.showSoftInput(etMsg, 0)
-            })
+            }
         }
 
     }
@@ -228,6 +236,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     fun setQuizNum(num: Int,gage:Boolean) {
 
         if(gage) {
+            tvQuizNum.setTextColor(ContextCompat.getColor(App.instance.applicationContext, R.color.speciYellow))
+
             cpGage.visibility = View.VISIBLE
 
             compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
@@ -237,8 +247,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                         val curSec = it.toInt() + 1
                         cpGage.progress = curSec
 
-                        if(curSec == 10)
+                        if(curSec == 10) {
                             cpGage.visibility = View.GONE
+                            tvQuizNum.setTextColor(ContextCompat.getColor(App.instance.applicationContext, R.color.deepBlue))
+                        }
                     }
         }
 
@@ -449,6 +461,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 isExpandChatWindow_ = false,
                 imgId = if (isAdmin) R.drawable.icc_play else R.drawable.icc_profile)
 
+        rlNextStep.isClickable = true
+
         val users = mutableListOf<Pair<String, String>>()
 
         var tmpStr: String? = null
@@ -483,6 +497,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun endQuiz(endMsg: EndMsg) {
         Log.i(TAG, "endQuiz : ${endMsg.toString()}")
         presenter.unsubscribeFirebase(false)
+        "퀴즈를 이용해주셔서 감사합니다".toast()
+
         activity?.finish()
     }
 
@@ -601,6 +617,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         activity!!.finish()
     }
 
+    override fun finishActivity() {
+        activity!!.finish()
+    }
+
     enum class QuizStatus(val value: Int) {
         BEFORE_START(100),
         RESTING(200),
@@ -614,8 +634,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         if(!compositeDisposable.isDisposed)
             compositeDisposable.dispose()
-//        disposer1?.dispose()
-//        disposer2?.dispose()
 
     }
 

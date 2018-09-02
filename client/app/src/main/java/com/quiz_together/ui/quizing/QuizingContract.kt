@@ -24,6 +24,7 @@ interface QuizingContract {
         fun endQuiz(endMsg: EndMsg)
 
         fun endQuizFromErr()
+        fun finishActivity()
 
     }
 

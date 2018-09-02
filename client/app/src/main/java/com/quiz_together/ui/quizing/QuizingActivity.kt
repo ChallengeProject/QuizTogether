@@ -12,6 +12,7 @@ import android.view.Window
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.remote.FirebaseHelper
+import com.quiz_together.ui.SelectorDialog
 import com.quiz_together.util.replaceFragmentInActivity
 
 
@@ -21,6 +22,8 @@ class QuizingActivity : AppCompatActivity() {
 
     lateinit var quizingPresenter:QuizingPresenter
 
+    var isAdmin = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -28,7 +31,7 @@ class QuizingActivity : AppCompatActivity() {
 
         val broadcastId = intent.getStringExtra(BROADCAST_ID)
 
-        val isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
+        isAdmin = intent.getBooleanExtra(IS_ADMIN,false)
 
         val fragment = supportFragmentManager
                 .findFragmentById(R.id.fl_content) as QuizingFragment? ?:
@@ -77,9 +80,21 @@ class QuizingActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
 
-        quizingPresenter.unsubscribeFirebase(true)
+        SelectorDialog(this,
+                title = "퀴즈를 정말로 종료하시겠습니까?",
+                firstSelector = SelectorDialog.DialogSelectorInfo("네, 종료할게요", R.color.soDeepBlue),
+                secondSelector = SelectorDialog.DialogSelectorInfo("한 번 더 확인해볼게요!", R.color.redInDialog),
+                cb = {
+                    when(it) {
+                        1 -> {
+                            quizingPresenter.unsubscribeFirebase(true)
+                            if(isAdmin) quizingPresenter.endBroadcast()
+                            else finish()
+                        }
+                    }
+                }).create()
+
 
     }
 

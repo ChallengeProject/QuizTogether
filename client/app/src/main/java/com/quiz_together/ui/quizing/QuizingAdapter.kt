@@ -36,11 +36,15 @@ class QuizingAdapter(val context:Context) : BaseAdapter() {
         val tvName1 = retView.findViewById<TextView>(R.id.tvName1)
         val tvName2 = retView.findViewById<TextView>(R.id.tvName2)
         val ivProfile2 = retView.findViewById<ImageView>(R.id.ivProfile2)
+        val ivProfile2Crown = retView.findViewById<ImageView>(R.id.ivProfile2Crown)
 
         tvName1.text = this.users.get(position).first
         tvName2.text = this.users.get(position).second
 
-        if (this.users.get(position).second.isNullOrEmpty()) ivProfile2.visibility = View.INVISIBLE
+        if (this.users.get(position).second.isNullOrEmpty()) {
+            ivProfile2.visibility = View.INVISIBLE
+            ivProfile2Crown.visibility = View.INVISIBLE
+        }
 
         return retView
     }

@@ -195,10 +195,10 @@ class AppApiHelper : ApiHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
-
-                    Log.e(TAG, "startBroadcast rst")
-                    Log.e(TAG, Gson().toJson(it.data))
-                    Log.e(TAG, it.toString())
+//
+//                    Log.e(TAG, "startBroadcast rst")
+//                    Log.e(TAG, Gson().toJson(it.data))
+//                    Log.e(TAG, it.toString())
 
                     if(it.code == 200)
                         cb.onBroadcastViewLoaded(it.data)

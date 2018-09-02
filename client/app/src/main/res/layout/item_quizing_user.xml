@@ -57,6 +57,7 @@
             app:civ_border_width="1dp" />
 
         <ImageView
+            android:id="@+id/ivProfile2Crown"
             android:layout_width="27dp"
             android:layout_height="18dp"
             android:layout_alignParentTop="true"
