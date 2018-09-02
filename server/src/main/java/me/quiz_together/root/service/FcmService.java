@@ -68,7 +68,8 @@ public class FcmService {
     public FcmResponse sendQuestion(OpenQuestionRequest openQuestionRequest) {
         checkPermissionBroadcast(openQuestionRequest.getBroadcastId(), openQuestionRequest.getUserId());
         //broadcast step validation
-        validCurrentBroadcastStep(openQuestionRequest.getBroadcastId(), openQuestionRequest.getStep());
+        // 문제 제출 시에는 step이 올라가있지 않아 -1을 해줌
+        validCurrentBroadcastStep(openQuestionRequest.getBroadcastId(), openQuestionRequest.getStep()-1);
         // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임
         //방송 상태 validation
         Broadcast broadcast = broadcastService.getBroadcastById(openQuestionRequest.getBroadcastId());
@@ -220,7 +221,7 @@ public class FcmService {
 
     private void validCurrentBroadcastStep(long broadcastId, int sendStep) {
         Long currentStep = broadcastService.getCurrentBroadcastStep(broadcastId);
-        if (currentStep.intValue() == sendStep) {
+        if (currentStep.intValue() != sendStep) {
             throw new RuntimeException("step 불일치!! currentStep :" + currentStep + " sendStep : " + sendStep);
         }
     }
