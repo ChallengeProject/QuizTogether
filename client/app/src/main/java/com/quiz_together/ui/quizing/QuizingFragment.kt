@@ -52,8 +52,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-//    var disposer1: Disposable? = null
-//    var disposer2: Disposable? = null
     private val compositeDisposable = CompositeDisposable()
 
     var isAdmin = false
@@ -88,6 +86,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         if (pickNum > 0)
             rcpbController.setRCPB(pickNum, SelectorController.SelectorColor.SELECT, 100, true)
     }
+
+
 
     fun initListeners() {
 
@@ -601,6 +601,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         activity!!.finish()
     }
 
+    override fun finishActivity() {
+        activity!!.finish()
+    }
+
     enum class QuizStatus(val value: Int) {
         BEFORE_START(100),
         RESTING(200),
@@ -614,8 +618,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         if(!compositeDisposable.isDisposed)
             compositeDisposable.dispose()
-//        disposer1?.dispose()
-//        disposer2?.dispose()
 
     }
 

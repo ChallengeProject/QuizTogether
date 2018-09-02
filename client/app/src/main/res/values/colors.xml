@@ -32,4 +32,7 @@
     <color name="black">#000000</color>
 
     <color name="speciYellow">#fafd47</color>
+
+    <color name="redInDialog">#ff2c2c</color>
+
 </resources>

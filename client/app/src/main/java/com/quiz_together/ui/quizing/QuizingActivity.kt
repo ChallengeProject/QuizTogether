@@ -12,6 +12,7 @@ import android.view.Window
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.remote.FirebaseHelper
+import com.quiz_together.ui.SelectorDialog
 import com.quiz_together.util.replaceFragmentInActivity
 
 
@@ -77,9 +78,20 @@ class QuizingActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
 
-        quizingPresenter.unsubscribeFirebase(true)
+        SelectorDialog(this,
+                title = "퀴즈를 정말로 종료하시겠습니까?",
+                firstSelector = SelectorDialog.DialogSelectorInfo("네, 종료할게요", R.color.soDeepBlue),
+                secondSelector = SelectorDialog.DialogSelectorInfo("한 번 더 확인해볼게요!", R.color.redInDialog),
+                cb = {
+                    when(it) {
+                        1 -> {
+                            quizingPresenter.unsubscribeFirebase(true)
+                            quizingPresenter.endBroadcast()
+                        }
+                    }
+                }).create()
+
 
     }
 

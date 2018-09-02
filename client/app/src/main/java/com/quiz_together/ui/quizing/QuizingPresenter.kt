@@ -4,7 +4,19 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.*
+import com.quiz_together.data.model.AdminMsg
+import com.quiz_together.data.model.AnswerMsg
+import com.quiz_together.data.model.BroadcastJoinInfo
+import com.quiz_together.data.model.BroadcastStatus
+import com.quiz_together.data.model.ChatMsg
+import com.quiz_together.data.model.EndMsg
+import com.quiz_together.data.model.PushType
+import com.quiz_together.data.model.QuestionMsg
+import com.quiz_together.data.model.ReqEndBroadcast
+import com.quiz_together.data.model.ReqSendAnswer
+import com.quiz_together.data.model.ReqStartBroadcast
+import com.quiz_together.data.model.ResStartBroadcast
+import com.quiz_together.data.model.WinnersMsg
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
@@ -197,11 +209,11 @@ class QuizingPresenter(
         repository.openQuestion(broadcastId,SC.USER_ID,step,
                 object : ApiHelper.GetSuccessCallback {
                     override fun onSuccessLoaded() {
-                        Log.i(TAG,"openAnswer onSuccessLoaded")
+                        Log.i(TAG,"openQuestion onSuccessLoaded")
                     }
 
                     override fun onDataNotAvailable() {
-                        Log.i(TAG,"openAnswer onDataNotAvailable")
+                        Log.i(TAG,"openQuestion onDataNotAvailable")
                     }
                 })
     }
@@ -210,11 +222,11 @@ class QuizingPresenter(
         repository.openWinners(broadcastId,SC.USER_ID,
                 object : ApiHelper.GetSuccessCallback {
                     override fun onSuccessLoaded() {
-                        Log.i(TAG,"openAnswer onSuccessLoaded")
+                        Log.i(TAG,"openWinners onSuccessLoaded")
                     }
 
                     override fun onDataNotAvailable() {
-                        Log.i(TAG,"openAnswer onDataNotAvailable")
+                        Log.i(TAG,"openWinners onDataNotAvailable")
                     }
                 })
     }
@@ -224,11 +236,12 @@ class QuizingPresenter(
         repository.endBroadcast(ReqEndBroadcast(broadcastId,SC.USER_ID,"dummy","dummy"),
                 object : ApiHelper.GetSuccessCallback {
                     override fun onSuccessLoaded() {
-                        Log.i(TAG,"openAnswer onSuccessLoaded")
+                        Log.i(TAG,"endBroadcast onSuccessLoaded")
+                        view.finishActivity()
                     }
 
                     override fun onDataNotAvailable() {
-                        Log.i(TAG,"openAnswer onDataNotAvailable")
+                        Log.i(TAG,"endBroadcast onDataNotAvailable")
                     }
                 })
     }

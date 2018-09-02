@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.quiz_together.R
 import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.main.home.HomeFragment
@@ -92,6 +91,9 @@ class MainActivity : AppCompatActivity() {
         initListener()
 //        bnv.disableShiftMode()
 //        bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+
+
 
     }
 
