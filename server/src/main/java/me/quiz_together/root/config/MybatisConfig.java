@@ -32,7 +32,6 @@ import me.quiz_together.root.support.typehandler.ValueEnumTypeHandler;
 @Configuration
 @EnableTransactionManagement
 public class MybatisConfig {
-//    public static final String MAPPER_LOCATIONS_PATH = "classpath:mapper/*Mapper.xml";
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
@@ -40,7 +39,6 @@ public class MybatisConfig {
         sqlSessionFactoryBean.setDataSource(dataSource);
 
         sqlSessionFactoryBean.setConfiguration(mybatisConfiguration());
-//        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATIONS_PATH));
         return sqlSessionFactoryBean.getObject();
     }
 
