@@ -27,6 +27,8 @@ spring:
 
 fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
+logging:
+  config: classpath:local/log4j2.xml
 
 
 ---
@@ -45,7 +47,8 @@ spring:
 
 fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
-
+logging:
+  config: classpath:dev/log4j2.xml
 ---
 
 spring:
@@ -64,3 +67,5 @@ fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
 server:
   port: 8081
+logging:
+  config: classpath:real/log4j2.xml
