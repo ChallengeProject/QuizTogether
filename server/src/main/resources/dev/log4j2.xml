@@ -15,7 +15,7 @@
 
   <RollingRandomAccessFile name="LogFileAppender" fileName="${log.dir}api-${env}.log"
                            filePattern="${log.dir}api-${env}.log.%d{yyyy-MM-dd-HH}-%i"
-                           immediateFlush="true" append="true" bufferSize="256">
+                           immediateFlush="true" append="true" >
     <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss:SSS} [%-5p] [%t] [%X{tid}] [%c{1}:%L] %m %n"/>
     <Policies>
       <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
