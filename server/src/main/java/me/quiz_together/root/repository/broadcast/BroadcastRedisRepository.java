@@ -78,8 +78,8 @@ public class BroadcastRedisRepository {
     /////////////////////////
     // playUserAnswer
     /////////////////////////
-    public void insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
-        integerRedisTemplate.opsForHash().put(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId), HEART_KEY
+    public boolean insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
+        return integerRedisTemplate.opsForHash().putIfAbsent(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId), HEART_KEY
                                                                                                         + step,
                                               answerNo);
     }
