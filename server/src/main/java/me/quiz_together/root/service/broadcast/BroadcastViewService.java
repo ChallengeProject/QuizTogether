@@ -157,6 +157,11 @@ public class BroadcastViewService {
         // 해당 방송의 스탭이랑 맞는지 확인
         //validate
         broadcastService.validCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
+        // status가 openQuestion인지 확인
+        Broadcast broadcast = broadcastService.getBroadcastById(sendAnswerRequest.getBroadcastId());
+        if (broadcast.getBroadcastStatus() != BroadcastStatus.OPEN_QUESTION) {
+            throw new AbusingUserException("abusing user! broadcast status :" + broadcast.getBroadcastStatus());
+        }
         // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
         PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
                                                                            sendAnswerRequest.getUserId(),
@@ -181,6 +186,7 @@ public class BroadcastViewService {
                                             sendAnswerRequest.getStep());
         } else {
             //탈락자 등록
+            broadcastService.insertLoserUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(), sendAnswerRequest.getStep());
         }
         // 3. 퀴즈 통계 등록
         broadcastService.incrementQuestionAnswerStat(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep(),
@@ -213,7 +219,7 @@ public class BroadcastViewService {
         fcmService.sendEndBroadcast(endBroadcastRequest);
         // stream 업데이트
         // chat close
-        // redis에서 해당 방송 관련된 정보 지우기
+        // TODO redis에서 해당 방송 관련된 정보 지우기
     }
 
     public JoinBroadcastView getJoinBroadcastView(long broadcastId, long userId) {
@@ -306,7 +312,7 @@ public class BroadcastViewService {
             throw new RuntimeException("user heart count update fail");
         }
         // user 상태 업데이트
-        broadcastService.deleteLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId());
+        broadcastService.deleteLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getStep());
         broadcastService.insertPlayUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep());
     }
 

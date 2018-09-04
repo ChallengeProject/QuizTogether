@@ -71,9 +71,9 @@ public class FcmService {
         // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임
         //방송 상태 validation
         Broadcast broadcast = broadcastService.getBroadcastById(openQuestionRequest.getBroadcastId());
-        broadcastService.validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
-                                                                      BroadcastStatus.OPEN_QUESTION,
-                                                                      broadcast.getId());
+        broadcastService.validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
+                                                                          BroadcastStatus.OPEN_QUESTION,
+                                                                          broadcast.getId());
         //문제 제출 마감시간 설정
 
         //현재의 방송 step 등록
@@ -105,9 +105,9 @@ public class FcmService {
 
         //방송 상태 validation
         Broadcast broadcast = broadcastService.getBroadcastById(openAnswerRequest.getBroadcastId());
-        broadcastService.validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
-                                                                      BroadcastStatus.OPEN_ANSWER,
-                                                                      broadcast.getId());
+        broadcastService.validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
+                                                                          BroadcastStatus.OPEN_ANSWER,
+                                                                          broadcast.getId());
 
         Question question = questionService.getQuestionByBroadcastIdAndStep(openAnswerRequest.getBroadcastId(),
                                                                             openAnswerRequest.getStep());
@@ -135,9 +135,9 @@ public class FcmService {
         int totalStep = broadcast.getQuestionCount();
         broadcastService.validCurrentBroadcastStep(openWinnersRequest.getBroadcastId(), totalStep);
         //방송 상태 validation
-        broadcastService.validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
-                                                                      BroadcastStatus.OPEN_WINNER,
-                                                                      broadcast.getId());
+        broadcastService.validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
+                                                                          BroadcastStatus.OPEN_WINNER,
+                                                                          broadcast.getId());
 
         String to = generateTopics(openWinnersRequest.getBroadcastId(), HashIdType.BROADCAST_ID);
 
@@ -165,7 +165,7 @@ public class FcmService {
         //방송 상태 validation
         //TODO 강제종료 기능 추가시엔 해당 기능 검토 필요
 //        Broadcast broadcast = broadcastService.getBroadcastById(endBroadcastRequest.getBroadcastId());
-//        validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.COMPLETED, broadcast.getId());
+//        validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(), BroadcastStatus.COMPLETED, broadcast.getId());
 
         String to = generateTopics(endBroadcastRequest.getBroadcastId(), HashIdType.BROADCAST_ID);
 
@@ -177,9 +177,9 @@ public class FcmService {
     }
 
     public FcmResponse sendFollowBroadcast(Broadcast broadcast) {
-        broadcastService.validBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
-                                                                      BroadcastStatus.WATING,
-                                                                      broadcast.getId());
+        broadcastService.validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
+                                                                          BroadcastStatus.WATING,
+                                                                          broadcast.getId());
         User user = userService.getUserById(broadcast.getUserId());
 
         String to = generateTopics(broadcast.getUserId(), HashIdType.USER_ID);
