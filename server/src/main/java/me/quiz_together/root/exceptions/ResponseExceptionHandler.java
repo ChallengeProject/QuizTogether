@@ -17,7 +17,7 @@ public class ResponseExceptionHandler {
 
     @ExceptionHandler(ResponseException.class)
     public final ResultContainer<Object> handleResponseException(HttpServletRequest request, ResponseException e) {
-        log.warn(e.toString(), e);
+        log.error(e.toString(), e);
 
         return new ResultContainer<>(e.getExceptionCode(), e.getMessage(), null);
     }

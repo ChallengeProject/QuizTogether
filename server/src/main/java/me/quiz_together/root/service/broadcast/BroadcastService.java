@@ -99,8 +99,8 @@ public class BroadcastService {
         return broadcastRedisRepository.isLoserUser(broadcastId, step, userId);
     }
 
-    public void deleteLoserUser(long broadcastId, long userId) {
-        return broadcastRedisRepository.deleteLoserUser(broadcastId, step, userId);
+    public void deleteLoserUser(long broadcastId, int step) {
+        broadcastRedisRepository.deleteLoserUser(broadcastId, step);
     }
 
     public PlayUserStatus getPlayUserStatus(long broadcastId, long userId, int step) {
@@ -161,7 +161,7 @@ public class BroadcastService {
         }
     }
 
-    public void validBroadcastStatusAndUpdateBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus, long broadcastId) {
+    public void validNextBroadcastStatusAndUpdateBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus, long broadcastId) {
         validateNextBroadcastStatus(currentBroadcastStatus, nextBroadcastStatus);
         //방송 상태 변경
         updateBroadcastStatus(nextBroadcastStatus, broadcastId);
