@@ -70,6 +70,11 @@ public class BroadcastViewService {
         return pagingBroadcastListView;
     }
 
+    public BroadcastView getBroadcastById(long broadcastId) {
+        Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
+        return buildBroadcastView(broadcast);
+    }
+
     public BroadcastForUpdateView getBroadcastForUpdateById(long broadcastId) {
         Broadcast broadcast = broadcastService.getBroadcastById(broadcastId);
 
