@@ -18,6 +18,7 @@ import me.quiz_together.root.model.request.broadcast.DeleteBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.SendAnswerRequest;
+import me.quiz_together.root.model.request.broadcast.SendHeartRequest;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusRequest;
 import me.quiz_together.root.model.response.broadcast.BroadcastForUpdateView;
@@ -114,6 +115,12 @@ public class BroadcastController implements ApiController {
     @PostMapping("/broadcast/deleteBroadcast")
     public ResultContainer<Void> deleteBroadcast(@RequestBody @Valid DeleteBroadcastRequest deleteBroadcastRequest) {
         broadcastViewService.deleteBroadcast(deleteBroadcastRequest);
+        return new ResultContainer<>();
+    }
+
+    @PostMapping("/broadcast/sendHeart")
+    public ResultContainer<Void> sendHeart(@RequestBody @Valid SendHeartRequest sendHeartRequest) {
+        broadcastViewService.sendHeart(sendHeartRequest);
         return new ResultContainer<>();
     }
 

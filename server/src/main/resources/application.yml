@@ -25,11 +25,11 @@ spring:
     database: 0
     password: qqqq
 
+
 fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
 logging:
   config: classpath:local/log4j2.xml
-
 
 ---
 

@@ -65,26 +65,42 @@ public class BroadcastService {
         return broadcastRepository.deleteBroadcastById(broadcastId);
     }
 
-    public Set<Long> getPlayUserIds(long broadcastId, int lastStep) {
-        return broadcastRedisRepository.selectPlayUserIds(broadcastId, lastStep);
-    }
-
     public Map<Integer, Integer> getQuestionAnswerStat(long broadcastId, int step) {
         Map<String, Integer> questionAnswerStat = broadcastRedisRepository.selectQuestionAnswerStat(broadcastId,
                                                                                                     step);
         return questionAnswerStat.entrySet().stream().collect(Collectors.toMap(e -> Integer.valueOf(e.getKey()), e-> e.getValue()));
     }
 
+    public void incrementQuestionAnswerStat(long broadcastId, int step, int answerNo) {
+        broadcastRedisRepository.incrementQuestionAnswerStat(broadcastId, step, answerNo);
+    }
+
     public void insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
         broadcastRedisRepository.insertPlayUserAnswer(broadcastId, userId, step, answerNo);
+    }
+
+    public Set<Long> getPlayUserIds(long broadcastId, int lastStep) {
+        return broadcastRedisRepository.selectPlayUserIds(broadcastId, lastStep);
     }
 
     public void insertPlayUser(long broadcastId, long userId, int step) {
         broadcastRedisRepository.insertPlayUser(broadcastId, step, userId);
     }
 
-    public void incrementQuestionAnswerStat(long broadcastId, int step, int answerNo) {
-        broadcastRedisRepository.incrementQuestionAnswerStat(broadcastId, step, answerNo);
+    public boolean isPlayUser(long broadcastId, long userId, int step) {
+        return broadcastRedisRepository.isPlayUser(broadcastId, step, userId);
+    }
+
+    public void insertLoserUser(long broadcastId, long userId, int step) {
+        broadcastRedisRepository.insertLoserUser(broadcastId, step, userId);
+    }
+
+    public boolean isLoserUser(long broadcastId, long userId, int step) {
+        return broadcastRedisRepository.isLoserUser(broadcastId, step, userId);
+    }
+
+    public void deleteLoserUser(long broadcastId, long userId) {
+        return broadcastRedisRepository.deleteLoserUser(broadcastId, step, userId);
     }
 
     public PlayUserStatus getPlayUserStatus(long broadcastId, long userId, int step) {
@@ -104,16 +120,9 @@ public class BroadcastService {
         return PlayUserStatus.VIEWER;
     }
 
-    public boolean isPlayUser(long broadcastId, long userId, int step) {
-        return broadcastRedisRepository.isPlayUser(broadcastId, step, userId);
-    }
 
     public void insertBroadcastStep(long broadcastId, int step) {
         broadcastRedisRepository.insertBroadcastStep(broadcastId, step);
-    }
-
-    public boolean isCurrentBroadcastStep(long broadcastId, int step) {
-        return broadcastRedisRepository.isCurrentBroadcastStep(broadcastId, step);
     }
 
     public Long getCurrentBroadcastStep(long broadcastId) {
@@ -130,6 +139,10 @@ public class BroadcastService {
 
     public Long getCurrentViewers(long broadcastId) {
         return broadcastRedisRepository.getCurrentViewers(broadcastId);
+    }
+
+    public boolean insertUserHeart(long broadcastId, long userId, int step) {
+        return broadcastRedisRepository.insertUserHeart(broadcastId, userId, step);
     }
 
     public void checkPermissionBroadcast(long broadcastId, long userId) {
