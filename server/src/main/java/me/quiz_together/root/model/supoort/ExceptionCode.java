@@ -16,6 +16,7 @@ public enum ExceptionCode {
     NOT_MATCH(HttpStatus.FORBIDDEN),
     FILE_NAME_EMPTY(HttpStatus.FORBIDDEN, "file name must be not empty"),
     INVALID_UPDATE(HttpStatus.FORBIDDEN, "invalid update try!!"),
+    ABUSING_USER(HttpStatus.FORBIDDEN, "ABUSING_USER!!"),
     // 404
     NOT_FOUND(HttpStatus.NOT_FOUND),
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),

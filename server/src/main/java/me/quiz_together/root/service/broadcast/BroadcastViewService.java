@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.AbusingUserException;
 import me.quiz_together.root.exceptions.CreatedBroadcastMaxException;
 import me.quiz_together.root.exceptions.InaccessibleBroadcastException;
 import me.quiz_together.root.exceptions.InvalidCreateException;
@@ -27,6 +28,7 @@ import me.quiz_together.root.model.request.broadcast.DeleteBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.EndBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.LeaveBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.SendAnswerRequest;
+import me.quiz_together.root.model.request.broadcast.SendHeartRequest;
 import me.quiz_together.root.model.request.broadcast.StartBroadcastRequest;
 import me.quiz_together.root.model.request.broadcast.UpdateBroadcastStatusRequest;
 import me.quiz_together.root.model.request.question.QuestionRequest;
@@ -40,8 +42,10 @@ import me.quiz_together.root.model.response.user.UserInfoView;
 import me.quiz_together.root.model.response.user.UserProfileView;
 import me.quiz_together.root.model.user.PlayUserStatus;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.model.user.UserInventory;
 import me.quiz_together.root.service.FcmService;
 import me.quiz_together.root.service.question.QuestionService;
+import me.quiz_together.root.service.user.UserInventoryService;
 import me.quiz_together.root.service.user.UserService;
 import me.quiz_together.root.service.user.view.UserViewService;
 import me.quiz_together.root.support.HashIdUtils;
@@ -56,6 +60,7 @@ public class BroadcastViewService {
     private final UserService userService;
     private final FcmService fcmService;
     private final UserViewService userViewService;
+    private final UserInventoryService userInventoryService;
 
     public PagingBroadcastListView getPagingBroadcastList(long next, int limit, Long userId) {
         PagingBroadcastListView pagingBroadcastListView = new PagingBroadcastListView();
@@ -169,11 +174,13 @@ public class BroadcastViewService {
         Question question = questionService.getQuestionByBroadcastIdAndStep(sendAnswerRequest.getBroadcastId(),
                                                                             sendAnswerRequest.getStep());
 
-        if (question.getAnswerNo() == sendAnswerRequest.getAnswerNo()) {
+        if (question.getAnswerNo().equals(sendAnswerRequest.getAnswerNo())) {
             //정답
             //오답시에는 playUser 에 등록되지 않음
             broadcastService.insertPlayUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
                                             sendAnswerRequest.getStep());
+        } else {
+            //탈락자 등록
         }
         // 3. 퀴즈 통계 등록
         broadcastService.incrementQuestionAnswerStat(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep(),
@@ -275,6 +282,32 @@ public class BroadcastViewService {
     public void deleteBroadcast(DeleteBroadcastRequest deleteBroadcastRequest) {
         broadcastService.checkPermissionBroadcast(deleteBroadcastRequest.getBroadcastId(), deleteBroadcastRequest.getUserId());
         broadcastService.deleteBroadcastById(deleteBroadcastRequest.getBroadcastId());
+    }
+
+    public void sendHeart(SendHeartRequest sendHeartRequest) {
+        // 해당 방송의 스탭이랑 맞는지 확인
+        // validate
+        broadcastService.validCurrentBroadcastStep(sendHeartRequest.getBroadcastId(), sendHeartRequest.getStep());
+        // 해당 유저가 이전 step에 정답을 제출해서 탈락한 상태인지 확인
+        if (!broadcastService.isLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep())) {
+            throw new AbusingUserException("abusing user! 하트로 부활 시도");
+        }
+        // user 하트 사용 유무 확인
+        if (!broadcastService.insertUserHeart(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep())) {
+            throw new AbusingUserException("abusing user! 하트 중복 사용 시도");
+        }
+        // user 하트 갯수 조회 및 감소
+        UserInventory userInventory = userInventoryService.getUserInventoryByUserId(sendHeartRequest.getUserId());
+        if (userInventory.getHeartCount() <= 0) {
+            throw new AbusingUserException("abusing user! 하트 강제 사용 시도 heart count : " + userInventory.getHeartCount());
+        }
+        if (userInventoryService.updateUserHeartCount(sendHeartRequest.getUserId(), -1) != 1) {
+            log.error("user heart count update fail");
+            throw new RuntimeException("user heart count update fail");
+        }
+        // user 상태 업데이트
+        broadcastService.deleteLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId());
+        broadcastService.insertPlayUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep());
     }
 
     public QuestionView buildQuestionView(Question question) {

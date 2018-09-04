@@ -12,6 +12,7 @@ import me.quiz_together.root.support.RedisKeyFormatter;
 @Repository
 public class BroadcastRedisRepository {
     private static final String STEP_KEY = "step:";
+    private static final String HEART_KEY = "heart";
     @Autowired
     private RedisTemplate<String, Long> longRedisTemplate;
     @Autowired
@@ -56,10 +57,29 @@ public class BroadcastRedisRepository {
     }
 
     /////////////////////////
+    // LoserUser
+    /////////////////////////
+    public void insertLoserUser(long broadcastId, int step, long userId) {
+        longRedisTemplate.opsForSet().add(RedisKeyFormatter.getLoserUser(broadcastId, step), userId);
+    }
+
+    public boolean isLoserUser(long broadcastId, int step, long userId) {
+        return longRedisTemplate.opsForSet().isMember(RedisKeyFormatter.getLoserUser(broadcastId, step), userId);
+    }
+
+    public Set<Long> selectLoserUserIds(long broadcastId, int step) {
+        return longRedisTemplate.opsForSet().members(RedisKeyFormatter.getLoserUser(broadcastId, step));
+    }
+
+    public void deleteLoserUser(long broadcastId, int step) {
+        longRedisTemplate.delete(RedisKeyFormatter.getLoserUser(broadcastId, step));
+    }
+
+    /////////////////////////
     // playUserAnswer
     /////////////////////////
     public void insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
-        integerRedisTemplate.opsForHash().put(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId), STEP_KEY
+        integerRedisTemplate.opsForHash().put(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId), HEART_KEY
                                                                                                         + step,
                                               answerNo);
     }
@@ -70,7 +90,22 @@ public class BroadcastRedisRepository {
     }
 
     public void deletePlayUserAnswer(long broadcastId, long userId) {
-        longRedisTemplate.delete(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId));
+        integerRedisTemplate.delete(RedisKeyFormatter.getPlayUserAnswer(broadcastId, userId));
+    }
+
+    /////////////////////////
+    // UserHeart
+    /////////////////////////
+    public boolean insertUserHeart(long broadcastId, long userId, int step) {
+        return integerRedisTemplate.opsForHash().putIfAbsent(RedisKeyFormatter.getUserHeart(broadcastId, userId), HEART_KEY, step);
+    }
+
+    public Integer selectUserHeart(long broadcastId, long userId) {
+        return (Integer) integerRedisTemplate.opsForHash().get(RedisKeyFormatter.getUserHeart(broadcastId, userId), HEART_KEY);
+    }
+
+    public void deleteUserHeart(long broadcastId, long userId) {
+        integerRedisTemplate.delete(RedisKeyFormatter.getUserHeart(broadcastId, userId));
     }
 
 
@@ -98,17 +133,17 @@ public class BroadcastRedisRepository {
         integerRedisTemplate.opsForSet().add(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
     }
 
-    public boolean isCurrentBroadcastStep(long broadcastId, int step) {
+    public boolean isBroadcastStep(long broadcastId, int step) {
         return integerRedisTemplate.opsForSet().isMember(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId), step);
-    }
-
-    public void deleteBroadcastStep(long broadcastId) {
-        integerRedisTemplate.delete(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
     }
 
     public Long getCurrentBroadcastStep(long broadcastId) {
         // 해당 key에 들어가 있는 value의 갯수
         return integerRedisTemplate.opsForSet().size(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
+    }
+
+    public void deleteBroadcastStep(long broadcastId) {
+        integerRedisTemplate.delete(RedisKeyFormatter.getCurrentBroadcastStep(broadcastId));
     }
 
 }
