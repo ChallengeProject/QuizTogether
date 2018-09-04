@@ -5,7 +5,7 @@ import me.quiz_together.root.support.enumeration.ValueEnum;
 
 @AllArgsConstructor
 public enum PlayUserStatus implements ValueEnum {
-    PLAY(100),
+    PLAYER(100),
     LOSER(200),
     VIEWER(300);
 

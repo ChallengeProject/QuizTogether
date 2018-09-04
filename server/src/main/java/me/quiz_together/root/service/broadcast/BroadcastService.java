@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.quiz_together.root.exceptions.AbusingUserException;
 import me.quiz_together.root.exceptions.InaccessiblePermissionException;
 import me.quiz_together.root.exceptions.InvalidUpdateException;
 import me.quiz_together.root.exceptions.NotMatchException;
@@ -75,8 +76,8 @@ public class BroadcastService {
         broadcastRedisRepository.incrementQuestionAnswerStat(broadcastId, step, answerNo);
     }
 
-    public void insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
-        broadcastRedisRepository.insertPlayUserAnswer(broadcastId, userId, step, answerNo);
+    public boolean insertPlayUserAnswer(long broadcastId, long userId, int step, int answerNo) {
+        return broadcastRedisRepository.insertPlayUserAnswer(broadcastId, userId, step, answerNo);
     }
 
     public Set<Long> getPlayUserIds(long broadcastId, int lastStep) {
@@ -108,11 +109,11 @@ public class BroadcastService {
         boolean isPlayUser = broadcastRedisRepository.isPlayUser(broadcastId, step - 1, userId);
 
         if (step == 1) {
-            // 1단계에선 모든 유저가 PLAY 상태
+            // 1단계에선 모든 유저가 PLAYER 상태
             // TODO : 만약 늦게 들어오는 경우 어떻게 처리 할지
-            return PlayUserStatus.PLAY;
+            return PlayUserStatus.PLAYER;
         } else if (isFirstStepJoinUser && isPlayUser) {
-            return PlayUserStatus.PLAY;
+            return PlayUserStatus.PLAYER;
         } else if (isFirstStepJoinUser) {
             return PlayUserStatus.LOSER;
         }
@@ -197,5 +198,13 @@ public class BroadcastService {
         }
 
         throw new InvalidUpdateException("해당 status 변경 할 수 없습니다! currentStatus : " + currentBroadcastStatus.name() + " / nextStatus : " + nextBroadcastStatus.name());
+    }
+
+    public void validateBroadcastStatusForAbusingUser(long broadcastId, BroadcastStatus broadcastStatus) {
+        Broadcast broadcast = getBroadcastById(broadcastId);
+        if (broadcast.getBroadcastStatus() != broadcastStatus) {
+            throw new AbusingUserException("abusing user! 강제 정답 제출 시도 broadcast status :" + broadcast.getBroadcastStatus());
+        }
+
     }
 }

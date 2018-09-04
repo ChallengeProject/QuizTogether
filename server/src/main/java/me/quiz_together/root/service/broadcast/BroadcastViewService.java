@@ -153,47 +153,6 @@ public class BroadcastViewService {
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }
 
-    public void sendAnswer(SendAnswerRequest sendAnswerRequest) {
-        // 해당 방송의 스탭이랑 맞는지 확인
-        //validate
-        broadcastService.validCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
-        // status가 openQuestion인지 확인
-        Broadcast broadcast = broadcastService.getBroadcastById(sendAnswerRequest.getBroadcastId());
-        if (broadcast.getBroadcastStatus() != BroadcastStatus.OPEN_QUESTION) {
-            throw new AbusingUserException("abusing user! broadcast status :" + broadcast.getBroadcastStatus());
-        }
-        // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
-        PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
-                                                                           sendAnswerRequest.getUserId(),
-                                                                           sendAnswerRequest.getStep());
-        if (PlayUserStatus.PLAY != playUserStatus) {
-            // 이전 정답자가 아니기 때문에 필터링
-            log.debug("이전 정답자가 아니기 때문에 필터링 되었습니다. userId : {}, broadcastId : {}, step : {}",
-                      sendAnswerRequest.getUserId(), sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
-            return;
-        }
-        // 1. 유저 정답 등록
-        broadcastService.insertPlayUserAnswer(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
-                                              sendAnswerRequest.getStep(), sendAnswerRequest.getAnswerNo());
-        // 2. 유저가 낸 답이 정답인지 확인
-        Question question = questionService.getQuestionByBroadcastIdAndStep(sendAnswerRequest.getBroadcastId(),
-                                                                            sendAnswerRequest.getStep());
-
-        if (question.getAnswerNo().equals(sendAnswerRequest.getAnswerNo())) {
-            //정답
-            //오답시에는 playUser 에 등록되지 않음
-            broadcastService.insertPlayUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
-                                            sendAnswerRequest.getStep());
-        } else {
-            //탈락자 등록
-            broadcastService.insertLoserUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(), sendAnswerRequest.getStep());
-        }
-        // 3. 퀴즈 통계 등록
-        broadcastService.incrementQuestionAnswerStat(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep(),
-                                                     sendAnswerRequest.getAnswerNo());
-
-    }
-
     public StartBroadcastView startBroadcast(StartBroadcastRequest startBroadcastRequest) {
         // TODO:stream 등록
         // TODO:chat 생성
@@ -290,10 +249,56 @@ public class BroadcastViewService {
         broadcastService.deleteBroadcastById(deleteBroadcastRequest.getBroadcastId());
     }
 
-    public void sendHeart(SendHeartRequest sendHeartRequest) {
+    public void sendAnswer(SendAnswerRequest sendAnswerRequest) {
+        //validate
         // 해당 방송의 스탭이랑 맞는지 확인
+        broadcastService.validCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
+        // status가 openQuestion인지 확인
+        broadcastService.validateBroadcastStatusForAbusingUser(sendAnswerRequest.getBroadcastId(), BroadcastStatus.OPEN_QUESTION);
+        // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
+        PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
+                                                                           sendAnswerRequest.getUserId(),
+                                                                           sendAnswerRequest.getStep());
+        // 1. 유저 정답 등록
+        if (!broadcastService.insertPlayUserAnswer(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
+                                              sendAnswerRequest.getStep(), sendAnswerRequest.getAnswerNo())) {
+            throw new AbusingUserException("abusing user! 정답 중복 제출 시도");
+        }
+        // 2. 유저가 낸 답이 정답인지 확인
+        Question question = questionService.getQuestionByBroadcastIdAndStep(sendAnswerRequest.getBroadcastId(),
+                                                                            sendAnswerRequest.getStep());
+
+        if (question.getAnswerNo().equals(sendAnswerRequest.getAnswerNo())) {
+            //정답
+            //Player인 경우만 Player 등록
+            if (playUserStatus == PlayUserStatus.PLAYER) {
+                broadcastService.insertPlayUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(),
+                                                sendAnswerRequest.getStep());
+            }
+            // TODO : 게이지 증가
+            // TODO : 게이지가 100%인 경우 하트 증가
+        } else {
+            //이전에 player 인 경우 탈락자 등록
+            if (playUserStatus == PlayUserStatus.PLAYER) {
+                broadcastService.insertLoserUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(), sendAnswerRequest.getStep());
+            }
+        }
+        // 3. 퀴즈 통계 등록
+        // 이전에 player인 경우 통계 등록
+        if (playUserStatus == PlayUserStatus.PLAYER) {
+            broadcastService.incrementQuestionAnswerStat(sendAnswerRequest.getBroadcastId(),
+                                                         sendAnswerRequest.getStep(),
+                                                         sendAnswerRequest.getAnswerNo());
+        }
+
+    }
+
+    public void sendHeart(SendHeartRequest sendHeartRequest) {
         // validate
+        // 해당 방송의 스탭이랑 맞는지 확인
         broadcastService.validCurrentBroadcastStep(sendHeartRequest.getBroadcastId(), sendHeartRequest.getStep());
+        // status가 openAnswer인지 확인
+        broadcastService.validateBroadcastStatusForAbusingUser(sendHeartRequest.getBroadcastId(), BroadcastStatus.OPEN_ANSWER);
         // 해당 유저가 이전 step에 정답을 제출해서 탈락한 상태인지 확인
         if (!broadcastService.isLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep())) {
             throw new AbusingUserException("abusing user! 하트로 부활 시도");
