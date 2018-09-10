@@ -105,16 +105,20 @@ public class BroadcastService {
     }
 
     public PlayUserStatus getPlayUserStatus(long broadcastId, long userId, int step) {
-        boolean isFirstStepJoinUser = broadcastRedisRepository.isPlayUser(broadcastId, 1, userId);
+        // TODO user status 체크
+        // 문제가 뜨고 답을 체크 안하고 재접속 하는 유저인 경우
+        // 문제가 뜨고 답 체크 후 재접속 하는 유저의 경우
+        // 문제가 사라지고 재접속 하는 유저의 경우
+        // 이전 문제에서의 user 상태 값을 가져온다
         boolean isPlayUser = broadcastRedisRepository.isPlayUser(broadcastId, step - 1, userId);
-
-        if (step == 1) {
-            // 1단계에선 모든 유저가 PLAYER 상태
+        boolean isLoserUser = broadcastRedisRepository.isLoserUser(broadcastId, step - 1, userId);
+        if (step == 0) {
+            // 문제 시작 전에는 모두 PLAYER상 태
             // TODO : 만약 늦게 들어오는 경우 어떻게 처리 할지
             return PlayUserStatus.PLAYER;
-        } else if (isFirstStepJoinUser && isPlayUser) {
+        } else if (isPlayUser) {
             return PlayUserStatus.PLAYER;
-        } else if (isFirstStepJoinUser) {
+        } else if (isLoserUser) {
             return PlayUserStatus.LOSER;
         }
 

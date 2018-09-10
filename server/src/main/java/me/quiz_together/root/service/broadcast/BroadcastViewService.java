@@ -209,6 +209,8 @@ public class BroadcastViewService {
                 joinBroadcastView.setStep(question.getStep());
                 break;
             case OPEN_ANSWER:
+                joinBroadcastView.setQuestionProp(question.getQuestionProp());
+                joinBroadcastView.setStep(question.getStep());
                 joinBroadcastView.setAnswerNo(question.getAnswerNo());
                 break;
             case OPEN_WINNER:
@@ -255,7 +257,7 @@ public class BroadcastViewService {
         broadcastService.validCurrentBroadcastStep(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getStep());
         // status가 openQuestion인지 확인
         broadcastService.validateBroadcastStatusForAbusingUser(sendAnswerRequest.getBroadcastId(), BroadcastStatus.OPEN_QUESTION);
-        // 0. 해당 유저가 이전에 정답을 맞춘 유저인지 판단
+        // 0. 해당 유저의 이전 문제 제출 정보를 통해 status 가져옴
         PlayUserStatus playUserStatus = broadcastService.getPlayUserStatus(sendAnswerRequest.getBroadcastId(),
                                                                            sendAnswerRequest.getUserId(),
                                                                            sendAnswerRequest.getStep());
@@ -278,8 +280,9 @@ public class BroadcastViewService {
             // TODO : 게이지 증가
             // TODO : 게이지가 100%인 경우 하트 증가
         } else {
-            //이전에 player 인 경우 탈락자 등록
+            // 이전에 player 인 경우 탈락자 등록
             if (playUserStatus == PlayUserStatus.PLAYER) {
+                // send heart validation과 관련 있음
                 broadcastService.insertLoserUser(sendAnswerRequest.getBroadcastId(), sendAnswerRequest.getUserId(), sendAnswerRequest.getStep());
             }
         }
@@ -299,6 +302,7 @@ public class BroadcastViewService {
         broadcastService.validCurrentBroadcastStep(sendHeartRequest.getBroadcastId(), sendHeartRequest.getStep());
         // status가 openAnswer인지 확인
         broadcastService.validateBroadcastStatusForAbusingUser(sendHeartRequest.getBroadcastId(), BroadcastStatus.OPEN_ANSWER);
+        // TODO : 마지막 문제 하트 사용 여부에 따라 validation 추가
         // 해당 유저가 이전 step에 정답을 제출해서 탈락한 상태인지 확인
         if (!broadcastService.isLoserUser(sendHeartRequest.getBroadcastId(), sendHeartRequest.getUserId(), sendHeartRequest.getStep())) {
             throw new AbusingUserException("abusing user! 하트로 부활 시도");
