@@ -8,7 +8,7 @@ import me.quiz_together.root.model.question.QuestionProp;
 
 @Builder
 @Getter
-public class AnswerMessage {
+public class AnswerMessage implements FcmMessage {
     private QuestionProp questionProp;
     private int answerNo;
     private int step;

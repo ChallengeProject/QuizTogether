@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ChatMessage {
+public class ChatMessage implements FcmMessage {
     private String message;
     private String userName;
     private PushType pushType;

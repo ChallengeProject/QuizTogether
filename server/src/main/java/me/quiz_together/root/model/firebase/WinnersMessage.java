@@ -8,7 +8,7 @@ import me.quiz_together.root.model.broadcast.GiftType;
 
 @Builder
 @Getter
-public class WinnersMessage {
+public class WinnersMessage implements FcmMessage {
     private String winnerMessage;
     private List<String> userName;
     private Long prize;

@@ -3,10 +3,15 @@ package me.quiz_together.root.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +23,7 @@ import me.quiz_together.root.model.firebase.BroadcastPlayInfoMessage;
 import me.quiz_together.root.model.firebase.ChatMessage;
 import me.quiz_together.root.model.firebase.EndBroadcastMessage;
 import me.quiz_together.root.model.firebase.FcmContainer;
+import me.quiz_together.root.model.firebase.FcmMessage;
 import me.quiz_together.root.model.firebase.FcmResponse;
 import me.quiz_together.root.model.firebase.FollowBroadcastMessage;
 import me.quiz_together.root.model.firebase.PushType;
@@ -42,11 +48,13 @@ import me.quiz_together.root.support.HashIdUtils.HashIdType;
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class FcmService {
+    private static final Pattern COMPILE = Pattern.compile("[\r\n]+");
     private static final String TO_PREFIX = "/topics/";
     private final UserService userService;
     private final BroadcastService broadcastService;
     private final QuestionService questionService;
     private final FcmRestTemplate fcmRestTemplate;
+    private final ObjectMapper objectMapper;
 
     public FcmResponse sendChatMessage(ChatMessageRequest chatMessageRequest, PushType pushType) {
         User user = userService.getUserById(chatMessageRequest.getUserId());
@@ -218,11 +226,32 @@ public class FcmService {
         return String.format("%s%s", TO_PREFIX, HashIdUtils.encryptId(hashIdType, id));
     }
 
-    private FcmResponse postForMessage(String to, Object message) {
-        FcmContainer<Object> fcmContainer = new FcmContainer<>(to, message);
-        log.debug("fcm to : {}, data {}",fcmContainer.getTo(), fcmContainer.getData());
+    private FcmResponse postForMessage(String to, FcmMessage message) {
+        FcmContainer fcmContainer = new FcmContainer(to, message);
+        printFcmContainer(fcmContainer);
 
         return fcmRestTemplate.postForMessage(fcmContainer, FcmResponse.class);
+    }
+
+    private void printFcmContainer(FcmContainer fcmContainer) {
+        String responseBody = null;
+        try {
+            responseBody = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fcmContainer);
+            if (StringUtils.isNotBlank(responseBody)) {
+                String[] lines = COMPILE.split(responseBody);
+                log.info("<< FcmContainer <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                for (String line : lines) {
+                    log.info("<< PAYLOAD << {}", line);
+                }
+                log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            }
+
+        } catch (JsonProcessingException e) {
+            log.error("JsonProcessingException : {}", e);
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 }

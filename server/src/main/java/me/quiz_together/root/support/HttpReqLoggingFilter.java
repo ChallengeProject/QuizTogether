@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 import me.quiz_together.root.support.security.SecurityUtils;
@@ -31,14 +32,16 @@ public class HttpReqLoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        beforeRequest(request);
+
+        Object requestToUse = new ContentCachingRequestWrapper(request);
+        beforeRequest((HttpServletRequest)requestToUse);
         try {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter((HttpServletRequest)requestToUse, response);
         } catch (Exception e) {
             log.error("unhandledException", e);
             response.setStatus(500);
         } finally {
-            afterRequest(request, response);
+            afterRequest((HttpServletRequest)requestToUse, response);
         }
 
     }
@@ -54,12 +57,12 @@ public class HttpReqLoggingFilter extends OncePerRequestFilter {
         requestId.set(request.getRemoteAddr() + ":" + System.nanoTime());
 
         MDC.put("tid", generateMDCValue());
-
-        HttpServletRequestDumpUtils.printHttpServletRequestValue(request);
     }
 
     /* Sucess or Failure, Status Code, Request Id, Request End Time, API, API Param, Response Data, Lang, Region, Client IP, Processing Time */
     private void afterRequest(HttpServletRequest request, HttpServletResponse response) {
+        HttpServletRequestDumpUtils.printHttpServletRequestValue(request);
+
         //TODO : 실패시에도 200으로 내려오는 경우 발생
         String success = SUCC;
         int statusCode = response.getStatus();

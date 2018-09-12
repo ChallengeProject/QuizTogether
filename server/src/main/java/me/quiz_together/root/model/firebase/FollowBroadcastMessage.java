@@ -6,7 +6,7 @@ import me.quiz_together.root.support.hashid.HashBroadcastId;
 
 @Builder
 @Getter
-public class FollowBroadcastMessage {
+public class FollowBroadcastMessage implements FcmMessage {
     @HashBroadcastId
     private Long broadcastId;
     private String title;

@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class EndBroadcastMessage {
+public class EndBroadcastMessage implements FcmMessage {
     private PushType pushType;
 }
