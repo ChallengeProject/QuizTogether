@@ -115,6 +115,8 @@ public class BroadcastService {
         if (step == 0) {
             // 문제 시작 전에는 모두 PLAYER상 태
             // TODO : 만약 늦게 들어오는 경우 어떻게 처리 할지
+            // 일단 탈락 처리
+            broadcastRedisRepository.insertPlayUser(broadcastId, step, userId);
             return PlayUserStatus.PLAYER;
         } else if (isPlayUser) {
             return PlayUserStatus.PLAYER;
