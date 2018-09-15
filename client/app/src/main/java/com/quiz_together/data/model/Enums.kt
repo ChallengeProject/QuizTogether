@@ -2,7 +2,8 @@ package com.quiz_together.data.model
 
 enum class GiftType(val value:Int) {
     PRIZE(100),
-    GIFT(200)
+    GIFT(200),
+    NONE(300)
 }
 
 enum class BroadcastType (val value:Int) {

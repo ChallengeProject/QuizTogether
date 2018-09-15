@@ -32,7 +32,32 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
     private val COLUMN_NO = 6
     private var mOpeningDate: String? = null
     private var mIsReservedBroadcast = false
-    private var mIsClickedReservation = false
+    private var mIsClickedOpen = false
+    private var mIsClickedSave = false
+
+    private val mQuizPagerAdapter: QuizPagerAdapter by lazy { QuizPagerAdapter(childFragmentManager) }
+
+    private val mOnDateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                val formattedYear = year % 100
+                tvTimeSetting.text = "$formattedYear. $month. $dayOfMonth"
+                mOpeningDate = year.toString() + month.toString() + dayOfMonth.toString()
+
+                showTimerPicker()
+            }
+
+    private val mOnTimeSetListener =
+            TimePickerDialog.OnTimeSetListener { _: TimePicker?, hourOfDay: Int, minute: Int ->
+                val meridiem = if (hourOfDay < 11) "오전" else "오후"
+                val formattedHour = if (hourOfDay < 11) hourOfDay else hourOfDay - 11
+
+                tvTimeSetting.text = "${tvTimeSetting.text} $meridiem $formattedHour 시 $minute 분 시작"
+                mOpeningDate += hourOfDay.toString() + minute.toString()
+
+                if (!this.mIsReservedBroadcast) {
+                    presenter.createBroadcast()
+                }
+            }
 
     companion object {
         @JvmStatic
@@ -51,7 +76,37 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
 
         initQuizInfoArea()
         initViewsSetOnClickListener()
+    }
 
+    private fun initQuizInfoArea() {
+        val numberRecyclerViewAdapter = NumberRecyclerViewAdapter(activity?.applicationContext!!)
+        numberRecyclerViewAdapter.setItemClickListener { prevPosition, currentPosition ->
+            quizViewPager.currentItem = currentPosition
+            mQuizPagerAdapter.getItem(prevPosition).extractQuestion()?.let {
+                presenter.updateQuestion(prevPosition, it)
+                numberRecyclerViewAdapter.setCurrentItem(currentPosition, it.isValidate())
+            }
+        }
+
+        rvQuizNumbers.layoutManager = GridLayoutManager(activity, COLUMN_NO)
+        rvQuizNumbers.adapter = numberRecyclerViewAdapter
+
+        quizViewPager.adapter = mQuizPagerAdapter
+        quizViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                mQuizPagerAdapter.getItem(position).extractQuestion()?.let {
+                    presenter.updateQuestion(position, it)
+                    numberRecyclerViewAdapter.setCurrentItem(position, it.isValidate())
+                }
+            }
+        })
+        indicator.setViewPager(quizViewPager)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.start()
         mIsReservedBroadcast = arguments?.getBoolean(RESERVED_BROADCAST) ?: false
         if (mIsReservedBroadcast) {
             tvTimeSetting.visibility = View.VISIBLE
@@ -63,33 +118,6 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         } else {
             presenter.loadQuizIfHasSavedQuiz()
         }
-    }
-
-    private fun initQuizInfoArea() {
-        val numberRecyclerViewAdapter = NumberRecyclerViewAdapter(activity?.applicationContext!!)
-        numberRecyclerViewAdapter.setItemClickListener {
-            quizViewPager.currentItem = it
-            numberRecyclerViewAdapter.setCurrentItem(it)
-        }
-
-        rvQuizNumbers.layoutManager = GridLayoutManager(activity, COLUMN_NO)
-        rvQuizNumbers.adapter = numberRecyclerViewAdapter
-
-        quizViewPager.adapter = QuizPagerAdapter(childFragmentManager)
-        indicator.setViewPager(quizViewPager)
-        quizViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                numberRecyclerViewAdapter.setCurrentItem(position)
-            }
-        })
-
-        numberRecyclerViewAdapter.mFragmentList = (quizViewPager.adapter as QuizPagerAdapter).quizFragmentList
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.start()
     }
 
     override fun setLoadingIndicator(active: Boolean) {
@@ -112,14 +140,9 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
             R.id.tvTimeSetting -> showDatePicker()
 
             R.id.reservation -> {
-                if (isValidatedBroadcast()) {
-                    showDatePicker()
-                    mIsClickedReservation = true
-                    Toast.makeText(context, "방 예약 완료", Toast.LENGTH_LONG).show()
-                    activity?.finish()
-                } else {
-                    // Toast
-                }
+                showDatePicker()
+                showToast("방 예약 완료")
+                activity?.finish()
             }
 
             R.id.cancel -> {
@@ -128,7 +151,8 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
 
             R.id.open -> {
                 // dialog
-                presenter.requestCreateBroadcast()
+                mIsClickedOpen = true
+                presenter.createBroadcast()
                 // d
             }
 
@@ -136,77 +160,27 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
                 if (mIsReservedBroadcast) {
                     // update Broadcast api
                 } else {
+                    mIsClickedSave = true
                     presenter.saveQuiz()
+                    activity?.finish()
+                    showToast("작성중인 정보를 저장했습니다.")
                 }
-                activity?.finish()
             }
-
         }
     }
 
     override fun onSuccessCreatedBroadcast(broadcastId: String) {
         Toast.makeText(context, "방 개설", Toast.LENGTH_LONG).show()
 
-        if (!mIsClickedReservation) { // 방 개설 시
+        if (!mIsClickedOpen) { // 방 개설 시
             val intent = Intent(context, QuizingActivity::class.java)
             intent.putExtra(QuizingActivity.BROADCAST_ID, broadcastId)
             intent.putExtra(QuizingActivity.IS_ADMIN, true)
-
             startActivity(intent)
         }
         activity?.finish()
     }
 
-    override fun onErrorCreatedBroadcast() {
-        Toast.makeText(context, "방 개설 실패", Toast.LENGTH_LONG).show()
-    }
-
-    override fun isValidatedBroadcast(): Boolean {
-        if (etTtile.text.isEmpty()) {
-            Toast.makeText(context, "방 제목이 입력되지 않았습니다.", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        val giftType = getGiftType()
-        if (giftType == null) {
-            Toast.makeText(context, "Gift Type 을 설정해 주세요.", Toast.LENGTH_LONG).show()
-            return false
-        } else if (giftType == GiftType.GIFT && etGoodsDescription.text.toString().isEmpty()) {
-            Toast.makeText(context, "상품을 입력해 주세요", Toast.LENGTH_LONG).show()
-            return false
-        } else if (giftType == GiftType.PRIZE && etPrize.text.toString() == "") {
-            Toast.makeText(context, "상금을 입력해 주세요.", Toast.LENGTH_LONG).show()
-            return false
-        } else if (etWinnerMessage.text.toString().isEmpty()) {
-            Toast.makeText(context, "우승자 메시지를 입력해 주세요.", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        val quizList = (quizViewPager.adapter as QuizPagerAdapter).extractQuestions()
-        if (quizList == null) {
-            Toast.makeText(context, "입력된 퀴즈가 없습니다.", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        return true
-    }
-
-    override fun extractBroadcast(): Broadcast {
-        val title = etTtile.text.toString()
-        val description = etDescription.text.toString()
-        val scheduledTime = mOpeningDate?.toLong()
-        val giftType = getGiftType()
-        val prize = if (etPrize.text.toString() == "") null else etPrize.text.toString().toLong()
-        val giftDescription = etGoodsDescription.text.toString()
-        val winnersMsg = etWinnerMessage.text.toString()
-
-        val questionList = (quizViewPager.adapter as QuizPagerAdapter).extractQuestions()!!
-        val questionCount = questionList.count()
-
-        return Broadcast(null, title, description, scheduledTime, null, giftType!!,
-                prize, giftDescription, Repository.getUserId(), null, winnersMsg, null,
-                questionList, questionCount, null)
-    }
 
     private fun setGiftTypeVisibility(visibility: Int) {
         btGoods.visibility = visibility
@@ -221,6 +195,10 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
     }
 
     private fun setGiftType(type: GiftType) {
+        if (type == GiftType.NONE) {
+            return
+        }
+
         if (type == GiftType.GIFT) {
             etGoodsDescription.visibility = View.VISIBLE
             btGoods.isSelected = true
@@ -231,11 +209,11 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         setGiftTypeVisibility(View.GONE)
     }
 
-    private fun getGiftType(): GiftType? {
+    private fun getGiftType(): GiftType {
         return when {
             btGoods.isSelected -> GiftType.GIFT
             btPrize.isSelected -> GiftType.PRIZE
-            else -> null
+            else -> GiftType.NONE
         }
     }
 
@@ -245,15 +223,13 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
             savedBroadcast.description.let { etDescription.setText(it) }
             mOpeningDate = savedBroadcast.scheduledTime?.toString()
             setGiftType(savedBroadcast.giftType)
-            etPrize.setText(savedBroadcast.prize.toString())
+            savedBroadcast.prize?.let { etPrize.setText(it.toString()) }
             etGoodsDescription.setText(savedBroadcast.giftDescription)
             etWinnerMessage.setText(savedBroadcast.winnerMessage)
 
-            val questionList = savedBroadcast.questionList
-            (quizViewPager.adapter as QuizPagerAdapter).quizFragmentList.forEachIndexed { index, inputQuizFragment ->
-                inputQuizFragment.setQuestion(questionList[index])
-            }
+            (quizViewPager.adapter as QuizPagerAdapter).mSavedQuestions = savedBroadcast.questionList
         }
+        Toast.makeText(context, "작성 중인 정보를 불러왔습니다.", Toast.LENGTH_LONG).show()
     }
 
     private fun showDatePicker() {
@@ -268,27 +244,24 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         timePicker.show(activity?.fragmentManager, "timePicker")
     }
 
-    private val mOnDateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val formattedYear = year % 100
-                tvTimeSetting.text = "$formattedYear. $month. $dayOfMonth"
-                mOpeningDate = year.toString() + month.toString() + dayOfMonth.toString()
+    override fun onErrorCreatedBroadcast() {
+        Toast.makeText(context, "방 개설 실패", Toast.LENGTH_LONG).show()
+    }
 
-                showTimerPicker()
-            }
+    override fun extractBroadcast(): Broadcast {
+        val title = etTtile.text.toString()
+        val description = etDescription.text.toString()
+        val scheduledTime = mOpeningDate?.toLong()
+        val winnersMsg = etWinnerMessage.text.toString()
 
-    private val mOnTimeSetListener =
-            TimePickerDialog.OnTimeSetListener { view: TimePicker?, hourOfDay: Int, minute: Int ->
-                val meridiem = if (hourOfDay < 11) "오전" else "오후"
-                val formattedHour = if (hourOfDay < 11) hourOfDay else hourOfDay - 11
+        val giftType = getGiftType()
+        val prize = if (etPrize.text.isEmpty()) null else etPrize.text.toString().toLong()
+        val giftDescription = etGoodsDescription.text.toString()
 
-                tvTimeSetting.text = "${tvTimeSetting.text} $meridiem $formattedHour 시 $minute 분 시작"
-                mOpeningDate += hourOfDay.toString() + minute.toString()
-
-                if (!this.mIsReservedBroadcast) {
-                    presenter.requestCreateBroadcast()
-                }
-            }
+        return Broadcast(null, title, description, scheduledTime, null, giftType,
+                prize, giftDescription, Repository.getUserId(), null, winnersMsg, null,
+                ArrayList(), 0, null)
+    }
 
     private fun initViewsSetOnClickListener() {
         tvTimeSetting.setOnClickListener(this)
@@ -300,5 +273,9 @@ class CreateFragment : Fragment(), CreateContract.View, View.OnClickListener {
         btGoods.setOnClickListener(this)
         etGoodsDescription.setOnClickListener(this)
         etPrize.setOnClickListener(this)
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 }

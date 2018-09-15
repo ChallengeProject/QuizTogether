@@ -1,32 +1,39 @@
 package com.quiz_together.data.model
 
 // dummy method
-data class Event(val id:Int, val topics:String, val thumbnail:String)
-data class Events(val events:List<Event>)
+data class Event(val id: Int, val topics: String, val thumbnail: String)
+
+data class Events(val events: List<Event>)
 
 
 // login
 class RespEmpty()
 
-data class ReqSignup(val name:String, val pushToken :String)
-data class ReqLogin(val userId:String)
+data class ReqSignup(val name: String, val pushToken: String)
+
+data class ReqLogin(val userId: String)
 
 //updateUserProfile
-data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val broadcastBeforeStarting:BroadcastBeforeStarting)
+data class User(val userId: String, val name: String, val profilePath: String, val money: Long, val broadcastBeforeStarting: BroadcastBeforeStarting)
 
-data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
+data class BroadcastBeforeStarting(val broadcastId: String, val scheduledTime: Long)
 
-data class QuestionProp(val title:String, val options:List<String>)
+data class QuestionProp(val title: String, val options: List<String>)
 
-data class Question(val answerNo: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType)
+data class Question(val answerNo: Int, val questionId: String?, val questionProp: QuestionProp, val category: CategoryType) {
+    fun isValidate(): Boolean {
+        return !(questionProp.title.isEmpty() || questionProp.options[0].isEmpty() || answerNo == -1
+                || questionProp.options[1].isEmpty() || questionProp.options[2].isEmpty())
+    }
+}
 
-data class UserView(val userId: String,val name:String)
+data class UserView(val userId: String, val name: String)
 
 data class Broadcast(
-        val broadcastId:String?,
-        val title:String,
-        val description:String,
-        val scheduledTime:Long?,
+        val broadcastId: String?,
+        val title: String,
+        val description: String,
+        val scheduledTime: Long?,
         val remainingStartSeconds: Long?,
         val giftType: GiftType,
         val prize: Long?,
@@ -34,7 +41,7 @@ data class Broadcast(
 
         val userId: String?,
         val broadcastStatus: BroadcastStatus?,
-        val winnerMessage:String,
+        val winnerMessage: String,
         val userInfoView: UserView?,
         val questionList: List<Question>,
         val questionCount: Int,
@@ -48,13 +55,13 @@ data class ResStartBroadcast(val broadcastView: Broadcast)
 
 data class BroadcastJoinInfo(val broadcastView: Broadcast, val userInfoView: UserView, val question: String, val step: Int, val answerNo: Int, val playUserStatus: PlayUserStatus, val viewerCount: Int)
 
-data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
+data class ReqSendAnswer(val step: Int, val userId: String, val broadcastId: String, val answerNo: Int)
 
-data class ReqEndBroadcast(val broadcastId: String, val userId: String, var streamId:String, var chatId:String)
+data class ReqEndBroadcast(val broadcastId: String, val userId: String, var streamId: String, var chatId: String)
 
-data class ReqStartBroadcast(val broadcastId: String, val userId: String, var streamingUrl:String, var scheduledTime:String)
+data class ReqStartBroadcast(val broadcastId: String, val userId: String, var streamingUrl: String, var scheduledTime: String)
 
-data class ReqSendChatMsg(val broadcastId: String, val userId: String,val message:String)
+data class ReqSendChatMsg(val broadcastId: String, val userId: String, val message: String)
 
 data class ReqUpdateBroadcast(val broadcastId: String, val userId: String, var broadcastStatus: BroadcastStatus)
 

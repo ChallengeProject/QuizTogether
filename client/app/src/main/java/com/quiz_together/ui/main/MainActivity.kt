@@ -14,6 +14,7 @@ import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         ProfileFragment()
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         setupActionBar(R.id.toolbar) {
             setDisplayShowHomeEnabled(true)
             setTitle("퀴즈홈")
@@ -73,10 +74,7 @@ class MainActivity : AppCompatActivity() {
             ibPrf.setImageResource(R.drawable.icc_prf_off)
 
             replace(R.id.fl_content, homeFragment)
-
         }
-
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         initListener()
 //        bnv.disableShiftMode()
 //        bnv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
     }
 
     override fun onResume() {
@@ -108,7 +105,6 @@ class MainActivity : AppCompatActivity() {
                 return@run
             startActivity(intent)
         }
-
     }
 
     override fun onBackPressed() {
@@ -121,13 +117,10 @@ class MainActivity : AppCompatActivity() {
             backPressedTime = tempTime
             Toast.makeText(applicationContext, "한번 더 뒤로가기 누르면 앱이 종료됩니다", Toast.LENGTH_SHORT).show()
         }
-
     }
-
 
     companion object {
         const val BROADCAST_ID = "BROADCAST_ID"
         const val USER_ID = "USER_ID"
     }
-
 }

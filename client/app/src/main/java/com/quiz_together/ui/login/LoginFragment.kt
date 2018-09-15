@@ -8,6 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.facebook.*
+import com.facebook.login.LoginResult
+import com.nhn.android.naverlogin.OAuthLogin
+import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.quiz_together.R
 import com.quiz_together.ui.loading.LoadingActivity
 import com.quiz_together.util.SC.OAUTH_CLIENT_ID

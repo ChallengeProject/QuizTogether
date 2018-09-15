@@ -43,7 +43,7 @@ class AppPreferenceHelper : PreferenceHelper {
         mPrefs.edit().putBoolean(HAS_SAVED_QUIZ, true).apply()
     }
 
-    override fun getSavedQuiz(): Broadcast? {
+    override fun getSavedQuiz(): Broadcast {
         val json = mPrefs.getString(INCOMPLETED_QUIZ, null)
         mPrefs.edit().putBoolean(HAS_SAVED_QUIZ, false).apply()
         return Gson().fromJson<Broadcast>(json, Broadcast::class.java)

@@ -2,36 +2,34 @@ package com.quiz_together.ui.create
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.util.Log
 import com.quiz_together.data.model.Question
 
 class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-    val quizFragmentList = ArrayList<QuizInputFragment>()
-    private val FRAG_NO = 12
+    private val NUMBER_OF_QUIZ = 12
+
+    val mQuizFragList = ArrayList<QuizInputFragment>()
+    var mSavedQuestions: List<Question>? = null
 
     init {
-        while (quizFragmentList.size < FRAG_NO) {
-            val fragment = QuizInputFragment.newInstance()
-            quizFragmentList.add(fragment)
+        while (mQuizFragList.size < NUMBER_OF_QUIZ) {
+            val fragment = QuizInputFragment.newInstance(mQuizFragList.size)
+            mQuizFragList.add(fragment)
         }
     }
 
     override fun getItem(position: Int): QuizInputFragment {
-        return quizFragmentList[position]
-    }
-
-    override fun getCount(): Int {
-        return FRAG_NO
-    }
-
-    fun extractQuestions(): ArrayList<Question>? {
-        val quizList = ArrayList<Question>()
-
-        for (quizInputFragment in quizFragmentList) {
-            if (quizInputFragment.isValidatedQuiz()) {
-                quizList.add(quizInputFragment.extractQuestion())
+        mSavedQuestions?.let {
+            if (it.size > position) {
+                mQuizFragList[position].mQuestion = it[position]
             }
         }
 
-        return if (quizList.size == 0) null else quizList
+        Log.e("TEST", "position {$position}")
+        return mQuizFragList[position]
+    }
+
+    override fun getCount(): Int {
+        return NUMBER_OF_QUIZ
     }
 }

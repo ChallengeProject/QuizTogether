@@ -5,20 +5,23 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.quiz_together.R
 import com.quiz_together.data.model.CategoryType
 import com.quiz_together.data.model.Question
 import com.quiz_together.data.model.QuestionProp
-import kotlinx.android.synthetic.main.frag_create.*
 import kotlinx.android.synthetic.main.frag_edit_quiz.*
 
 class QuizInputFragment : Fragment(), View.OnClickListener {
+    var mQuestion: Question? = null
+    var mPosition: Int = -1
+
     companion object {
 
         @JvmStatic
-        fun newInstance(): QuizInputFragment {
-            return QuizInputFragment()
+        fun newInstance(position: Int): QuizInputFragment {
+            val fragment = QuizInputFragment()
+            fragment.mPosition = position
+            return fragment
         }
     }
 
@@ -33,23 +36,10 @@ class QuizInputFragment : Fragment(), View.OnClickListener {
         cbAnswer3.setOnClickListener(this)
     }
 
-    fun isValidatedQuiz(): Boolean {
-        if (isEmpty()) {
-            return false
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val toastMsg = when {
-            option1.text.isEmpty() -> "보기1을 입력하지 않았습니다"
-            option2.text.isEmpty() -> "보기2을 입력하지 않았습니다"
-            option3.text.isEmpty() -> "보기3을 입력하지 않았습니다"
-            getAnswerNo() < 0 -> "정답을 선택하지 않았습니다"
-            else -> null
-        }
-
-        return if (toastMsg == null) true else {
-            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
-            false
-        }
+        mQuestion?.let { setQuestion(it) }
     }
 
     private fun isEmpty(): Boolean {
@@ -71,10 +61,15 @@ class QuizInputFragment : Fragment(), View.OnClickListener {
             1 -> cbAnswer1.isChecked = true
             2 -> cbAnswer2.isChecked = true
             3 -> cbAnswer3.isChecked = true
+            else -> return
         }
     }
 
-    fun extractQuestion(): Question {
+    fun extractQuestion(): Question? {
+        if (isEmpty()) {
+            return null
+        }
+
         val options = arrayListOf<String>()
         options.add(option1.text.toString())
         options.add(option2.text.toString())
@@ -84,11 +79,13 @@ class QuizInputFragment : Fragment(), View.OnClickListener {
                 QuestionProp(etQuizTitle.text.toString(), options), CategoryType.NORMAL)
     }
 
-    fun setQuestion(question: Question) {
-        etTtile.setText(question.questionProp.title)
-        option1.setText(question.questionProp.options[0])
-        option2.setText(question.questionProp.options[1])
-        option3.setText(question.questionProp.options[2])
+    private fun setQuestion(question: Question) {
+        question.questionProp.let {
+            etQuizTitle?.setText(it.title)
+            option1?.setText(it.options[0])
+            option2?.setText(it.options[1])
+            option3?.setText(it.options[2])
+        }
 
         setAnswerNo(question.answerNo)
     }

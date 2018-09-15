@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.quiz_together.R
 import kotlinx.android.synthetic.main.item_number.view.*
 
@@ -15,10 +16,9 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
     private val mNumbers = (1..12).toList()
     private var mCurrentIdx = 0
 
-    lateinit var mItemClickListener: ItemClickLisnter
-    lateinit var mFragmentList: ArrayList<QuizInputFragment>
+    lateinit var mItemClickListener: ItemClickListener
 
-    interface ItemClickLisnter {
+    interface ItemClickListener {
         fun onItemClicked(idx: Int)
     }
 
@@ -62,19 +62,25 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
         return mNumbers.size
     }
 
-    fun setCurrentItem(currentIdx: Int) {
-        mStates[mCurrentIdx] = if (mFragmentList[mCurrentIdx].isValidatedQuiz()) STATE.COMPLETED else STATE.DEFAULT
-        notifyItemChanged(mCurrentIdx)
-        mStates[currentIdx] = STATE.FOCUSING
-        notifyItemChanged(currentIdx)
+    fun setCurrentItem(currentIdx: Int, isValidate: Boolean) {
+        val previousIdx = mCurrentIdx
         mCurrentIdx = currentIdx
 
+        if (isValidate) {
+            mStates[previousIdx] = STATE.COMPLETED
+        } else {
+            mStates[previousIdx] = STATE.DEFAULT
+        }
+        notifyItemChanged(previousIdx)
+
+        mStates[mCurrentIdx] = STATE.FOCUSING
+        notifyItemChanged(mCurrentIdx)
     }
 
-    fun setItemClickListener(listener: (idx: Int) -> Unit) {
-        mItemClickListener = object : ItemClickLisnter {
+    fun setItemClickListener(listener: (prevPosition: Int, currentPosition: Int) -> Unit) {
+        mItemClickListener = object : ItemClickListener {
             override fun onItemClicked(idx: Int) {
-                listener(idx)
+                listener(mCurrentIdx, idx)
             }
         }
     }
@@ -82,8 +88,8 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
     enum class STATE { DEFAULT, COMPLETED, FOCUSING }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val tvNumber = itemView.tvNumber
-        var currentState = STATE.DEFAULT
+        val tvNumber: TextView = itemView.tvNumber
+        private var currentState = STATE.DEFAULT
 
         init {
             tvNumber.setOnClickListener(this)

@@ -2,6 +2,8 @@ package com.quiz_together.ui.loading
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.ui.base.LoadingFragment
