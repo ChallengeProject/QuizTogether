@@ -23,7 +23,7 @@
         user_inventory
       SET
         heart_count = heart_count + #{heartCount}
-        updated_time = NOW(3)
+        , updated_time = NOW(3)
       WHERE
         user_id = #{userId}
   </update>
