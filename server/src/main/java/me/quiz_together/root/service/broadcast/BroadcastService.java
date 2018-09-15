@@ -110,21 +110,23 @@ public class BroadcastService {
         // 문제가 뜨고 답 체크 후 재접속 하는 유저의 경우
         // 문제가 사라지고 재접속 하는 유저의 경우
         // 이전 문제에서의 user 상태 값을 가져온다
-        boolean isPlayUser = broadcastRedisRepository.isPlayUser(broadcastId, step - 1, userId);
-        boolean isLoserUser = broadcastRedisRepository.isLoserUser(broadcastId, step - 1, userId);
-        if (step == 0) {
-            // 문제 시작 전에는 모두 PLAYER상 태
-            // TODO : 만약 늦게 들어오는 경우 어떻게 처리 할지
-            // 일단 탈락 처리
-            broadcastRedisRepository.insertPlayUser(broadcastId, step, userId);
-            return PlayUserStatus.PLAYER;
-        } else if (isPlayUser) {
-            return PlayUserStatus.PLAYER;
-        } else if (isLoserUser) {
-            return PlayUserStatus.LOSER;
-        }
-
-        return PlayUserStatus.VIEWER;
+        // TODO 해커톤용으로 생성
+        return PlayUserStatus.PLAYER;
+//        boolean isPlayUser = broadcastRedisRepository.isPlayUser(broadcastId, step - 1, userId);
+//        boolean isLoserUser = broadcastRedisRepository.isLoserUser(broadcastId, step - 1, userId);
+//        if (step == 0) {
+//            // 문제 시작 전에는 모두 PLAYER상 태
+//            // TODO : 만약 늦게 들어오는 경우 어떻게 처리 할지
+//            // 일단 탈락 처리
+//            broadcastRedisRepository.insertPlayUser(broadcastId, step, userId);
+//            return PlayUserStatus.PLAYER;
+//        } else if (isPlayUser) {
+//            return PlayUserStatus.PLAYER;
+//        } else if (isLoserUser) {
+//            return PlayUserStatus.LOSER;
+//        }
+//
+//        return PlayUserStatus.VIEWER;
     }
 
 
