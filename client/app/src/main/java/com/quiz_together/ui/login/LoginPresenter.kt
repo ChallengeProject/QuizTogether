@@ -1,17 +1,10 @@
 package com.quiz_together.ui.login
 
+import android.util.Log
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.UserView
+import com.quiz_together.data.model.UserProfileView
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
-import android.content.pm.PackageManager
-import android.provider.SyncStateContract.Helpers.update
-import com.google.android.gms.common.util.ClientLibraryUtils.getPackageInfo
-import android.content.pm.PackageInfo
-import android.util.Base64
-import android.util.Log
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 
 class LoginPresenter(
@@ -60,7 +53,7 @@ class LoginPresenter(
         loginView.setLoadingIndicator(true)
 
         repository.signup(name,"THIS_IS_DUMMY_DATA", object : ApiHelper.UserViewCallback{
-            override fun onLoginLoaded(respLogin: UserView) {
+            override fun onLoginLoaded(respLogin: UserProfileView) {
 
                 loginView.run{
                     if(!isActive) return@onLoginLoaded

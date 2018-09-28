@@ -11,7 +11,7 @@ interface ApiHelper {
     }
 
     interface UserViewCallback{
-        fun onLoginLoaded(respLogin: UserView)
+        fun onLoginLoaded(respLogin: UserProfileView)
         fun onDataNotAvailable()
     }
 
@@ -26,7 +26,7 @@ interface ApiHelper {
     }
 
     interface GetUserCallback{
-        fun onUserLoaded(user: User)
+        fun onUserLoaded(user: UserProfileView)
         fun onDataNotAvailable()
     }
 
@@ -42,7 +42,7 @@ interface ApiHelper {
 
     interface GetBroadcastCallback{
 
-        fun onBroadcastLoaded(broadcasts: Broadcast)
+        fun onBroadcastLoaded(broadcast: Broadcast)
         fun onDataNotAvailable()
     }
 
@@ -89,6 +89,7 @@ interface ApiHelper {
     fun insertFollower(userId: String, followerId: String,cb :ApiHelper.GetSuccessCallback)
     fun deleteFollower(userId: String, followerId: String,cb :ApiHelper.GetSuccessCallback)
     fun getFollowerList(userId: String,cb :ApiHelper.GetFollowerListCallback)
+    fun sendHeart(step:Int, userId:String, broadcastId: String, cb:GetSuccessCallback)
 
 
     //firebase
@@ -97,5 +98,5 @@ interface ApiHelper {
     fun openAnswer(broadcastId:String, userId:String,step:Int, cb: ApiHelper.GetSuccessCallback)
     fun sendChatMsg(broadcastId:String, userId:String,msg:String, cb: ApiHelper.GetSuccessCallback)
     fun sendAdminChatMsg(broadcastId: String, userId: String, msg: String, cb: ApiHelper.GetSuccessCallback)
-
+    fun sendBroadcastPlayInfo(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback)
 }

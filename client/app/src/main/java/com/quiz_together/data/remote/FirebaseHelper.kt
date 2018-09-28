@@ -103,7 +103,8 @@ class FirebaseHelper : FirebaseMessagingService() {
                 .setAutoCancel(true)
                 .setSound(RingtoneManager
                         .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setSmallIcon(android.R.drawable.btn_star) // TODO 로고 백터이미지
+                .setSmallIcon(R.drawable.qx_icon_vec) // TODO 로고 백터이미지
+                .setColor(getResources().getColor(R.color.deepBlue))
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.qx_icon_512))
                 .setBadgeIconType(R.drawable.icc_add)
                 .setContentIntent(pendingIntent)

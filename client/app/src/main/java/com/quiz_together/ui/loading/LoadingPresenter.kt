@@ -1,8 +1,7 @@
 package com.quiz_together.ui.base
 
-import android.util.Log
 import com.quiz_together.data.Repository
-import com.quiz_together.data.model.UserView
+import com.quiz_together.data.model.UserProfileView
 import com.quiz_together.data.remote.ApiHelper
 import com.quiz_together.util.SC
 
@@ -12,7 +11,7 @@ class LoadingPresenter(
         private val view: LoadingContract.View
 ) : LoadingContract.Presenter {
 
-    val TAG = "LoadingPresenter"
+    val TAG = "LoadingPresenter#$#"
 
     init {
         view.presenter = this
@@ -35,7 +34,7 @@ class LoadingPresenter(
 
             repository.login(it, object :ApiHelper.UserViewCallback {
 
-                override fun onLoginLoaded(respLogin: UserView) {
+                override fun onLoginLoaded(respLogin: UserProfileView) {
                     view.run {
                         if(!isActive) return@onLoginLoaded
                         setLoadingIndicator(false)

@@ -20,7 +20,7 @@ enum class UserStatus(val value:Int = 0) {
 }
 
 enum class PlayUserStatus(val value:Int) {
-    PLAY(100),
+    PLAYER(100),
     LOSER(200),
     VIEWER(300)
 }
@@ -40,7 +40,8 @@ enum class PushType(val value:Int) {
     WINNERS_MESSAGE(500),
     NOTICE_MESSAGE(600),
     END_MESSAGE(700),
-    FOLLOW_BROADCAST(800)
+    FOLLOW_BROADCAST(800),
+    BROADCAST_PLAY_INFO(900),
 }
 
 enum class RoomOutputType(value: Int) {

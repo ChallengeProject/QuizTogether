@@ -16,6 +16,9 @@ class AppPreferenceHelper : PreferenceHelper {
 
     private val PFRK_FOLLOW_LIST = "PFRK_FOLLOW_LIST"
 
+    private val PFRK_CUR_BROADCAST_INFO = "PFRK_CUR_BROADCAST_INFO"
+    private val PFRK_CUR_BROADCAST_IS_ADMIN = "PFRK_CUR_BROADCAST_IS_ADMIN"
+
 
     val mPrefs = App.instance.getSharedPreferences(BuildConfig.PREF_FILE_NAME, Context.MODE_PRIVATE)
 
@@ -54,6 +57,18 @@ class AppPreferenceHelper : PreferenceHelper {
 
     override fun setFollowerList(setStr : Set<String>) {
         mPrefs.edit().putStringSet(PFRK_FOLLOW_LIST, setStr).apply()
+    }
+
+    override fun getCurBroadcstInfo(): String
+            = mPrefs.getString(PFRK_CUR_BROADCAST_INFO, "")
+
+    override fun setCurBroadcstInfo(setStr : String) {
+        mPrefs.edit().putString(PFRK_CUR_BROADCAST_INFO, setStr).apply()
+    }
+
+    override fun removeCurBroadcstInfo() {
+        mPrefs.edit().putString(PFRK_CUR_BROADCAST_INFO, "").apply()
+//        mPrefs.edit().remove(PFRK_CUR_BROADCAST_INFO).apply()
     }
 
 }

@@ -14,6 +14,7 @@ import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
 import com.quiz_together.util.replace
 import com.quiz_together.util.setupActionBar
+import com.quiz_together.util.toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -40,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private fun initListener(){
 
         ibFindLock.setOnClickListener {
+            "준비중인 기능입니다".toast()
+            return@setOnClickListener
 
             //TODO 비공개방 넘버입력 후 들어갈 수 있게
 
@@ -57,6 +60,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         ibPrf.setOnClickListener {
+
+            "준비중인 기능입니다".toast()
+            return@setOnClickListener
+
             ibSetting.visibility = View.VISIBLE
             ibFindLock.visibility = View.GONE
 

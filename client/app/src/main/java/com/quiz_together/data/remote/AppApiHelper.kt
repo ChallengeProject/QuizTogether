@@ -23,8 +23,10 @@ class AppApiHelper : ApiHelper {
 
                     if(it.code == 200)
                         cb.onEventsLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
 
                 }, { _ ->
                     cb.onDataNotAvailable()
@@ -45,8 +47,10 @@ class AppApiHelper : ApiHelper {
 
                     if(it.code == 200)
                         cb.onLoginLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
 
                 }, { _ ->
                     cb.onDataNotAvailable()
@@ -64,8 +68,10 @@ class AppApiHelper : ApiHelper {
 
                     if(it.code == 200)
                         cb.onLoginLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
 
                 }, { _ ->
                     cb.onDataNotAvailable()
@@ -81,8 +87,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -95,8 +103,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onUserLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -111,8 +121,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { err ->
                     err.printStackTrace()
                     cb.onDataNotAvailable()
@@ -126,23 +138,28 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onPagingBroadcastListLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { err ->
 
+                    Log.e(TAG,err.message)
                     cb.onDataNotAvailable()
                 })
     }
 
     override fun getBroadcastById(broadcastId:String ,cb: ApiHelper.GetBroadcastCallback) {
-        apiServices.getBroadcastById(broadcastId )
+        apiServices.getBroadcastInfoById(broadcastId )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onBroadcastLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -155,22 +172,29 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
 
     override fun sendAnswer(reqSendAnswer: ReqSendAnswer, cb: ApiHelper.GetSuccessCallback) {
+
+        Log.i(TAG,reqSendAnswer.toString())
+
         apiServices.sendAnswer(reqSendAnswer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -183,8 +207,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -202,8 +228,10 @@ class AppApiHelper : ApiHelper {
 
                     if(it.code == 200)
                         cb.onBroadcastViewLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -216,8 +244,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onBroadcastLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { err ->
                     cb.onDataNotAvailable()
                 })
@@ -231,8 +261,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onJoinBroadcastInfoLoaded(it.data)
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { err ->
                     err.printStackTrace()
                     cb.onDataNotAvailable()
@@ -248,8 +280,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -264,8 +298,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -280,8 +316,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -296,8 +334,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -311,8 +351,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -326,8 +368,10 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
+                    }
                 }, { _ ->
                     cb.onDataNotAvailable()
                 })
@@ -341,9 +385,11 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
-                }, { err ->
+                    }
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
     }
@@ -356,9 +402,11 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
-                }, { err ->
+                    }
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -372,9 +420,11 @@ class AppApiHelper : ApiHelper {
                 .subscribe({ it ->
                     if(it.code == 200)
                         cb.onSuccessLoaded()
-                    else
+                    else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
-                }, { err ->
+                    }
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
@@ -389,21 +439,58 @@ class AppApiHelper : ApiHelper {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
                     if(it.code == 200) {
-
-//                        it.data ?.run {
                             cb.onFollowerList(it.data)
-//                        } ?: cb.onFollowerList(ResFollowList(listOf<Follower>()))
-
                     } else {
+                        Log.e(TAG,it.message)
                         cb.onDataNotAvailable()
                     }
-                }, { err ->
-                    Log.i(TAG,err.message)
-                    err.printStackTrace()
+                }, { _ ->
                     cb.onDataNotAvailable()
                 })
 
 
+    }
+
+    override fun sendBroadcastPlayInfo(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback) {
+
+        apiServices.sendBroadcastPlayInfo(ReqBrdIdAndUsrId(broadcastId, userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200) {
+                        cb.onSuccessLoaded()
+                    } else {
+                        Log.e(TAG,it.message)
+                        cb.onDataNotAvailable()
+                    }
+                }, { _ ->
+                    cb.onDataNotAvailable()
+                })
+
+    }
+
+    override fun sendHeart(step: Int, userId: String, broadcastId: String,cb: ApiHelper.GetSuccessCallback) {
+        apiServices.sendHeart(ReqHeart(step,userId,broadcastId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ it ->
+                    if(it.code == 200) {
+
+                        Log.i(TAG,"sendHeart")
+                        Log.i(TAG,it.toString())
+
+                        cb.onSuccessLoaded()
+                    } else {
+                        Log.e(TAG,"sendHeart onDataNotAvailable")
+                        Log.e(TAG,it.message)
+
+                        cb.onDataNotAvailable()
+                    }
+                }, { err ->
+                    Log.e(TAG,"sendHeart onDataNotAvailable")
+                    err.printStackTrace()
+                    cb.onDataNotAvailable()
+                })
     }
 
 

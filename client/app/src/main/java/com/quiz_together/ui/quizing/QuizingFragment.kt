@@ -17,6 +17,7 @@ import com.quiz_together.R
 import com.quiz_together.data.model.AdminMsg
 import com.quiz_together.data.model.AnswerMsg
 import com.quiz_together.data.model.BroadcastStatus
+import com.quiz_together.data.model.BrodcastInfoMsg
 import com.quiz_together.data.model.ChatMsg
 import com.quiz_together.data.model.EndMsg
 import com.quiz_together.data.model.GiftType
@@ -58,10 +59,12 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     var finalMsg = arrayListOf<String>()
     var isOpenKbd = false
 
-    private val compositeDisposable = CompositeDisposable()
+    var compositeDisposable : CompositeDisposable? = null
 
     var isAdmin = false
     var lastQuestionNum = -1
+
+    var isUserHeart = false //TODO 나갓다 들어왓다할때 저장하고 불러와야댐
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -204,6 +207,24 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             }
         }
 
+        tvLife.setOnClickListener{
+            "준비중인 기능입니다".toast()
+//            return
+//            v -> useHeart()
+        }
+        tvHeartCnt.setOnClickListener{
+            "준비중인 기능입니다".toast()
+//            return
+//            v -> useHeart()
+        }
+
+    }
+
+    fun useHeart(){
+        if(!isUserHeart) {
+            presenter.useHeart(curQuizStep)
+            isUserHeart=true
+        }
     }
 
     fun setAnswerClickable(isClickable: Boolean) {
@@ -215,19 +236,29 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        userMsgs = arrayOf("", "", "", "", "", "", "", "", "") // "" count is nine !
+
         // background from gif
         Glide.with(activity!!.applicationContext)
                 .load(R.drawable.quiz_background)
                 .into(ivBackground)
 
-        presenter.start()
-
         rcpbController = SelectorController(
                 arrayOf(rcpbQ1, rcpbQ2, rcpbQ3),
                 arrayOf(tvQuestion1, tvQuestion2, tvQuestion3, tvCnt1, tvCnt2, tvCnt3))
 
-        initListeners()
+        if(compositeDisposable == null)
+            compositeDisposable = CompositeDisposable()
+
+
+        presenter.start()
+
+
+
         initQuizCalledByOncreate()
+
+
+        initListeners()
 
 
 
@@ -238,9 +269,9 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         if(gage) {
             tvQuizNum.setTextColor(ContextCompat.getColor(App.instance.applicationContext, R.color.speciYellow))
 
+            cpGage.progress = 0
             cpGage.visibility = View.VISIBLE
-
-            compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
+            compositeDisposable!! += Observable.interval(1, TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .take(10)
                     .subscribe {
@@ -258,7 +289,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
 
         tvQuizNum.text = "$num"
         tvQuizNum.visibility = View.VISIBLE
-        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.icc_white_circle)) // need to use
+        ivIcon.setImageDrawable(context!!.getDrawable(R.drawable.tmp_dummy_seoul)) // need to use
 
     }
 
@@ -285,7 +316,6 @@ class QuizingFragment : Fragment(), QuizingContract.View {
     fun initQuizCalledByOncreate() {
         isAlive = true
         quizStatus = QuizStatus.BEFORE_START
-        userMsgs = arrayOf("", "", "", "", "", "", "", "", "") // "" count is nine !
 
         userMsgs.forEach { updateUserMsg(it) }
 
@@ -354,7 +384,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 llQuestionShow = View.VISIBLE,
                 llResultShow = View.INVISIBLE,
                 isExpandChatWindow_ = false,
-                imgId = R.drawable.icc_white_circle)
+                imgId = R.drawable.tmp_dummy_seoul)
 
         pickNum = CAN_PICK
 
@@ -375,7 +405,10 @@ class QuizingFragment : Fragment(), QuizingContract.View {
             }
         }
 
-        startTimer(null, pickEnd, turnRestView)
+        startTimer(null, {
+            if (!isAdmin && pickNum == CAN_PICK)
+                pickAnswer(0)
+            }, turnRestView)
 
     }
 
@@ -444,7 +477,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         llNotice.visibility = View.VISIBLE
         tvAdminMsg.text = winnersMsg.winnerMessage
 
-        compositeDisposable += Observable.interval(3, TimeUnit.SECONDS)
+        compositeDisposable!! += Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (!isOpenKbd)
@@ -459,7 +492,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.VISIBLE,
                 isExpandChatWindow_ = false,
-                imgId = if (isAdmin) R.drawable.icc_play else R.drawable.icc_profile)
+                imgId = if (isAdmin) R.drawable.icc_play else R.drawable.tmp_dummy_seoul)
 
         rlNextStep.isClickable = true
 
@@ -502,14 +535,15 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         activity?.finish()
     }
 
-    // for showQuestionView
-    val pickEnd: () -> Any = {
-
-
-        if (!isAdmin && pickNum == CAN_PICK)
-            pickAnswer(0)
-
+//    override fun showBroadcastPlayInfo(brodcastInfoMsg: BrodcastInfoMsg) {
+//        tvMemberCount.text = brodcastInfoMsg.viewerCount.toString()
+//    }
+// this is polling callback
+    override fun setMemberCount(cnt: Int) {
+        tvMemberCount.text = cnt.toString()
     }
+
+
 
     val turnRestView: () -> Any = {
         Log.i(TAG, "turnRestView")
@@ -526,13 +560,13 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 llQuestionShow = View.INVISIBLE,
                 llResultShow = View.INVISIBLE,
                 isExpandChatWindow_ = false,
-                imgId = if (isAdmin) R.drawable.icc_play else R.drawable.icc_profile)
-
+                imgId = if (isAdmin) R.drawable.icc_play else R.drawable.tmp_dummy_seoul)
     }
 
     fun startTimer(doWhen5Sec: (() -> Any)?, doWhen10Sec: (() -> Any)?, doWhen15Sec: (() -> Any)?) {
 
-        compositeDisposable += Observable.interval(5, TimeUnit.SECONDS)
+
+        compositeDisposable!! += Observable.interval(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(3)
                 .map { ((it + 1) * 5).toInt() }
@@ -576,8 +610,8 @@ class QuizingFragment : Fragment(), QuizingContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter {
                     quizStatus == QuizStatus.RESTING ||
-                            quizStatus == QuizStatus.BEFORE_START ||
-                            quizStatus == QuizStatus.ENDING
+                    quizStatus == QuizStatus.BEFORE_START ||
+                    quizStatus == QuizStatus.ENDING
                 }
                 .subscribe {
                     llNotice.visibility = View.VISIBLE
@@ -629,12 +663,72 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         ENDING(500),
     }
 
+    fun sendPolling() {
+        compositeDisposable!! += Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    presenter.polling()
+//                    Log.i(TAG,"RUN POLLING")
+                }
+    }
+
+    override fun setHeartCnt(cnt:Int) {
+        if(cnt == 0 ) {
+
+            rlLife.visibility = View.GONE
+
+            return
+        }
+        tvHeartCnt.text = cnt.toString()
+    }
+
+    override fun setUseHeartResult() {
+        rlLife.visibility = View.GONE
+        isAlive = true
+        isUserHeart = true
+        // TODO 하트사용 모션
+        playMotion()
+    }
+
+    fun playMotion(){
+
+        ivMotion.setImageResource(R.drawable.heart_motion)
+        ivMotion.visibility =View.VISIBLE
+        compositeDisposable!! += Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .take(1)
+                .subscribe {
+                    ivMotion.visibility =View.GONE
+                }
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+
+        if(compositeDisposable == null)
+            compositeDisposable = CompositeDisposable()
+
+//        presenter.registFirbaseSubscribe() //TODO 나갓다들어올때 받아야됨 우선은 자잘한버그때문에 제외
+
+        if(presenter.existBroadcastInfo())
+            presenter.loadCurBroadcastInfo()
+
+        if(isAdmin) sendPolling()
+
+    }
+
     override fun onPause() {
         super.onPause()
 
-        if(!compositeDisposable.isDisposed)
-            compositeDisposable.dispose()
+        presenter.unsubscribeFirebase(true)
+        presenter.saveCurBroadcastInfo()
 
+        if(!compositeDisposable!!.isDisposed) {
+            compositeDisposable!!.dispose()
+            compositeDisposable = null
+        }
     }
 
 }
