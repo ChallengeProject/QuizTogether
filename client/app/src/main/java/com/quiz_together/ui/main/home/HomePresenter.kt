@@ -4,6 +4,8 @@ import android.util.Log
 import android.widget.ProgressBar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.quiz_together.data.Repository
+import com.quiz_together.data.model.Broadcast
+import com.quiz_together.data.model.CurBroadcastInfo
 import com.quiz_together.data.model.Follower
 import com.quiz_together.data.model.ReqEndBroadcast
 import com.quiz_together.data.model.ResFollowList
@@ -18,6 +20,7 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
 
     override fun start() {
         loadBroadcasts()
+        startBroadcastWhenCreated()
     }
 
 
@@ -28,7 +31,7 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
             repository.getFollowerList(SC.USER_ID, object : ApiHelper.GetFollowerListCallback {
                 override fun onFollowerList(followList: ResFollowList) {
 
-                    Log.i(TAG, followList.toString())
+//                    Log.i(TAG, "onFollowerList " + followList.toString())
                     getPagingListAndProcWithFollowerList(followList.userFollowerList)
                 }
 
@@ -46,6 +49,9 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
     }
 
     fun getPagingListAndProcWithFollowerList(followList: List<Follower>) {
+
+//        Log.i(TAG,"getPagingListAndProcWithFollowerList SC.USER_ID " + SC.USER_ID )
+
         repository.getPagingBroadcastList(SC.USER_ID, object : ApiHelper.GetPagingBroadcastList {
             override fun onPagingBroadcastListLoaded(resGetPagingBroadcastList: ResGetPagingBroadcastList) {
                 view.run {
@@ -118,6 +124,8 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
 
     override fun tmpEndBroadcast(broadcastId: String) {
 
+        repository.removeCurBroadcstInfo()
+
         repository.endBroadcast(ReqEndBroadcast(broadcastId, SC.USER_ID, "", ""),
                 object : ApiHelper.GetSuccessCallback {
                     override fun onSuccessLoaded() {
@@ -133,6 +141,42 @@ class HomePresenter(val view: HomeFragment, val pb: ProgressBar, val repository:
 
     }
 
+    fun startBroadcastWhenCreated() {
+
+
+        val jsonStr = repository.getCurBroadcstInfo()
+
+        if(jsonStr.isNullOrEmpty()) {
+            repository.removeCurBroadcstInfo()
+            return
+        }
+
+        Log.i(TAG,"in startBroadcastWhenCreated  : $jsonStr")
+
+        val curBroadcastInfo = SC.gson.fromJson(jsonStr, CurBroadcastInfo::class.java)
+
+        if(curBroadcastInfo.fcmMsg.contains("END_MESSAGE")){
+            Log.i(TAG,"catch END_MESSAGE, not getBroadcastById")
+            repository.removeCurBroadcstInfo()
+            return
+        }
+
+        repository.getBroadcastById(curBroadcastInfo.broadcastId,
+                object :ApiHelper.GetBroadcastCallback{
+                    override fun onBroadcastLoaded(broadcast: Broadcast) {
+                        view.startBroadcast(broadcast.broadcastId,true)
+                    }
+
+                    override fun onDataNotAvailable() {
+                        Log.i(TAG, "getBroadcastById onDataNotAvailable")
+                        repository.removeCurBroadcstInfo()
+                    }
+                })
+
+
+
+
+    }
 
 
 }

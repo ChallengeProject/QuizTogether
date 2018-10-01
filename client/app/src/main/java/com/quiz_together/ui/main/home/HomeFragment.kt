@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.*
-import android.widget.ImageButton
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.quiz_together.R
 import com.quiz_together.data.Repository
 import com.quiz_together.data.model.Follower
 import com.quiz_together.data.model.ResGetPagingBroadcastList
 import com.quiz_together.data.model.RoomOutputType
-import com.quiz_together.ui.create.CreateActivity
 import com.quiz_together.ui.quizing.QuizingActivity
 import com.quiz_together.util.SC
 import com.quiz_together.util.setTouchable
@@ -28,17 +28,14 @@ class HomeFragment : Fragment(), HomeContract.View {
 
 
     private val broadcastAdapter: BroadcastAdapter by lazy {
-        BroadcastAdapter(activity?.applicationContext, {
+        BroadcastAdapter(activity?.applicationContext) {
 
             cbType , broadcast ->
 
             when (cbType) {
                 BroadcastAdapter.CallBackType.ROOM -> {
-                    val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
-                    intent.putExtra(QuizingActivity.BROADCAST_ID, broadcast.broadcastId)
-                    intent.putExtra(QuizingActivity.IS_ADMIN, if (broadcast.roomOutputType == RoomOutputType.RESERVATION) true else false)
                     // TODO Create RESERVED 로 진입할때 처리 RESERVED intent 넣어서
-                    startActivity(intent)
+                    startBroadcast(broadcast.broadcastId,broadcast.roomOutputType == RoomOutputType.RESERVATION )
                 }
                 BroadcastAdapter.CallBackType.FOLLOW -> presenter.insertFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
                 BroadcastAdapter.CallBackType.UNFOLLOW -> presenter.deleteFollower(SC.USER_ID,broadcast.userInfoView!!.userId)
@@ -50,8 +47,16 @@ class HomeFragment : Fragment(), HomeContract.View {
 
 
 
-        })
+        }
     }
+
+    override fun startBroadcast(broadcastId: String?,isAdmin: Boolean) {
+        val intent = Intent(activity?.applicationContext, QuizingActivity::class.java)
+        intent.putExtra(QuizingActivity.BROADCAST_ID, broadcastId)
+        intent.putExtra(QuizingActivity.IS_ADMIN, isAdmin)
+        startActivity(intent)
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater?.inflate(R.layout.fragm_home, container, false)
@@ -95,13 +100,13 @@ class HomeFragment : Fragment(), HomeContract.View {
 
     override fun showBroadcasts(resGetPagingBroadcastList: ResGetPagingBroadcastList,followList: List<Follower>) {
 
-        Log.i(TAG,followList.toString())
+//        Log.i(TAG,"followList.toString() : ${followList.toString()}")
 
         val followSet = followList.map {
             it.follower
         }.toSet()
 
-        Log.i(TAG,followSet.toString())
+//        Log.i(TAG,"followSet.toString : ${followSet.toString()}")
 
 
         broadcastAdapter.run {

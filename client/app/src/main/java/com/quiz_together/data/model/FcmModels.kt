@@ -10,12 +10,14 @@ data class AdminMsg(val pushType: PushType, val message:String, val userName:Str
 
 data class WinnersMsg(val pushType: PushType,val winnerMessage:String, val prize:String, val giftDescription:String, val giftType: GiftType, val userName:Array<String>)
 
+data class BrodcastInfoMsg(val pushType: PushType,val broadcastStatus: BroadcastStatus, val viewerCount:Int)
+
 //data class NoticeMsg(val pushType: PushType,val aa:Int)
 
 data class EndMsg(val pushType: PushType)
 
 data class ReqOpenAnsAndQus(val broadcastId: String, val userId: String, val step:Int)
 
-data class FollowBroadcastMsg( val pushType: PushType, val broadcastId: String , val title:String, val description:String, val userName: String )
+//data class FollowBroadcastMsg( val pushType: PushType, val broadcastId: String , val title:String, val description:String, val userName: String )
 
 

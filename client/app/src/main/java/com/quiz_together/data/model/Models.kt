@@ -12,7 +12,7 @@ data class ReqSignup(val name:String, val pushToken :String)
 data class ReqLogin(val userId:String)
 
 //updateUserProfile
-data class User(val userId:String, val name :String, val profilePath:String, val money:Long, val heartCount:Int, val broadcastBeforeStarting:BroadcastBeforeStarting)
+data class UserProfileView(val userId:String, val name :String, val profilePath:String, val money:Long, val heartCount:Int, val broadcastBeforeStarting:BroadcastBeforeStarting)
 
 data class BroadcastBeforeStarting(val broadcastId:String , val scheduledTime:Long)
 
@@ -35,18 +35,20 @@ data class Broadcast(
         val userId: String?,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage:String,
-        val userInfoView: UserView?,
+        val userInfoView: UserProfileView?,
         val questionList: List<Question>,
         val questionCount: Int,
 
         var roomOutputType: RoomOutputType?
 )
 
+
+
 data class ResGetPagingBroadcastList(val myBroadcastList: List<Broadcast>, val currentBroadcastList: List<Broadcast>)
 
 data class ResStartBroadcast(val broadcastView: Broadcast)
 
-data class BroadcastJoinInfo(val broadcastView: Broadcast, val userInfoView: UserView, val question: String, val step: Int, val answerNo: Int, val playUserStatus: PlayUserStatus, val viewerCount: Int)
+data class BroadcastJoinInfo(val broadcastView: Broadcast, val userProfileView: UserProfileView, val questionStatistics:Map<String,Int>, val questionProp: QuestionProp, val step: Int, val answerNo: Int, val playUserStatus: PlayUserStatus, val viewerCount: Int)
 
 data class ReqSendAnswer(val step :Int, val userId: String, val broadcastId: String, val answerNo: Int)
 
@@ -65,3 +67,5 @@ data class ReqFollow(val userId: String,val follower:String)
 data class ResFollowList(val userFollowerList : List<Follower>)
 
 data class Follower(val follower: String)
+
+data class ReqHeart(val step: Int, val userId:String,val broadcastId: String)

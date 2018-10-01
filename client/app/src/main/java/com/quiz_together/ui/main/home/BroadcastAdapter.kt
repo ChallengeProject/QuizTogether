@@ -60,7 +60,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType : Ca
             tvName.text = item.userInfoView?.name
             tvPrize.text = item.prize.toString()
             tvContent.text = item.description
-            ivProfile.setImageResource(R.drawable.icc_profile)
+            ivProfile.setImageResource(R.drawable.tmp_dummy_seoul)
 
             val calcedMin = item.remainingStartSeconds!! / 60
 

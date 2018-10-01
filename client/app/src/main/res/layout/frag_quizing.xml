@@ -79,17 +79,36 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/icc_more" />
 
-                <ImageButton
-                    android:id="@+id/ibLife"
+                <RelativeLayout
+                    android:id="@+id/rlLife"
                     android:layout_width="23dp"
                     android:layout_height="22dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:layout_gravity="center"
                     android:layout_marginRight="14dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/icc_life" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    >
+
+
+                    <ImageButton
+                        android:id="@+id/tvLife"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icc_life" />
+
+                    <TextView
+                        android:id="@+id/tvHeartCnt"
+                        android:textColor="@color/speciYellow"
+                        tools:text="1"
+                        android:textSize="10dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -109,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="14dp"
-                        android:text="1000"
+                        android:text="0"
                         android:textColor="#97cdd7"
                         android:textSize="10dp" />
 
@@ -417,7 +436,7 @@
                 android:id="@+id/ivIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/icc_profile"
+                android:src="@drawable/tmp_dummy_seoul"
                 app:civ_border_color="#ffffff"
                 app:civ_border_width="5dp" />
 
@@ -494,6 +513,14 @@
             app:layout_constraintEnd_toStartOf="@+id/btSendMsg"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/ivMotion"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
 
     <ImageButton
         android:id="@+id/ibChatOn"

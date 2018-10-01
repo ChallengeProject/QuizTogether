@@ -1,5 +1,6 @@
 package com.quiz_together.data
 
+import android.util.Log
 import com.quiz_together.data.local.AppPreferenceHelper
 import com.quiz_together.data.local.PreferenceHelper
 import com.quiz_together.data.model.*
@@ -8,6 +9,8 @@ import com.quiz_together.data.remote.AppApiHelper
 
 
 object Repository : PreferenceHelper, ApiHelper {
+
+    val TAG = "Repository#$#"
 
     private val preferenceHelper = AppPreferenceHelper()
     private val apiHelper = AppApiHelper()
@@ -27,6 +30,20 @@ object Repository : PreferenceHelper, ApiHelper {
     }
 
     override fun getUserId(): String? = preferenceHelper.getUserId()
+
+    override fun getCurBroadcstInfo(): String  = preferenceHelper.getCurBroadcstInfo()
+
+    override fun setCurBroadcstInfo(curBroadcastInfo: String) {
+        Log.i(TAG,"setCurBroadcstInfo $curBroadcastInfo")
+        preferenceHelper.setCurBroadcstInfo(curBroadcastInfo)
+    }
+
+    override fun removeCurBroadcstInfo() {
+
+        Log.i(TAG,"removeCurBroadcstInfo")
+
+        preferenceHelper.removeCurBroadcstInfo()
+    }
 
 
     // rest api
@@ -134,6 +151,9 @@ object Repository : PreferenceHelper, ApiHelper {
         apiHelper.getFollowerList(userId, cb)
     }
 
+    override fun sendHeart(step: Int, userId: String, broadcastId: String, cb: ApiHelper.GetSuccessCallback) {
+        apiHelper.sendHeart(step,userId,broadcastId,cb)
+    }
 
 
     override fun hasSavedQuiz(): Boolean = preferenceHelper.hasSavedQuiz()
@@ -141,6 +161,9 @@ object Repository : PreferenceHelper, ApiHelper {
     override fun getSavedQuiz(): Broadcast? = preferenceHelper.getSavedQuiz()
     override fun getSavedFollowerList(): List<String> = preferenceHelper.getSavedFollowerList()
     override fun setFollowerList(setStr: Set<String>) = preferenceHelper.setFollowerList(setStr)
+    override fun sendBroadcastPlayInfo(broadcastId: String, userId: String, cb: ApiHelper.GetSuccessCallback)
+            = apiHelper.sendBroadcastPlayInfo(broadcastId,userId, cb)
+
 
 
 }

@@ -22,13 +22,17 @@ interface QuizingContract {
         fun showAnswerView(answerMsg: AnswerMsg)
         fun showWinnerView(winnersMsg: WinnersMsg)
         fun endQuiz(endMsg: EndMsg)
+//        fun showBroadcastPlayInfo(brodcastInfoMsg:BrodcastInfoMsg)
+        fun setMemberCount(cnt:Int)
 
         fun endQuizFromErr()
         fun finishActivity()
-
+        fun setHeartCnt(cnt:Int)
+        fun setUseHeartResult()
     }
 
     interface Presenter : BasePresenter {
+
 
         fun sendAnswer(step :Int,  answerNo: Int)
 
@@ -43,6 +47,15 @@ interface QuizingContract {
         fun openWinners()
         fun endBroadcast()
 
+        fun saveCurBroadcastInfo()
+
+        fun registFirbaseSubscribe()
+        fun loadCurBroadcastInfo()
+
+        fun existBroadcastInfo() : Boolean
+        fun polling()
+
+        fun useHeart(step:Int)
 
     }
 

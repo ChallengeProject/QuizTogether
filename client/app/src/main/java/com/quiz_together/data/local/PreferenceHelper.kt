@@ -15,4 +15,9 @@ interface PreferenceHelper {
 
     fun getSavedFollowerList() : List<String>
     fun setFollowerList(setStr : Set<String>)
+
+    fun getCurBroadcstInfo() : String
+    fun setCurBroadcstInfo( curBroadcastInfo : String)
+    fun removeCurBroadcstInfo()
+
 }
