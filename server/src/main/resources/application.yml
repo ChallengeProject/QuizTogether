@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local
   datasource:
-    url: jdbc:mysql://seose11.iptime.org:13306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false
+    url: jdbc:mysql://seose11.iptime.org:13306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: qqqq
     hikari:
@@ -35,7 +35,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: qqqq
   redis:
@@ -53,7 +53,7 @@ logging:
 spring:
   profiles: real
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: qqqq
   redis:
