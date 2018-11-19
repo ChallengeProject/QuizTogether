@@ -6,7 +6,7 @@ spring:
     password:
     hikari:
       auto-commit: true
-      pool-name: quiz_together
+      pool-name: quiz_test_together
       register-mbeans: true
       minimum-idle: 5
       maximum-pool-size: 5
@@ -30,8 +30,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-
-
 
 fcm:
   apiKey: AIzaSyDmtRKxoWiKuDqTVFTLHYYIrZSw8CPyYYM
