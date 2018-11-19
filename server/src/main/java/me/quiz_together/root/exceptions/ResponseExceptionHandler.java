@@ -1,6 +1,7 @@
 package me.quiz_together.root.exceptions;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,8 +17,9 @@ import me.quiz_together.root.model.supoort.ResultContainer;
 public class ResponseExceptionHandler {
 
     @ExceptionHandler(ResponseException.class)
-    public final ResultContainer<Object> handleResponseException(HttpServletRequest request, ResponseException e) {
+    public final ResultContainer<Object> handleResponseException(HttpServletRequest request, HttpServletResponse response, ResponseException e) {
         log.error(e.toString(), e);
+        response.setStatus(e.getExceptionCode().getCode());
 
         return new ResultContainer<>(e.getExceptionCode(), e.getMessage(), null);
     }
