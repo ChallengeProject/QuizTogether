@@ -6,7 +6,8 @@
   <insert id="insertReferralUser" parameterType="map">
        INSERT INTO /* user_referral.insertReferralUser */
         user_referral(user_id, referral_user, created_time)
-        value(#{userId}, #{referralUser}, NOW(3))
+       VALUES (#{userId}, #{referralUser}, NOW(3))
+
   </insert>
 
 

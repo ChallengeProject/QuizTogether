@@ -31,7 +31,7 @@
   <insert id="insertUserInventory" parameterType="map">
        INSERT INTO /* user_inventory.insertUserInventory */
         user_inventory(user_id, heart_count, created_time, updated_time)
-        value(#{userId}, 1, NOW(3), NOW(3))
+       VALUES (#{userId}, 1, NOW(3), NOW(3))
   </insert>
 
 

@@ -18,8 +18,7 @@ CREATE TABLE `broadcast` (
   `updated_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `deleted_time` timestamp(3) NULL DEFAULT NULL,
   `scheduled_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  PRIMARY KEY (`id`),
---   KEY `idx_user_id` (`user_id`)
+  PRIMARY KEY (`id`)
 );
 --
 -- -- Create syntax for TABLE 'chat'
@@ -85,7 +84,8 @@ CREATE TABLE user (
   created_time timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   updated_time timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   deleted_time timestamp(3) NULL DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE KEY `name` (`name`)
 );
 --
 -- -- Create syntax for TABLE 'user_answer_history'
@@ -108,7 +108,7 @@ CREATE TABLE `user_device` (
   `created_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `updated_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`),
---   KEY `user_id` (`user_id`)
+  UNIQUE KEY uni_user_id (user_id)
 );
 --
 -- Create syntax for TABLE 'user_follower'
@@ -118,7 +118,7 @@ CREATE TABLE `user_follower` (
   `follower` bigint(20) NOT NULL,
   `created_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`seq`),
---   UNIQUE KEY `user_id` (`user_id`,`follower`)
+  UNIQUE KEY `user_follower_user_id` (`user_id`,`follower`)
 );
 --
 -- Create syntax for TABLE 'user_inventory'
