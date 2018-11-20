@@ -160,6 +160,9 @@
         <includes>
           <include>**/*.xml</include>
         </includes>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
       </resource>
     </resources>
     <testResources>
