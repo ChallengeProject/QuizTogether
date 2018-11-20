@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://seose11.iptime.org:13306/quizTogether?zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&mysqlEncoding=utf8&connectTimeout=5000&socketTimeout=5000&useServerPrepStmts=true&cachePrepStmts=true&useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: qqqq
+    hikari:
+      auto-commit: true
+      pool-name: quiz_together
+      register-mbeans: true
+      minimum-idle: 5
+      maximum-pool-size: 5
+      connection-test-query: select 1
+      connection-timeout: 3200
+      validation-timeout: 3200
+  redis:
+    host: seose11.iptime.org
+    port: 6379
+    database: 0
+    password: qqqq
+
+logging:
+  config: classpath:local/log4j2.xml
