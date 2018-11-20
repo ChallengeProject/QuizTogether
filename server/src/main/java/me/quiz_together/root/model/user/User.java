@@ -7,7 +7,7 @@ public class User {
     private Long id;
     private String name;
     private String profilePath;
-    private Long money;
+    private Long money = 0L;
     private Long createdTime;
     private Long updatedTime;
     private Long deletedTime;

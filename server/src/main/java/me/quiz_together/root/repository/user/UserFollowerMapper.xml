@@ -22,7 +22,7 @@
   <insert id="insertFollower" parameterType="map">
     INSERT INTO /* user_follower.insertFollower */
         user_follower(user_id, follower, created_time)
-    value(#{userId}, #{follower}, NOW(3))
+    VALUES (#{userId}, #{follower}, NOW(3))
   </insert>
 
   <delete id="deleteFollower" parameterType="map">
