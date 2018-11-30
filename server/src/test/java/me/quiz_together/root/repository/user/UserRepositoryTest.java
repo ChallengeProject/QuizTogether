@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
 
 import org.assertj.core.util.Lists;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.IntegrationTest;
@@ -18,41 +18,40 @@ public class UserRepositoryTest extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
     private User user;
-    private User user1;
-    private User user2;
-    private User user3;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         user = new User();
         user.setName(generateRandomName());
-        user1 = new User();
-        user1.setName(generateRandomName());
-        user2 = new User();
-        user2.setName(generateRandomName());
-        user3 = new User();
-        user3.setName(generateRandomName());
     }
     @Test
-    public void insertTest() {
+    void insertTest() {
         userRepository.insertUser(user);
     }
 
     @Test
-    public void deleteUser() {
+    void deleteUser() {
         userRepository.insertUser(user);
         userRepository.deleteUserById(1);
     }
 
     @Test
-    public void selectUserById() {
+    void selectUserById() {
         userRepository.insertUser(user);
         User woojinUser = userRepository.selectUserById(user.getId());
         assertThat(woojinUser).isNotNull();
     }
 
     @Test
-    public void getUserByIds() {
+    void getUserByIds() {
+
+        User user1 = new User();
+        user1.setName(generateRandomName());
+        User user2 = new User();
+        user2.setName(generateRandomName());
+        User user3 = new User();
+        user3.setName(generateRandomName());
+
         userRepository.insertUser(user1);
         userRepository.insertUser(user2);
         userRepository.insertUser(user3);
@@ -64,7 +63,7 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void updateUserProfile() {
+    void updateUserProfile() {
         userRepository.insertUser(user);
         String profileImageUrl = generateRandomName();
         userRepository.updateUserProfile(user.getId(), profileImageUrl);
@@ -73,13 +72,13 @@ public class UserRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void selectUserByName() {
+    void selectUserByName() {
         userRepository.insertUser(user);
         assertThat(userRepository.selectUserByName(user.getName()).getName()).isEqualTo(user.getName());
     }
 
     @Test
-    public void login() {
+    void login() {
         userRepository.insertUser(user);
 
         assertThat(userRepository.login(user.getId())).isNotNull();

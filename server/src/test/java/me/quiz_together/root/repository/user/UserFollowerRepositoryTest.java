@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.AbstractDummy;
@@ -18,26 +18,26 @@ public class UserFollowerRepositoryTest extends IntegrationTest {
     private UserFollowerRepository userFollowerRepository;
     private UserFollower userFollower;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         userFollower = new UserFollower();
         userFollower.setFollower(AbstractDummy.generateRandomLong());
         userFollower.setUserId(AbstractDummy.generateRandomLong());
     }
 
     @Test
-    public void insertFollower() {
+    void insertFollower() {
         userFollowerRepository.insertFollower(userFollower);
     }
 
     @Test
-    public void deleteFollower() {
+    void deleteFollower() {
         userFollowerRepository.insertFollower(userFollower);
         userFollowerRepository.deleteFollower(userFollower);
     }
 
     @Test
-    public void selectFollowerListByUserId() {
+    void selectFollowerListByUserId() {
         userFollowerRepository.insertFollower(userFollower);
         List<UserFollower> userFollowerList = userFollowerRepository.selectFollowerListByUserId(userFollower.getUserId());
         assertThat(userFollowerList).isNotEmpty();

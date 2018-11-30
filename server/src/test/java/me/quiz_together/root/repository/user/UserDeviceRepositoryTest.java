@@ -4,8 +4,8 @@ import static me.quiz_together.root.AbstractDummy.generateRandomLong;
 import static me.quiz_together.root.AbstractDummy.generateRandomName;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.IntegrationTest;
@@ -17,8 +17,15 @@ public class UserDeviceRepositoryTest extends IntegrationTest {
     private UserDeviceRepository userDeviceRepository;
     private UserDevice userDevice;
 
+    @BeforeEach
+    void init() {
+        userDevice = new UserDevice();
+        userDevice.setPushToken(generateRandomName());
+        userDevice.setUserId(generateRandomLong());
+    }
+
     @Test
-    public void selectUserDeviceByUserId() {
+    void selectUserDeviceByUserId() {
         userDeviceRepository.insertUserDevice(userDevice);
 
         UserDevice selectedUserDevice = userDeviceRepository.selectUserDeviceByUserId(userDevice.getUserId());
@@ -26,14 +33,7 @@ public class UserDeviceRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void insertUserDevice() {
+    void insertUserDevice() {
         userDeviceRepository.insertUserDevice(userDevice);
-    }
-
-    @Before
-    public void init() {
-        userDevice = new UserDevice();
-        userDevice.setPushToken(generateRandomName());
-        userDevice.setUserId(generateRandomLong());
     }
 }

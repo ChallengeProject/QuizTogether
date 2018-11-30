@@ -2,7 +2,7 @@ package me.quiz_together.root.repository.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.AbstractDummy;
@@ -15,12 +15,12 @@ public class UserInventoryRepositoryTest extends IntegrationTest {
     private UserInventoryRepository userInventoryRepository;
 
     @Test
-    public void insertUserInventory() {
+    void insertUserInventory() {
         userInventoryRepository.insertUserInventory(AbstractDummy.generateRandomLong());
     }
 
     @Test
-    public void updateUserHeartCount() {
+    void updateUserHeartCount() {
         long userId = AbstractDummy.generateRandomLong();
 
         userInventoryRepository.insertUserInventory(userId);
@@ -37,7 +37,7 @@ public class UserInventoryRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void selectUserInventoryByUserId() {
+    void selectUserInventoryByUserId() {
         long userId = AbstractDummy.generateRandomLong();
 
         userInventoryRepository.insertUserInventory(userId);
