@@ -3,26 +3,29 @@ package me.quiz_together.root.repository.user;
 import static me.quiz_together.root.AbstractDummy.generateRandomName;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.IntegrationTest;
 import me.quiz_together.root.model.user.User;
+import me.quiz_together.root.repository.arbitrary.UserArbitrary;
+import me.quiz_together.root.util.ArbitraryUtils;
 
 public class UserRepositoryTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
     private User user;
+    UserArbitrary userArbitrary = new UserArbitrary();
 
     @BeforeEach
     void init() {
-        user = new User();
-        user.setName(generateRandomName());
+        user = UserArbitrary.defaultOne();
     }
     @Test
     void insertTest() {
@@ -45,18 +48,9 @@ public class UserRepositoryTest extends IntegrationTest {
     @Test
     void getUserByIds() {
 
-        User user1 = new User();
-        user1.setName(generateRandomName());
-        User user2 = new User();
-        user2.setName(generateRandomName());
-        User user3 = new User();
-        user3.setName(generateRandomName());
-
-        userRepository.insertUser(user1);
-        userRepository.insertUser(user2);
-        userRepository.insertUser(user3);
-
-        Map<Long, User> userMap = userRepository.getUserByIds(Lists.newArrayList(user1.getId(), user2.getId(), user3.getId()));
+        List<User> users = ArbitraryUtils.list(userArbitrary.arbitrary(), 100);
+        users.forEach(u -> userRepository.insertUser(u));
+        Map<Long, User> userMap = userRepository.getUserByIds(users.stream().map(User::getId).collect(Collectors.toList()));
 
         assertThat(userMap).isNotEmpty();
         assertThat(userMap.size()).isGreaterThan(2);

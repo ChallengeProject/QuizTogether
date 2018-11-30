@@ -1,12 +1,20 @@
 package me.quiz_together.root.model.user;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserDevice {
     private Long id;
     private Long userId;
     private String pushToken;
-    private Long created_time;
-    private Long updated_time;
+    private Long createdTime;
+    private Long updatedTime;
 }

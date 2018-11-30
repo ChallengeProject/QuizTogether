@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import me.quiz_together.root.AbstractDummy;
 import me.quiz_together.root.IntegrationTest;
 import me.quiz_together.root.model.user.UserFollower;
+import me.quiz_together.root.repository.arbitrary.UserFollowerArbitrary;
 
 public class UserFollowerRepositoryTest extends IntegrationTest {
 
@@ -20,9 +20,7 @@ public class UserFollowerRepositoryTest extends IntegrationTest {
 
     @BeforeEach
     void init() {
-        userFollower = new UserFollower();
-        userFollower.setFollower(AbstractDummy.generateRandomLong());
-        userFollower.setUserId(AbstractDummy.generateRandomLong());
+        userFollower = UserFollowerArbitrary.defaultOne();
     }
 
     @Test

@@ -1,7 +1,5 @@
 package me.quiz_together.root.repository.user;
 
-import static me.quiz_together.root.AbstractDummy.generateRandomLong;
-import static me.quiz_together.root.AbstractDummy.generateRandomName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import me.quiz_together.root.IntegrationTest;
 import me.quiz_together.root.model.user.UserDevice;
+import me.quiz_together.root.repository.arbitrary.UserDeviceArbitrary;
 
 public class UserDeviceRepositoryTest extends IntegrationTest {
 
@@ -19,9 +18,7 @@ public class UserDeviceRepositoryTest extends IntegrationTest {
 
     @BeforeEach
     void init() {
-        userDevice = new UserDevice();
-        userDevice.setPushToken(generateRandomName());
-        userDevice.setUserId(generateRandomLong());
+        userDevice = UserDeviceArbitrary.defaultOne();
     }
 
     @Test
