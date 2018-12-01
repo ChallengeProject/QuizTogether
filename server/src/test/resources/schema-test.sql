@@ -9,7 +9,7 @@ CREATE TABLE `broadcast` (
   `broadcast_status` smallint(11) NOT NULL,
   `prize` bigint(20) NOT NULL,
   `gift_description` varchar(100)  DEFAULT NULL,
-  `gift_type` tinyint(4) NOT NULL,
+  `gift_type` int(11) NOT NULL,
   `winner_message` varchar(200)  DEFAULT NULL,
   `code` varchar(300)  DEFAULT '',
   `is_public` tinyint(4) DEFAULT NULL,
@@ -52,7 +52,8 @@ CREATE TABLE `question` (
   `created_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `updated_time` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `category` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `broadcast_id` (`broadcast_id`,`step`)
 );
 --
 -- -- Create syntax for TABLE 'stream'
@@ -124,9 +125,9 @@ CREATE TABLE `user_follower` (
 -- Create syntax for TABLE 'user_inventory'
 CREATE TABLE `user_inventory` (
   `user_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `heart_count` int(11) DEFAULT NULL,
-  `created_time` timestamp(3) NULL DEFAULT NULL,
-  `updated_time` timestamp(3) NULL DEFAULT NULL,
+  `heart_count` int(11) NOT NULL,
+  `created_time` timestamp(3) NOT NULL,
+  `updated_time` timestamp(3) NOT NULL,
   PRIMARY KEY (`user_id`)
 );
 --
@@ -152,9 +153,9 @@ CREATE TABLE `user_inventory` (
 -- Create syntax for TABLE 'user_referral'
 CREATE TABLE `user_referral` (
   `seq` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) DEFAULT NULL,
-  `referral_user` bigint(20) DEFAULT NULL,
-  `created_time` timestamp(3) NULL DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `referral_user` bigint(20) NOT NULL,
+  `created_time` timestamp(3) NOT NULL,
   PRIMARY KEY (`seq`),
   UNIQUE KEY `user_id` (`user_id`)
 );

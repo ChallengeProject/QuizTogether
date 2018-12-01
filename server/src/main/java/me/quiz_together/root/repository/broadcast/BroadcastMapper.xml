@@ -115,7 +115,7 @@
     UPDATE /* broadcast.updateBroadcast */
       broadcast
     SET
-      , title = #{title}
+      title = #{title}
       , description = #{title}
       , prize = #{prize}
       , gift_description = #{giftDescription}
@@ -124,10 +124,10 @@
       , code = #{code}
       , is_public = #{isPublic}
       , question_count = #{questionCount}
-      ,	updated_time = NOW()
-      , scheduled_time = #{scheduledTime}
+      ,	updated_time = NOW(3)
+      , scheduled_time = #{scheduledTime, jdbcType=TIMESTAMP}
     WHERE
-        id = #{id}
+      id = #{id}
   </update>
 
   <delete id="deleteBroadcastById" parameterType="map">

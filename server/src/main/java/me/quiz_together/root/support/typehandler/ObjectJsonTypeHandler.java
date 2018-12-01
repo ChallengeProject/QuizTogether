@@ -51,17 +51,17 @@ public class ObjectJsonTypeHandler<T extends Object> extends BaseTypeHandler<T> 
 
     @Override
     public T getNullableResult(ResultSet resultSet, String s) throws SQLException {
-        return valueOf(resultSet.getBytes(s));
+        return valueOf(resultSet.getString(s));
     }
 
     @Override
     public T getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        return valueOf(resultSet.getBytes(i));
+        return valueOf(resultSet.getString(i));
     }
 
     @Override
     public T getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        return valueOf(callableStatement.getBytes(i));
+        return valueOf(callableStatement.getString(i));
     }
 
     @SuppressWarnings("rawtypes")
@@ -76,7 +76,7 @@ public class ObjectJsonTypeHandler<T extends Object> extends BaseTypeHandler<T> 
         return OBJECT_MAPPER.writeValueAsString(parameter);
     }
 
-    private T valueOf(byte[] data) throws SQLException {
+    private T valueOf(String data) throws SQLException {
         if (StringUtils.isEmpty(data))
             return null;
         try {
