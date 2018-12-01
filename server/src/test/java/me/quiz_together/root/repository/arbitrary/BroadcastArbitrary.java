@@ -35,8 +35,7 @@ public class BroadcastArbitrary {
                                                .greaterOrEqual(1);
     private Arbitrary<Long> scheduledTime = Arbitraries.longs()
                                                        .greaterOrEqual(0);
-    private Arbitrary<BroadcastStatus> broadcastStatus = Arbitraries.constant(
-            AbstractDummy.getRandomValueType(BroadcastStatus.class));
+    private Arbitrary<BroadcastStatus> broadcastStatus = Arbitraries.constant(BroadcastStatus.CREATED);
     private Arbitrary<GiftType> giftType = Arbitraries.constant(
             AbstractDummy.getRandomValueType(GiftType.class));
 
