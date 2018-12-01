@@ -260,3 +260,5 @@ modules.xml
 
 # client
 client
+
+.jqwik-database

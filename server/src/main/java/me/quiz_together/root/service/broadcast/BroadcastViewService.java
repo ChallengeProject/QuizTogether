@@ -123,7 +123,7 @@ public class BroadcastViewService {
             throw new RuntimeException("broadcast update fail");
         }
         List<Question> questionList = convertQuestionList(broadcastUpdateRequest.getQuestionList());
-        questionService.updateQuestionListByQuestionId(questionList);
+        questionList.forEach(question -> questionService.updateQuestionByQuestionId(question));
 
         return HashIdUtils.encryptId(HashIdType.BROADCAST_ID, broadcast.getId());
     }

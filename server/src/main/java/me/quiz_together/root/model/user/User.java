@@ -1,8 +1,13 @@
 package me.quiz_together.root.model.user;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor @Getter @Setter @Builder
 public class User {
     private Long id;
     private String name;
