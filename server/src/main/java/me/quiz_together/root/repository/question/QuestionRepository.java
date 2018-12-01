@@ -28,7 +28,7 @@ public class QuestionRepository {
         questionMapper.insertQuestionList(questionList);
     }
 
-    public int updateQuestionListByQuestionId(List<Question> questionList) {
-        return questionMapper.updateQuestionListByQuestionId(questionList);
+    public int updateQuestionByQuestionId(Question question) {
+        return questionMapper.updateQuestionByQuestionId(question);
     }
 }

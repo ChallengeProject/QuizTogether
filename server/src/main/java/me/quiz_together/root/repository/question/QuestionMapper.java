@@ -17,6 +17,6 @@ public interface QuestionMapper {
 
     void insertQuestionList(List<Question> questionList);
 
-    int updateQuestionListByQuestionId(List<Question> questionList);
+    int updateQuestionByQuestionId(Question question);
 
 }

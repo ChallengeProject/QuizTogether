@@ -29,7 +29,7 @@ public class QuestionService {
         questionRepository.insertQuestionList(questionList);
     }
 
-    public int updateQuestionListByQuestionId(List<Question> questionList) {
-        return questionRepository.updateQuestionListByQuestionId(questionList);
+    public int updateQuestionByQuestionId(Question question) {
+        return questionRepository.updateQuestionByQuestionId(question);
     }
 }

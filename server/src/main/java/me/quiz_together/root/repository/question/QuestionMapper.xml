@@ -55,19 +55,17 @@
     </foreach>
   </insert>
 
-  <update id="updateQuestionListByQuestionId" parameterType="map">
-    <foreach collection="list" item="question" index="index" separator=";">
-      UPDATE /* question.updateQuestionListByQuestionId */
+  <update id="updateQuestionByQuestionId" parameterType="map">
+      UPDATE /* question.updateQuestionByQuestionId */
       question
       SET
-      , step = #{question.step}
-      , question_prop = #{question.questionProp}
-      , answer_no = #{question.answerNo}
-      , category = #{question.category}
-      ,	updated_time = NOW()
+      step = #{step}
+      , question_prop = #{questionProp}
+      , answer_no = #{answerNo}
+      , category = #{category}
+      ,	updated_time = NOW(3)
       WHERE
-      question_id = #{question.questionId}
-    </foreach>
+      id = #{id}
   </update>
 
 </mapper>
