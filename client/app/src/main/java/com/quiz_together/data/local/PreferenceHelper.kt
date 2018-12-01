@@ -9,9 +9,9 @@ interface PreferenceHelper {
     fun setUserId(userId: String)
     fun getUserId(): String?
 
-    fun hasSavedQuiz(): Boolean
-    fun saveQuiz(incompletedBroadcast: Broadcast)
-    fun getSavedQuiz(): Broadcast?
+    fun hasSavedBroadcast(): Boolean
+    fun saveBroadcast(broadcast: Broadcast)
+    fun getSavedBroadcast(): Broadcast?
 
     fun getSavedFollowerList(): List<String>
     fun setFollowerList(setStr: Set<String>)

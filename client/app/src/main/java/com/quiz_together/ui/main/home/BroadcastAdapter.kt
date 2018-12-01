@@ -53,7 +53,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType: Cal
 
             tvTitle.text = item.title
             tvDate.text = item.scheduledTime?.toStringTemplate()?.substring(2) + "시작"
-            tvName.text = item.userInfoView?.name
+            userID.text = item.userInfoView?.name
             tvPrize.text = item.prize.toString()
             tvContent.text = item.description
             ivProfile.setImageResource(R.drawable.icc_profile)
@@ -66,7 +66,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType: Cal
                 tvShare.text = "팔로우"
 
                 tvPrize.setTextColor(Color.parseColor("#000000"))
-                tvName.setTextColor(Color.parseColor("#000000"))
+                userID.setTextColor(Color.parseColor("#000000"))
                 tvShare.setTextColor(Color.parseColor("#236ad1"))
                 tvTitle.setTextColor(Color.parseColor("#0e8199"))
                 tvContent.setTextColor(Color.parseColor("#6b6b6b"))
@@ -84,7 +84,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType: Cal
                 tvShare.text = "팔로잉"
 
                 tvPrize.setTextColor(resources.getColor(R.color.white))
-                tvName.setTextColor(resources.getColor(R.color.white))
+                userID.setTextColor(resources.getColor(R.color.white))
                 tvShare.setTextColor(resources.getColor(R.color.white))
                 tvTitle.setTextColor(Color.parseColor("#fafd47"))
                 tvContent.setTextColor(resources.getColor(R.color.white))
@@ -103,7 +103,7 @@ class BroadcastAdapter(private val context: Context?, val cb: (callBackType: Cal
                 tvShare.text = ""
 
                 tvPrize.setTextColor(resources.getColor(R.color.white))
-                tvName.setTextColor(resources.getColor(R.color.white))
+                userID.setTextColor(resources.getColor(R.color.white))
                 tvShare.setTextColor(resources.getColor(R.color.white))
                 tvTitle.setTextColor(Color.parseColor("#fafd47"))
                 tvContent.setTextColor(resources.getColor(R.color.white))

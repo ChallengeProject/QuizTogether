@@ -11,7 +11,7 @@ class AppPreferenceHelper : PreferenceHelper {
 
     private val PFRK_IS_FIRST_LAUNCH = "PFRK_IS_FIRST_LAUNCH"
     private val PFRK_USER_ID = "PFRK_USER_ID"
-    private val INCOMPLETED_QUIZ = "INCOMPLETED_QUIZ"
+    private val BROADCAST_IN_WRITTING = "BROADCAST_IN_WRITTING"
     private val HAS_SAVED_QUIZ = "HAS_SAVED_QUIZ"
 
     private val PFRK_FOLLOW_LIST = "PFRK_FOLLOW_LIST"
@@ -33,18 +33,18 @@ class AppPreferenceHelper : PreferenceHelper {
 
     override fun getUserId(): String? = mPrefs.getString(PFRK_USER_ID, null)
 
-    override fun hasSavedQuiz(): Boolean {
+    override fun hasSavedBroadcast(): Boolean {
         return mPrefs.getBoolean(HAS_SAVED_QUIZ, false)
     }
 
-    override fun saveQuiz(incompletedBroadcast: Broadcast) {
-        val json = Gson().toJson(incompletedBroadcast)
-        mPrefs.edit().putString(INCOMPLETED_QUIZ, json).apply()
+    override fun saveBroadcast(broadcast: Broadcast) {
+        val json = Gson().toJson(broadcast)
+        mPrefs.edit().putString(BROADCAST_IN_WRITTING, json).apply()
         mPrefs.edit().putBoolean(HAS_SAVED_QUIZ, true).apply()
     }
 
-    override fun getSavedQuiz(): Broadcast {
-        val json = mPrefs.getString(INCOMPLETED_QUIZ, null)
+    override fun getSavedBroadcast(): Broadcast {
+        val json = mPrefs.getString(BROADCAST_IN_WRITTING, null)
         mPrefs.edit().putBoolean(HAS_SAVED_QUIZ, false).apply()
         return Gson().fromJson<Broadcast>(json, Broadcast::class.java)
     }

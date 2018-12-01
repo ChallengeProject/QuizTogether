@@ -1,4 +1,4 @@
-package com.quiz_together.ui.create
+package com.quiz_together.ui.create.fragment
 
 import android.app.Dialog
 import android.app.DialogFragment

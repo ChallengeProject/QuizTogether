@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="96dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/cancel"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/navy"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/reservation"
+        android:layout_width="96dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/reservation"
+        android:gravity="center"
+        android:text="@string/reservation"
+        android:textColor="@color/navy" />
+
+    <TextView
+        android:id="@+id/open"
+        android:layout_width="96dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/open"
+        android:gravity="center"
+        android:text="@string/open"
+        android:textColor="@color/yellow" />
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="96dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/save"
+        android:gravity="center"
+        android:text="@string/save"
+        android:textColor="@color/white" />
+</LinearLayout>

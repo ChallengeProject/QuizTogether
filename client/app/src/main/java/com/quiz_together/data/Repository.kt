@@ -135,10 +135,9 @@ object Repository : PreferenceHelper, ApiHelper {
     }
 
 
-
-    override fun hasSavedQuiz(): Boolean = preferenceHelper.hasSavedQuiz()
-    override fun saveQuiz(incompletedBroadcast: Broadcast) = preferenceHelper.saveQuiz(incompletedBroadcast)
-    override fun getSavedQuiz(): Broadcast? = preferenceHelper.getSavedQuiz()
+    override fun hasSavedBroadcast(): Boolean = preferenceHelper.hasSavedBroadcast()
+    override fun saveBroadcast(broadcast: Broadcast) = preferenceHelper.saveBroadcast(broadcast)
+    override fun getSavedBroadcast(): Broadcast? = preferenceHelper.getSavedBroadcast()
     override fun getSavedFollowerList(): List<String> = preferenceHelper.getSavedFollowerList()
     override fun setFollowerList(setStr: Set<String>) = preferenceHelper.setFollowerList(setStr)
 

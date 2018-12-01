@@ -9,7 +9,6 @@ import com.quiz_together.data.remote.ApiHelper
 
 class CreatePresenter(private val repository: Repository, private val view: CreateContract.View)
     : CreateContract.Presenter {
-
     private val mQuestions = HashMap<Int, Question>()
 
     init {
@@ -18,19 +17,31 @@ class CreatePresenter(private val repository: Repository, private val view: Crea
 
     override fun start() {}
 
-    override fun updateQuestion(position: Int, item: Question) {
+    override fun saveQuiz(broadcast: Broadcast) {
+        repository.saveBroadcast(broadcast)
     }
 
-    override fun saveQuiz() {
-        val broadcast = view.extractBroadcast()
-
-        repository.saveQuiz(broadcast)
+    override fun updateBroadcast(broadcast: Broadcast) {
+        // call update api
     }
 
-    override fun createBroadcast() {
-        val broadcast = view.extractBroadcast()
+    override fun loadBroadcastIfHasSavedBroadcast() {
+        if (repository.hasSavedBroadcast()) {
+            view.setLoadingIndicator(true)
+            loadQuiz()
+        }
+        view.setLoadingIndicator(false)
+    }
 
-        if (isValidatedBroadcast(broadcast)) {
+    private fun loadQuiz() {
+        val savedBroadcast = repository.getSavedBroadcast()
+        view.loadSavedBroadcast(savedBroadcast)
+    }
+
+    override fun createBroadcast(broadcast: Broadcast) {
+        val msg = checkValidationForBroadcast(broadcast)
+        if (msg.isNotBlank()) {
+            view.showToast(msg)
             return
         }
 
@@ -40,27 +51,13 @@ class CreatePresenter(private val repository: Repository, private val view: Crea
             }
 
             override fun onDataNotAvailable() {
-                view.onErrorCreatedBroadcast()
+                view.showToast("방 개설 실패")
             }
         })
     }
 
-    override fun loadQuizIfHasSavedQuiz() {
-        if (repository.hasSavedQuiz()) {
-            view.setLoadingIndicator(true)
-            loadQuiz()
-        }
-        view.setLoadingIndicator(false)
-    }
-
-    private fun loadQuiz() {
-        val savedBroadcast = repository.getSavedQuiz()
-        view.loadQuiz(savedBroadcast)
-        view.setLoadingIndicator(false)
-    }
-
-    private fun isValidatedBroadcast(broadcast: Broadcast): Boolean {
-        var msg: String? = null
+    private fun checkValidationForBroadcast(broadcast: Broadcast): String {
+        var msg = ""
 
         if (broadcast.title.isEmpty()) {
             msg = "방 제목이 입력되지 않았습니다."
@@ -76,23 +73,13 @@ class CreatePresenter(private val repository: Repository, private val view: Crea
             msg = "우승자 메시지를 입력해 주세요."
         } else if (mQuestions.size == 0) {
             msg = "현재 작성된 문제가 없습니다."
-        }
-
-        if (msg != null) {
-            view.showToast(msg)
-            return false
-        }
-
-        for (i in 0..12) {
-            mQuestions[i]?.let {
-                isValidatedQuestion(it)?.let {
-                    view.showToast(it)
-                    return false
-                }
+        } else {
+            for (i in 0..12) {
+                mQuestions[i]?.let { question -> isValidatedQuestion(question)?.let { msg = it } }
             }
         }
 
-        return true
+        return msg
     }
 
     private fun isValidatedQuestion(question: Question): String? {
