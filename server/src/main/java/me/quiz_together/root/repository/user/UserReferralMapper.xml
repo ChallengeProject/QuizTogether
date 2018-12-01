@@ -7,9 +7,5 @@
        INSERT INTO /* user_referral.insertReferralUser */
         user_referral(user_id, referral_user, created_time)
        VALUES (#{userId}, #{referralUser}, NOW(3))
-
   </insert>
-
-
-
 </mapper>

@@ -18,7 +18,7 @@ public class UserArbitrary {
                                                 .unique();
     private Arbitrary<String> profilePath = Arbitraries.strings()
                                                        .ascii()
-                                                       .ofMaxLength(1)
+                                                       .ofMinLength(1)
                                                        .ofMaxLength(300)
                                                        .unique();
     private Arbitrary<Long> money = Arbitraries.longs()
