@@ -417,7 +417,7 @@ class QuizingFragment : Fragment(), QuizingContract.View {
         var msgTurn = 0
 
         finalMsg.add("") // admin msg is finalMsg[0]
-        finalMsg.add("${if (winnersMsg.giftType == GiftType.PRIZE) winnersMsg.prize else winnersMsg.giftDescription}")
+        finalMsg.add("${if (winnersMsg.goodsType == GiftType.PRIZE) winnersMsg.prize else winnersMsg.goodsDescription}")
 
         if (isAlive) {
             finalMsg.add("${winnersMsg.winnerMessage}")

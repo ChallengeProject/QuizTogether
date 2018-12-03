@@ -71,15 +71,20 @@ class NumberRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<NumberR
         return numbers.size
     }
 
-    fun setCurrentItem(currentIdx: Int) {
+    fun refreshViewState(prevItemValidation: Boolean, focusedPosition: Int) {
+        setPrevItemState(prevItemValidation)
+        setCurrentItemState(focusedPosition)
+    }
+
+    private fun setPrevItemState(isValidate: Boolean) {
+        val previousIdx = currentIdx
+        updateState(previousIdx, isValidate)
+    }
+
+    private fun setCurrentItemState(currentIdx: Int) {
         this.currentIdx = currentIdx
         states[this.currentIdx] = NumberHolderState.FOCUSING
         notifyItemChanged(this.currentIdx)
-    }
-
-    fun setPrevItemState(isValidate: Boolean) {
-        val previousIdx = currentIdx
-        updateState(previousIdx, isValidate)
     }
 
     fun updateState(position: Int, isValidate: Boolean) {

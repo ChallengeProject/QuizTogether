@@ -20,8 +20,9 @@ interface CreateContract {
     interface Presenter : BasePresenter {
 
         fun loadBroadcastIfHasSavedBroadcast()
-        fun createBroadcast(broadcast: Broadcast)
+        fun createBroadcast(broadcast: Broadcast): Boolean
         fun updateBroadcast(broadcast: Broadcast)
+        fun checkValidationForBroadcast(broadcast: Broadcast): String
         fun saveQuiz(broadcast: Broadcast)
     }
 }

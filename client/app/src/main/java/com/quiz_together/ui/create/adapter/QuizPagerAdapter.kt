@@ -23,12 +23,10 @@ class QuizPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return QuizInputFragment.newInstance(questions[position]) { question -> questions[position] = question }
     }
 
-    override fun getCount(): Int {
-        return NUMBER_OF_QUIZ
-    }
+    override fun getCount() = NUMBER_OF_QUIZ
 
     fun getQuestions() = questions
-    fun getQuestion(position: Int) = questions[position]
+    fun getQuestionValidation(position: Int) = questions[position].isValidate()
     fun setQuestions(questions: ArrayList<Question>) {
         this.questions = questions
         notifyDataSetChanged()

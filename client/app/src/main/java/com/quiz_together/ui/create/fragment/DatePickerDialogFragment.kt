@@ -7,8 +7,16 @@ import android.os.Bundle
 import java.util.*
 
 class DatePickerDialogFragment : DialogFragment() {
+    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
 
-    lateinit var mOnDateSetListener: DatePickerDialog.OnDateSetListener
+    companion object {
+        @JvmStatic
+        fun newInstance(listener: DatePickerDialog.OnDateSetListener): DatePickerDialogFragment {
+            val datePicker = DatePickerDialogFragment()
+            datePicker.dateSetListener = listener
+            return datePicker
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
@@ -16,10 +24,6 @@ class DatePickerDialogFragment : DialogFragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        return DatePickerDialog(activity, mOnDateSetListener, year, month, day)
-    }
-
-    fun setOnTimeSetListener(listener: DatePickerDialog.OnDateSetListener) {
-        mOnDateSetListener = listener
+        return DatePickerDialog(activity, dateSetListener, year, month, day)
     }
 }

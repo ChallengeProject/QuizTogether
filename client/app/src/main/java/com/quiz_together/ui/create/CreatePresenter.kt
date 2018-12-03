@@ -38,11 +38,11 @@ class CreatePresenter(private val repository: Repository, private val view: Crea
         view.loadSavedBroadcast(savedBroadcast)
     }
 
-    override fun createBroadcast(broadcast: Broadcast) {
+    override fun createBroadcast(broadcast: Broadcast): Boolean {
         val msg = checkValidationForBroadcast(broadcast)
         if (msg.isNotBlank()) {
             view.showToast(msg)
-            return
+            return false
         }
 
         repository.createBroadcast(broadcast, object : ApiHelper.GetSuccessBroadcastIdCallback {
@@ -54,42 +54,46 @@ class CreatePresenter(private val repository: Repository, private val view: Crea
                 view.showToast("방 개설 실패")
             }
         })
+        return true
     }
 
-    private fun checkValidationForBroadcast(broadcast: Broadcast): String {
+    override fun checkValidationForBroadcast(broadcast: Broadcast): String {
         var msg = ""
 
         if (broadcast.title.isEmpty()) {
             msg = "방 제목이 입력되지 않았습니다."
         } else if (broadcast.giftType == GiftType.NONE) {
             msg = "Gift Type 을 설정해 주세요."
-        } else if (broadcast.giftType == GiftType.GIFT && broadcast.giftDescription == null
-                || broadcast.giftDescription!!.isEmpty()) {
+        } else if (broadcast.giftType == GiftType.GOODS && broadcast.goodsDescription?.isBlank() == true) {
             msg = "상품을 입력해 주세요"
         } else if (broadcast.giftType == GiftType.PRIZE && broadcast.prize == null
                 || broadcast.prize!! == 0L) {
             msg = "상금을 입력해 주세요."
         } else if (broadcast.winnerMessage.isEmpty()) {
             msg = "우승자 메시지를 입력해 주세요."
-        } else if (mQuestions.size == 0) {
-            msg = "현재 작성된 문제가 없습니다."
         } else {
-            for (i in 0..12) {
-                mQuestions[i]?.let { question -> isValidatedQuestion(question)?.let { msg = it } }
+            broadcast.questionList.forEach { question ->
+                if (isValidatedQuestion(question).isNotBlank()) {
+                    broadcast.questionList.remove(question)
+                }
+            }
+
+            if (broadcast.questionList.size == 0) {
+                msg = "현재 작성된 문제가 없습니다."
             }
         }
 
         return msg
     }
 
-    private fun isValidatedQuestion(question: Question): String? {
+    private fun isValidatedQuestion(question: Question): String {
         return when {
             question.questionProp.title.isEmpty() -> "문제를 입력해주세요."
             question.questionProp.options[0].isEmpty() -> "보기1을 입력해주세요."
             question.questionProp.options[1].isEmpty() -> "보기2을 입력해주세요."
             question.questionProp.options[2].isEmpty() -> "보기3을 입력해주세요."
             question.answerNo < 0 -> "정답을 선택해주세요."
-            else -> null
+            else -> ""
         }
     }
 }

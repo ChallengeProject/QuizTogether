@@ -8,7 +8,7 @@ data class ChatMsg( val pushType: PushType,val message:String, val userName:Stri
 
 data class AdminMsg(val pushType: PushType, val message:String, val userName:String)
 
-data class WinnersMsg(val pushType: PushType,val winnerMessage:String, val prize:String, val giftDescription:String, val giftType: GiftType, val userName:Array<String>)
+data class WinnersMsg(val pushType: PushType, val winnerMessage: String, val prize: String, val goodsDescription: String, val goodsType: GiftType, val userName: Array<String>)
 
 //data class NoticeMsg(val pushType: PushType,val aa:Int)
 

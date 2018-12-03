@@ -38,7 +38,7 @@ data class Broadcast(
         val remainingStartSeconds: Long?,
         val giftType: GiftType = GiftType.NONE,
         val prize: Long?,
-        val giftDescription: String?,
+        val goodsDescription: String?,
         val userId: String?,
         val broadcastStatus: BroadcastStatus?,
         val winnerMessage: String,

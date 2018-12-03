@@ -2,7 +2,7 @@ package com.quiz_together.data.model
 
 enum class GiftType(val value:Int) {
     PRIZE(100),
-    GIFT(200),
+    GOODS(200),
     NONE(300)
 }
 
