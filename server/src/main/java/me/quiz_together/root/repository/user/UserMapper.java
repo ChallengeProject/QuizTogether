@@ -19,7 +19,7 @@ public interface UserMapper {
     @MapKey("id")
     Map<Long, User> getUserByIds(@Param("userIds") Collection<Long> userIds);
 
-    int updateUserProfile(long userId, String profileImageUrl);
+    int updateUserProfile(@Param("userId") long userId, @Param("profileImageUrl")String profileImageUrl);
 
     int deleteUserById(@Param("id")long id);
 
