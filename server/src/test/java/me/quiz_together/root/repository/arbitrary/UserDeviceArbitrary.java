@@ -10,7 +10,8 @@ import me.quiz_together.root.model.user.UserDevice;
 
 public class UserDeviceArbitrary {
     private Arbitrary<Long> userId = Arbitraries.longs()
-                                                .greaterOrEqual(1).unique();
+                                                .greaterOrEqual(1)
+                                                .unique();
     private Arbitrary<String> pushToken = Arbitraries.strings()
                                                      .all()
                                                      .ofMinLength(1)

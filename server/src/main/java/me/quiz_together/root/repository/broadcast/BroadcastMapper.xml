@@ -37,7 +37,7 @@
     FROM
     broadcast
     <where>
-      broadcast_status != 600
+      broadcast_status != 'COMPLETED'
       <if test="next > 0">
         AND id &lt; #{next}
       </if>
@@ -59,7 +59,7 @@
     broadcast
     WHERE
       user_id = #{userId}
-      AND broadcast_status != 600
+      AND broadcast_status != 'COMPLETED'
     ORDER BY
     scheduled_time
   </select>
@@ -72,7 +72,7 @@
     broadcast
     WHERE
     user_id = #{userId}
-    AND broadcast_status != 600
+    AND broadcast_status != 'COMPLETED'
   </select>
 
   <insert id="insertBroadcast" useGeneratedKeys="true" keyProperty="id" parameterType="map">

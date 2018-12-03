@@ -4,7 +4,7 @@ import static me.quiz_together.root.model.broadcast.BroadcastStatus.COMPLETED;
 import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_ANSWER;
 import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_QUESTION;
 import static me.quiz_together.root.model.broadcast.BroadcastStatus.OPEN_WINNER;
-import static me.quiz_together.root.model.broadcast.BroadcastStatus.WATING;
+import static me.quiz_together.root.model.broadcast.BroadcastStatus.WAITING;
 
 import java.util.List;
 import java.util.Map;
@@ -179,22 +179,22 @@ public class BroadcastService {
     public void validateNextBroadcastStatus(BroadcastStatus currentBroadcastStatus, BroadcastStatus nextBroadcastStatus) {
         switch (currentBroadcastStatus) {
             case CREATED:
-                if (nextBroadcastStatus == WATING) {
+                if (nextBroadcastStatus == WAITING) {
                     return;
                 }
                 break;
-            case WATING:
+            case WAITING:
                 if (nextBroadcastStatus == OPEN_ANSWER || nextBroadcastStatus == OPEN_QUESTION || nextBroadcastStatus == OPEN_WINNER) {
                     return;
                 }
                 break;
             case OPEN_QUESTION:
-                if (nextBroadcastStatus == WATING) {
+                if (nextBroadcastStatus == WAITING) {
                     return;
                 }
                 break;
             case OPEN_ANSWER:
-                if (nextBroadcastStatus == WATING) {
+                if (nextBroadcastStatus == WAITING) {
                     return;
                 }
                 break;

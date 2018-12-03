@@ -14,20 +14,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import me.quiz_together.root.model.broadcast.Broadcast;
-import me.quiz_together.root.model.broadcast.BroadcastStatus;
-import me.quiz_together.root.model.broadcast.BroadcastType;
-import me.quiz_together.root.model.broadcast.GiftType;
-import me.quiz_together.root.model.question.CategoryType;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.model.question.QuestionProp;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.model.user.UserDevice;
 import me.quiz_together.root.model.user.UserFollower;
 import me.quiz_together.root.model.user.UserInventory;
-import me.quiz_together.root.model.user.UserStatus;
 import me.quiz_together.root.support.typehandler.DateLongTypeHandler;
 import me.quiz_together.root.support.typehandler.QuestionPropTypeHandler;
-import me.quiz_together.root.support.typehandler.ValueEnumTypeHandler;
 
 @Configuration
 @EnableTransactionManagement
@@ -64,11 +58,6 @@ public class MybatisConfig {
         //typeHandler
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
         typeHandlerRegistry.register(DateLongTypeHandler.class);
-        typeHandlerRegistry.register(UserStatus.class, ValueEnumTypeHandler.class);
-        typeHandlerRegistry.register(BroadcastStatus.class, ValueEnumTypeHandler.class);
-        typeHandlerRegistry.register(BroadcastType.class, ValueEnumTypeHandler.class);
-        typeHandlerRegistry.register(GiftType.class, ValueEnumTypeHandler.class);
-        typeHandlerRegistry.register(CategoryType.class, ValueEnumTypeHandler.class);
         typeHandlerRegistry.register(QuestionProp.class, QuestionPropTypeHandler.class);
 
 

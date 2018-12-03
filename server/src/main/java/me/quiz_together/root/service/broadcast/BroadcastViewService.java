@@ -202,7 +202,7 @@ public class BroadcastViewService {
                                                                             currentStep.intValue());
         switch (broadcastView.getBroadcastStatus()) {
             case CREATED:
-            case WATING:
+            case WAITING:
                 break;
             case OPEN_QUESTION:
                 joinBroadcastView.setQuestionProp(question.getQuestionProp());

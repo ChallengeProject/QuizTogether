@@ -186,7 +186,7 @@ public class FcmService {
 
     public FcmResponse sendFollowBroadcast(Broadcast broadcast) {
         broadcastService.validNextBroadcastStatusAndUpdateBroadcastStatus(broadcast.getBroadcastStatus(),
-                                                                          BroadcastStatus.WATING,
+                                                                          BroadcastStatus.WAITING,
                                                                           broadcast.getId());
         User user = userService.getUserById(broadcast.getUserId());
 
