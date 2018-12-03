@@ -30,7 +30,6 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     generate-ddl: true
-    database-platform: test
 
 logging:
   config: classpath:test/log4j2.xml
