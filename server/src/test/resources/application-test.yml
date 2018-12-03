@@ -25,6 +25,12 @@ spring:
       enabled: true
       settings:
         trace: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    generate-ddl: true
+    database-platform: test
 
 logging:
   config: classpath:test/log4j2.xml

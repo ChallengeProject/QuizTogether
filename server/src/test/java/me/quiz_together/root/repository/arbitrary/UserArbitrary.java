@@ -17,7 +17,7 @@ public class UserArbitrary {
                                                 .ofMaxLength(40)
                                                 .unique();
     private Arbitrary<String> profilePath = Arbitraries.strings()
-                                                       .ascii()
+                                                       .alpha()
                                                        .ofMinLength(1)
                                                        .ofMaxLength(300)
                                                        .unique();

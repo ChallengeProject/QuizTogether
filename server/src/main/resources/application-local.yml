@@ -18,6 +18,11 @@ spring:
     port: 6379
     database: 0
     password: qqqq
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
 
 logging:
   config: classpath:local/log4j2.xml

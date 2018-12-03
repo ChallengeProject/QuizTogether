@@ -3,23 +3,24 @@ package me.quiz_together.root.repository.user;
 import static me.quiz_together.root.AbstractDummy.generateRandomName;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import me.quiz_together.root.IntegrationTest;
 import me.quiz_together.root.model.user.User;
 import me.quiz_together.root.repository.arbitrary.UserArbitrary;
 import me.quiz_together.root.util.ArbitraryUtils;
 
-public class UserRepositoryTest extends IntegrationTest {
+@DataJpaTest
+public class UserRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
     private User user;
     UserArbitrary userArbitrary = new UserArbitrary();
 
@@ -29,19 +30,19 @@ public class UserRepositoryTest extends IntegrationTest {
     }
     @Test
     void insertTest() {
-        userRepository.insertUser(user);
+        userJpaRepository.save(user);
     }
 
     @Test
     void deleteUser() {
-        userRepository.insertUser(user);
-        userRepository.deleteUserById(1);
+        userJpaRepository.save(user);
+        userJpaRepository.deleteById(user.getId());
     }
 
     @Test
     void selectUserById() {
-        userRepository.insertUser(user);
-        User woojinUser = userRepository.selectUserById(user.getId());
+        userJpaRepository.save(user);
+        User woojinUser = userJpaRepository.findById(user.getId()).get();
         assertThat(woojinUser).isNotNull();
     }
 
@@ -49,8 +50,13 @@ public class UserRepositoryTest extends IntegrationTest {
     void getUserByIds() {
 
         List<User> users = ArbitraryUtils.list(userArbitrary.arbitrary(), 100);
-        users.forEach(u -> userRepository.insertUser(u));
-        Map<Long, User> userMap = userRepository.getUserByIds(users.stream().map(User::getId).collect(Collectors.toList()));
+        users.forEach(u -> userJpaRepository.save(u));
+//        Map<Long, User> userMap = userJpaRepository.findUsersByIdIn(users.stream().map(User::getId).collect(Collectors.toList()));
+        List<User> empty = userJpaRepository.findByIdIn(Collections.emptyList());
+        assertThat(empty).isEmpty();
+        List<User> userMap = userJpaRepository.findByIdIn(users.stream().map(User::getId).collect(Collectors.toList()));
+
+
 
         assertThat(userMap).isNotEmpty();
         assertThat(userMap.size()).isGreaterThan(2);
@@ -58,23 +64,24 @@ public class UserRepositoryTest extends IntegrationTest {
 
     @Test
     void updateUserProfile() {
-        userRepository.insertUser(user);
+        userJpaRepository.save(user);
         String profileImageUrl = generateRandomName();
-        userRepository.updateUserProfile(user.getId(), profileImageUrl);
-        User updatedUser = userRepository.selectUserById(user.getId());
+        user.setProfilePath(profileImageUrl);
+        userJpaRepository.save(user);
+        User updatedUser = userJpaRepository.findById(user.getId()).get();
         assertThat(updatedUser.getProfilePath()).isEqualTo(profileImageUrl);
     }
 
     @Test
     void selectUserByName() {
-        userRepository.insertUser(user);
-        assertThat(userRepository.selectUserByName(user.getName()).getName()).isEqualTo(user.getName());
+        userJpaRepository.save(user);
+        assertThat(userJpaRepository.findByName(user.getName()).getName()).isEqualTo(user.getName());
     }
 
     @Test
     void login() {
-        userRepository.insertUser(user);
+        userJpaRepository.save(user);
 
-        assertThat(userRepository.login(user.getId())).isNotNull();
+        assertThat(userJpaRepository.findById(user.getId())).isNotNull();
     }
 }
