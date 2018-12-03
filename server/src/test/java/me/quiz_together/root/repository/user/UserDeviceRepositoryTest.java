@@ -19,18 +19,12 @@ public class UserDeviceRepositoryTest extends IntegrationTest {
     @BeforeEach
     void init() {
         userDevice = UserDeviceArbitrary.defaultOne();
+        userDeviceRepository.insertUserDevice(userDevice);
     }
 
     @Test
     void selectUserDeviceByUserId() {
-        userDeviceRepository.insertUserDevice(userDevice);
-
         UserDevice selectedUserDevice = userDeviceRepository.selectUserDeviceByUserId(userDevice.getUserId());
         assertThat(selectedUserDevice).isNotNull();
-    }
-
-    @Test
-    void insertUserDevice() {
-        userDeviceRepository.insertUserDevice(userDevice);
     }
 }
