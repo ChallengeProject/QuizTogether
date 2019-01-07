@@ -5,7 +5,6 @@ import static java.util.Objects.isNull;
 import java.io.IOException;
 
 import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,7 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Converter
+//TODO : generic
+//@Converter
 public class ObjectJsonConverter<T extends Object> implements AttributeConverter<T, String> {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
