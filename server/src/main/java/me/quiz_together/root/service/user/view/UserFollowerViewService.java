@@ -48,9 +48,10 @@ public class UserFollowerViewService {
     }
 
     private UserFollower convertUserFollower(UserFollowerRequest userFollowerRequest) {
-        UserFollower userFollower = new UserFollower();
-        userFollower.setFollower(userFollowerRequest.getFollower());
-        userFollower.setUserId(userFollowerRequest.getUserId());
+        UserFollower userFollower = UserFollower.builder()
+                                                .userId(userFollowerRequest.getUserId())
+                                                .follower(userFollowerRequest.getFollower())
+                                                .build();
 
         return userFollower;
     }

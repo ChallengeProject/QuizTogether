@@ -23,10 +23,6 @@ public class UserArbitrary {
                                                        .unique();
     private Arbitrary<Long> money = Arbitraries.longs()
                                                .greaterOrEqual(0);
-    private Arbitrary<Long> createdTime = Arbitraries.longs()
-                                                     .greaterOrEqual(0);
-    private Arbitrary<Long> updatedTime = Arbitraries.longs()
-                                                     .greaterOrEqual(0);
     private Arbitrary<Long> deletedTime = Arbitraries.longs()
                                                      .greaterOrEqual(0);
 
@@ -39,17 +35,13 @@ public class UserArbitrary {
 
     public Arbitrary<User> arbitrary() {
         return Combinators.combine(
-                this.name, this.profilePath, this.money, this.createdTime, this.updatedTime,
+                this.name, this.profilePath, this.money,
                 this.deletedTime, this.userStatus)
-                          .as((name, profilePath, money, createdTime, updatedTime, deletedTime, userStatus) ->
+                          .as((name, profilePath, money, deletedTime, userStatus) ->
                                       User.builder()
                                           .name(name)
                                           .profilePath(profilePath)
                                           .money(money)
-                                          .createdTime(createdTime)
-                                          .updatedTime(updatedTime)
-                                          .deletedTime(deletedTime)
-                                          .userStatus(userStatus)
                                           .build());
     }
 

@@ -74,6 +74,7 @@ public class FcmService {
                                                   openQuestionRequest.getUserId());
         //broadcast step validation
         // 문제 제출 시에는 step이 올라가있지 않아 -1을 해줌
+        // TODO : 현재는 client가 1로 보내 주는걸로 협의
         broadcastService.validCurrentBroadcastStep(openQuestionRequest.getBroadcastId(),
                                                    openQuestionRequest.getStep() - 1);
         // TODO: 문제 제출 마감시간은 update 이후 n초가 좋아보임

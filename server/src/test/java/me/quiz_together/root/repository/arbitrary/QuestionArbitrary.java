@@ -43,7 +43,6 @@ public class QuestionArbitrary {
                                               .step(step)
                                               .answerNo(answerNo)
                                               .questionProp(questionProp)
-                                              .category(category)
                                               .build());
     }
 

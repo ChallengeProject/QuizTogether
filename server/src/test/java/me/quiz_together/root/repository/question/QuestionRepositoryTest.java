@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import me.quiz_together.root.IntegrationTest;
+import me.quiz_together.root.JpaRepositoryTest;
 import me.quiz_together.root.model.question.Question;
 import me.quiz_together.root.repository.arbitrary.QuestionArbitrary;
 import me.quiz_together.root.util.ArbitraryUtils;
 
-class QuestionRepositoryTest extends IntegrationTest {
+class QuestionRepositoryTest extends JpaRepositoryTest {
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionJpaRepository questionJpaRepository;
     QuestionArbitrary questionArbitrary = new QuestionArbitrary();
     List<Question> questions;
     int size = 12;
@@ -25,23 +25,25 @@ class QuestionRepositoryTest extends IntegrationTest {
     void setUp() {
         questions = ArbitraryUtils.list(questionArbitrary.arbitrary(), size);
         assertThat(questions).isNotEmpty();
-        questionRepository.insertQuestionList(questions);
+        for (Question question : questions) {
+            questionJpaRepository.save(question);
+        }
         assertThat(questions.size()).isEqualTo(size);
-        question = questionRepository.selectQuestionListByBroadcastId(questions.iterator().next().getBroadcastId())
-                          .iterator().next();
+        question = questionJpaRepository.findByBroadcastId(questions.iterator().next().getBroadcastId())
+                                        .iterator().next();
     }
 
     @Test
     void selectQuestionListByBroadcastId() {
         long broadcastId = question.getBroadcastId();
-        List<Question> questions = questionRepository.selectQuestionListByBroadcastId(broadcastId);
+        List<Question> questions = questionJpaRepository.findByBroadcastId(broadcastId);
 
         assertThat(questions).isNotEmpty();
     }
 
     @Test
     void selectQuestionByQuestionId() {
-        Question resultQuestion = questionRepository.selectQuestionByQuestionId(question.getId());
+        Question resultQuestion = questionJpaRepository.findById(question.getId()).orElse(null);
 
         isEqualToQuestion(resultQuestion);
     }
@@ -53,9 +55,8 @@ class QuestionRepositoryTest extends IntegrationTest {
 
     @Test
     void selectQuestionByBroadcastIdAndStep() {
-        Question resultQuestion = questionRepository.selectQuestionByBroadcastIdAndStep(
-                this.question.getBroadcastId(), questionRepository
-                        .selectQuestionByBroadcastIdAndStep(question.getBroadcastId(), question.getStep()).getStep());
+        Question resultQuestion = questionJpaRepository.findByBroadcastIdAndStep(
+                this.question.getBroadcastId(), question.getStep());
         isEqualToQuestion(resultQuestion);
 
     }
@@ -63,17 +64,16 @@ class QuestionRepositoryTest extends IntegrationTest {
     @Test
     void insertQuestionList() {
         long broadcastId = questions.get(0).getBroadcastId();
-        List<Question> resultQuestions = questionRepository.selectQuestionListByBroadcastId(broadcastId);
+        List<Question> resultQuestions = questionJpaRepository.findByBroadcastId(broadcastId);
         assertThat(resultQuestions).isNotEmpty();
         assertThat(resultQuestions.size()).isEqualTo(questions.size());
     }
 
     @Test
     void updateQuestionListByQuestionId() {
-        List<Question> resultQuestions = questionRepository.selectQuestionListByBroadcastId(
+        List<Question> resultQuestions = questionJpaRepository.findByBroadcastId(
                 question.getBroadcastId());
 
-
-        resultQuestions.forEach(question1 -> questionRepository.updateQuestionByQuestionId(question1));
+        resultQuestions.forEach(question1 -> questionJpaRepository.save(question1));
     }
 }
