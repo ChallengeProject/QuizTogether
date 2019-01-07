@@ -14,9 +14,10 @@ public class UserReferralService {
     private final UserInventoryService userInventoryService;
 
     public void insertReferralUser(Long userId, Long referralUser) {
-        UserReferral userReferral = new UserReferral();
-        userReferral.setUserId(userId);
-        userReferral.setReferralUser(referralUser);
+        UserReferral userReferral = UserReferral.builder()
+                                                .userId(userId)
+                                                .referralUser(referralUser)
+                                                .build();
 
         userReferralRepository.insertReferralUser(userReferral);
 

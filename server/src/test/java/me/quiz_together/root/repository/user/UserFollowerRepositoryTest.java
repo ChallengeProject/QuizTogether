@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import me.quiz_together.root.IntegrationTest;
+import me.quiz_together.root.JpaRepositoryTest;
 import me.quiz_together.root.model.user.UserFollower;
 import me.quiz_together.root.repository.arbitrary.UserFollowerArbitrary;
 
-public class UserFollowerRepositoryTest extends IntegrationTest {
+public class UserFollowerRepositoryTest extends JpaRepositoryTest {
 
     @Autowired
-    private UserFollowerRepository userFollowerRepository;
+    private UserFollowerJpaRepository cut;
     private UserFollower userFollower;
 
     @BeforeEach
@@ -25,19 +25,31 @@ public class UserFollowerRepositoryTest extends IntegrationTest {
 
     @Test
     void insertFollower() {
-        userFollowerRepository.insertFollower(userFollower);
+        cut.save(userFollower);
+        flushAndClear();
+        List<UserFollower> byUserId = cut.findUserFollowersByUserId(userFollower.getUserId());
+
+        assertThat(byUserId).isNotEmpty();
     }
 
     @Test
     void deleteFollower() {
-        userFollowerRepository.insertFollower(userFollower);
-        userFollowerRepository.deleteFollower(userFollower);
+        UserFollower defaultOne = UserFollowerArbitrary.defaultOne();
+        cut.save(defaultOne);
+        flushAndClear();
+        cut.delete(defaultOne);
+
+        List<UserFollower> byUserId = cut.findUserFollowersByUserId(defaultOne.getUserId());
+
+        assertThat(byUserId).isEmpty();
+
     }
 
     @Test
     void selectFollowerListByUserId() {
-        userFollowerRepository.insertFollower(userFollower);
-        List<UserFollower> userFollowerList = userFollowerRepository.selectFollowerListByUserId(userFollower.getUserId());
+        cut.save(userFollower);
+        flushAndClear();
+        List<UserFollower> userFollowerList = cut.findUserFollowersByUserId(userFollower.getUserId());
         assertThat(userFollowerList).isNotEmpty();
 
     }

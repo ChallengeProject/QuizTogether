@@ -56,6 +56,7 @@ public class BroadcastArbitrary {
                                                .prize(prize)
                                                .scheduledTime(scheduledTime)
                                                .broadcastStatus(broadcastStatus)
+                                               .updatedTime(AbstractDummy.generateRandomLong())
                                                .giftType(giftType)
                                                .build());
     }
